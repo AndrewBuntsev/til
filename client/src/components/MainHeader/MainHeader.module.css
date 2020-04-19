@@ -1,0 +1,22 @@
+.container{
+    position: fixed;
+    padding: 0;
+    top: 1.5vw;
+    z-index: -1;
+}
+
+.header{
+    margin: 0;
+    display: block;
+    color: #082736;
+    font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: .1em;
+    font-weight: 900;
+    font-size: 7vw;
+    line-height: 1;
+    text-align: center;
+    width: 100vw;
+    cursor: pointer;
+}

@@ -1,0 +1,33 @@
+.container{
+    background: #ffffffe6;
+    --opacity: 0.9;
+    padding: 25px;
+}
+
+.content{
+    padding: 4vw;
+    overflow: auto;
+}
+
+.header{
+    font-size: 1.6em;
+}
+.header a{
+    color: inherit;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+.header a:hover{
+    color: #ae1f23;
+}
+
+.content p{
+    line-height: 1.6;
+    display: block;
+    font-size: 1em;
+    font-weight: normal;
+}
+.aside{
+
+}

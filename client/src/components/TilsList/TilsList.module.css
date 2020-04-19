@@ -1,0 +1,13 @@
+.container{
+    margin-top: 17vw;
+}
+
+.tilContainer{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3vw;
+}
+
+.tilWrapper{
+    max-width: 60%;
+}
