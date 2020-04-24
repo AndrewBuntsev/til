@@ -7,41 +7,47 @@ const MONGO_CLIENT_OPTIONS = { useUnifiedTopology: true, useNewUrlParser: true }
 
 
 
-// exports.getClient = async options => {
-//     const { clientId } = options;
-//     if (!clientId) {
-//         throw 'ClientId parameter is not provided';
-//     }
+exports.getUser = async options => {
+    const { fbId, ghId } = options;
 
-//     // update online clients collection
-//     const onlineClient = onlineClients.find(c => c.id == clientId);
-//     if (onlineClient) {
-//         onlineClient.time = new Date();
-//     } else {
-//         onlineClients.push({ id: clientId, time: new Date() });
-//     }
+    const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
+    const db = mongoClient.db(MONGO_DB_NAME);
+    let user = null;
+    if (fbId) {
+        user = await db.collection('users').findOne({ fbId });
+    } else if (ghId) {
+        user = await db.collection('users').findOne({ ghId });
+    }
 
-//     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-//     const db = mongoClient.db(MONGO_DB_NAME);
-//     let client = await db.collection('clients').findOne({ clientId: clientId });
+    mongoClient.close();
+    return user;
+};
 
-//     mongoClient.close();
-//     return client;
-// };
+exports.addUser = async options => {
+    const { fbId, ghId } = options;
 
-// exports.getClientBrief = async options => {
-//     const { clientId } = options;
-//     if (!clientId) {
-//         throw 'ClientId parameter is not provided';
-//     }
+    const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
+    const db = mongoClient.db(MONGO_DB_NAME);
 
-//     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-//     const db = mongoClient.db(MONGO_DB_NAME);
-//     let client = await db.collection('clients').find({ clientId: clientId }).limit(1).project({ clientId: 1, clientName: 1, _id: 0 }).next();
+    await db.collection('users').insertOne({ fbId, ghId });
+    let user = await db.collection('users').findOne({ fbId, ghId });
+    mongoClient.close();
 
-//     mongoClient.close();
-//     return client;
-// };
+    return user;
+};
+
+exports.getTils = async options => {
+
+    const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
+    const db = mongoClient.db(MONGO_DB_NAME);
+
+    //TODO: not effective
+    const results = await db.collection('tils').find().toArray();
+
+    mongoClient.close();
+    // return list of unique clients (unique by clientId)
+    return results;
+};
 
 exports.addTil = async options => {
     const { header, text, user } = options;
@@ -118,18 +124,7 @@ exports.addTil = async options => {
 //     mongoClient.close();
 // };
 
-exports.getTils = async options => {
 
-    const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-    const db = mongoClient.db(MONGO_DB_NAME);
-
-    //TODO: not effective
-    const results = await db.collection('tils').find().toArray();
-
-    mongoClient.close();
-    // return list of unique clients (unique by clientId)
-    return results;
-};
 
 // exports.sendMessage = async options => {
 //     const { senderId, receiverId, message } = options;

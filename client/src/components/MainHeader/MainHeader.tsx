@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import styles from './MainHeader.module.css';
 
@@ -10,7 +11,9 @@ export default class MainHeader extends Component<Props, State> {
     render() {
         return (
             <div className={styles.container}>
-                <a className={styles.header} href='/'>Today I Learned</a>
+                <NavLink to="/" activeClassName={styles.header}>
+                    Today I Learned
+                </NavLink>
             </div>
         );
     }

@@ -16,10 +16,9 @@ export default (state: AppState, action: Action): AppState => {
 
 function handleAction(state: AppState, action: Action): AppState {
     switch (action.type) {
-        // case ActionType.SET_CLIENT_DETAILS:
-        //     const clientDetails = action.payload['clientDetails'];
-        //     cookiesHelper.setClietnId(clientDetails ? clientDetails.clientId : null);
-        //     return { ...state, clientDetails: clientDetails };
+        case ActionType.SET_USER:
+            const user = action.payload['user'];
+            return { ...state, user };
 
         // case ActionType.SET_ACTIVE_SCREEN:
         //     return { ...state, activeScreen: action.payload['activeScreen'] };

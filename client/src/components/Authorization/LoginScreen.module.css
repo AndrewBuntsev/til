@@ -1,0 +1,12 @@
+.container{
+    margin-top: 17vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.loginContainer{
+    flex: 1 0;
+    display: flex;
+}
+

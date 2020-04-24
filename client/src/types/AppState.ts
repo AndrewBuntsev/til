@@ -1,3 +1,6 @@
+import { User } from "./User";
 
 
-export type AppState = {};
+export type AppState = {
+    user: User;
+};

@@ -19,6 +19,9 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 
 
 // declare API methods

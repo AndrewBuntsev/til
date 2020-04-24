@@ -1,5 +1,8 @@
 const statusCodes = require('./const/statusCodes');
 const dbClient = require('./dbClient');
+const fetch = require('node-fetch');
+
+
 
 
 const testApi = app => {
@@ -10,47 +13,34 @@ const testApi = app => {
     });
 };
 
-const testDB = app => {
-    app.get('/api/testDB', async (req, res) => {
-        // try {
-        //     await dbClient.addMessage('ff051f3d-0374-45d4-a16b-eba1b1045735', '5664df86-1abe-468b-8019-d66e17049d6d', 'in', 'guess who');
-        //     res.json({ status: statusCodes.SUCCESS, message: '', payload: null });
-        // }
-        // catch (err) {
-        //     res.status(500);
-        //     console.error(err);
-        //     res.json({ status: statusCodes.ERROR, message: err, payload: null });
-        // }
+
+const getUser = app => {
+    app.get('/api/getUser', async (req, res) => {
+        const { fbId, ghId } = req.query;
+        try {
+            const user = await dbClient.getUser({ fbId, ghId });
+            if (user) {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: '', payload: user });
+            } else {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `User with fbId ${fbId} and ghId ${ghId} not found`, payload: null });
+            }
+        }
+        catch (err) {
+            res.status(500);
+            console.error(err);
+            res.json({ status: statusCodes.ERROR, message: err, payload: null })
+        }
     });
 };
 
-// const getClient = app => {
-//     app.get('/api/getClient', async (req, res) => {
-//         const { clientId } = req.query;
-//         try {
-//             const client = await dbClient.getClient({ clientId: clientId });
-//             if (client) {
-//                 res.status(200);
-//                 res.json({ status: statusCodes.SUCCESS, message: '', payload: client });
-//             } else {
-//                 res.status(200);
-//                 res.json({ status: statusCodes.SUCCESS, message: `Client with ID ${clientId} not found`, payload: null });
-//             }
-//         }
-//         catch (err) {
-//             res.status(500);
-//             console.error(err);
-//             res.json({ status: statusCodes.ERROR, message: err, payload: null })
-//         }
-//     });
-// };
-
-const addTil = app => {
-    app.post('/api/addTil', async (req, res) => {
-        const { header, text, user } = req.body;
+const addUser = app => {
+    app.post('/api/addUser', async (req, res) => {
+        const { fbId, ghId } = req.body;
         try {
-            await dbClient.addTil({ header, text, user });
-            res.json({ status: statusCodes.SUCCESS, message: 'TIL has been added successfully', payload: null });
+            const user = await dbClient.addUser({ fbId, ghId });
+            res.json({ status: statusCodes.SUCCESS, message: 'User has been created successfully', payload: user });
         }
         catch (err) {
             res.status(500);
@@ -59,54 +49,6 @@ const addTil = app => {
         }
     });
 };
-
-// const updateClient = app => {
-//     app.post('/api/updateClient', async (req, res) => {
-//         const { clientId, clientName, showNotifications, gender, status } = req.body;
-//         try {
-//             await dbClient.updateClient({ clientId, clientName, showNotifications, gender, status });
-//             const client = await dbClient.getClient({ clientId: clientId });
-//             res.json({ status: statusCodes.SUCCESS, message: '', payload: client });
-//         }
-//         catch (err) {
-//             res.status(500);
-//             console.error(err);
-//             res.json({ status: statusCodes.ERROR, message: err, payload: null });
-//         }
-//     });
-// };
-
-// const addContact = app => {
-//     app.post('/api/addContact', async (req, res) => {
-//         const { clientId, contact } = req.body;
-//         try {
-//             await dbClient.addContact({ clientId, contact });
-//             const client = await dbClient.getClient({ clientId: clientId });
-//             res.json({ status: statusCodes.SUCCESS, message: '', payload: client });
-//         }
-//         catch (err) {
-//             res.status(500);
-//             console.error(err);
-//             res.json({ status: statusCodes.ERROR, message: err, payload: null });
-//         }
-//     });
-// };
-
-// const removeContact = app => {
-//     app.post('/api/removeContact', async (req, res) => {
-//         const { clientId, contactId } = req.body;
-//         try {
-//             await dbClient.removeContact({ clientId, contactId });
-//             const client = await dbClient.getClient({ clientId: clientId });
-//             res.json({ status: statusCodes.SUCCESS, message: '', payload: client });
-//         }
-//         catch (err) {
-//             res.status(500);
-//             console.error(err);
-//             res.json({ status: statusCodes.ERROR, message: err, payload: null });
-//         }
-//     });
-// };
 
 const getTils = app => {
     app.get('/api/getTils', async (req, res) => {
@@ -123,34 +65,131 @@ const getTils = app => {
     });
 };
 
-// const sendMessage = app => {
-//     app.post('/api/sendMessage', async (req, res) => {
-//         const { senderId, receiverId, message } = req.body;
-//         try {
-//             await dbClient.sendMessage({ senderId, receiverId, message });
-//             const client = await dbClient.getClient({ clientId: senderId });
-//             res.json({ status: statusCodes.SUCCESS, message: '', payload: client });
-//         }
-//         catch (err) {
-//             res.status(500);
-//             console.error(err);
-//             res.json({ status: statusCodes.ERROR, message: err, payload: null });
-//         }
-//     });
-// };
+const addTil = app => {
+    app.post('/api/addTil', async (req, res) => {
+        const { header, text, user } = req.body;
+        try {
+            await dbClient.addTil({ header, text, user });
+            res.json({ status: statusCodes.SUCCESS, message: 'TIL has been added successfully', payload: null });
+        }
+        catch (err) {
+            res.status(500);
+            console.error(err);
+            res.json({ status: statusCodes.ERROR, message: err, payload: null });
+        }
+    });
+};
 
 
 
-//TODO: add functions to swagger
+
+
+
+const ghAuth = app => {
+    app.get('/api/ghAuth', async (req, res) => {
+        const { code } = req.query;
+
+        try {
+            //1. Get access_code from GitHub
+            const accessData = await fetch(`https://github.com/login/oauth/access_token?client_id=5c2258cb88831cea80c2&client_secret=b83c19e87b8e9a5f3212715b4f1b4011cdd94ad9&code=${code}`, {
+                method: 'POST',
+                headers: { 'accept': 'application/json' },
+                body: JSON.stringify({})
+            }).then(response => response.json());
+            const access_token = accessData.access_token;
+            if (!access_token) {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get GitHub access_token for the ${code} request code`, payload: null });
+                return;
+            }
+
+            //2. Get a user by access_token
+            const user = await fetch('https://api.github.com/user', {
+                headers: { Authorization: `token ${access_token}` }
+            }).then(response => response.json());
+
+            //3. Send the user data back to the client
+            if (user) {
+                const { id, avatar_url, url, name } = user;
+                const payload = { id, avatar_url, url, name, access_token };
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: '', payload: payload });
+            } else {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${code} request code`, payload: null });
+            }
+        }
+        catch (err) {
+            res.status(500);
+            console.error(err);
+            res.json({ status: statusCodes.ERROR, message: err, payload: null })
+        }
+    });
+};
+
+const getGHUser = app => {
+    app.get('/api/getGHUser', async (req, res) => {
+        const { access_token } = req.query;
+        try {
+            const user = await fetch('https://api.github.com/user', {
+                headers: { Authorization: `token ${access_token}` }
+            }).then(response => response.json());
+
+            if (user) {
+                const { id, avatar_url, url, name } = user;
+                const payload = { id, avatar_url, url, name, access_token };
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: '', payload: payload });
+            } else {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${access_token} access_token`, payload: null });
+            }
+        }
+        catch (err) {
+            res.status(500);
+            console.error(err);
+            res.json({ status: statusCodes.ERROR, message: err, payload: null })
+        }
+    });
+};
+
+
+const getFBUser = app => {
+    app.get('/api/getFBUser', async (req, res) => {
+        const { user_id, access_token } = req.query;
+        console.log(JSON.stringify(req.cookies));
+
+        try {
+            const user = await fetch(`https://graph.facebook.com/${user_id}?fields=name,picture&access_token=${access_token}`)
+                .then(response => response.json());
+
+            if (user) {
+                const { name, picture } = user;
+                const avatar_url = picture && picture.data ? picture.data.url : '';
+                const payload = { name, avatar_url };
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: '', payload: payload });
+            } else {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get Facebook user for the ${user_id} user_id & ${access_token} access_token`, payload: null });
+            }
+        }
+        catch (err) {
+            res.status(500);
+            console.error(err);
+            res.json({ status: statusCodes.ERROR, message: err, payload: null })
+        }
+    });
+};
+
 
 module.exports = app => {
     testApi(app);
-    testDB(app);
-    // getClient(app);
-    addTil(app);
-    // updateClient(app);
-    // addContact(app);
-    // removeContact(app);
+    getUser(app);
+    addUser(app);
     getTils(app);
-    // sendMessage(app);
+    addTil(app);
+    ghAuth(app);
+    getGHUser(app);
+    getFBUser(app);
 };

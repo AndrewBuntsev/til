@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import * as api from '../api';
 import dispatchCombinedAction from '../redux/actions/dispatchCombinedAction';
-import { Response } from '../types/Response';
+import { ApiResponse } from '../types/ApiResponse';
 import { ResponseStatus } from '../enums/ResponseStatus';
 import { AppState } from '../types/AppState';
 import { Action } from '../redux/Action';
@@ -38,7 +38,7 @@ class AddTilTemComponent extends Component<Props, State> {
 
     async componentDidMount() {
         //const response: Response = await api.addTil(this.props.clientDetails.clientId, { clientId, clientName });
-        const response: Response = await api.getTils();
+        const response: ApiResponse = await api.getTils();
         console.log(response.payload);
     }
 
