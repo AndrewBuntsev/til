@@ -5,7 +5,7 @@ import setUser from '../../redux/actions/setUser';
 import { Dispatch } from 'redux';
 import { User } from '../../types/User';
 import { connect } from 'react-redux';
-import { setFBUserId, setFBAccessToken, setGHUserId, setGHAccessToken } from '../../helpers/cookiesHelper';
+import { clearCookies } from '../../helpers/cookiesHelper';
 
 
 
@@ -18,10 +18,7 @@ type State = {};
 
 class LoggedInUser extends Component<Props, State> {
     logOut = () => {
-        setFBUserId('');
-        setFBAccessToken('');
-        setGHUserId('');
-        setGHAccessToken('');
+        clearCookies();
         this.props.setUser(null);
     };
 
@@ -39,7 +36,7 @@ class LoggedInUser extends Component<Props, State> {
                 </div>
 
                 <div className={styles.loggedViaContainer}>
-                    {user.fbId ? 'FB' : user.ghId ? 'GH' : '?'}
+                    {user.fbId ? 'FB' : user.ghId ? 'GH' : user.liId ? 'LI' : '?'}
                 </div>
 
                 <button onClick={this.logOut}>Log out</button>

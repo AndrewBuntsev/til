@@ -83,6 +83,8 @@ class LoginScreen extends Component<Props, State> {
                 <div className={styles.loginContainer}>
                     <img src={require('./../../assets/images/loginWithFacebook.png')} width={250} onClick={this.loginWithFacebook} />
                     <a href={`https://github.com/login/oauth/authorize?scope=user:email&client_id=${GH_APP_ID}`}>Login with GitHub</a>
+                    <br />
+                    <a href={`https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86v6z3n8v3ybvo&redirect_uri=https%3A%2F%2Flocalhost:3000/liAuth&scope=r_liteprofile`}>Login with LinkedIn</a>
                 </div>
 
             </div>

@@ -39,10 +39,18 @@ export const getFBUser = (user_id: string, access_token: string) => {
     return fetch(`${ENDPOINT}/api/getFBUser?user_id=${user_id}&access_token=${access_token}`).then(res => res.json());
 };
 
-export const getGHUserByRequestCode = (code: string) => {
-    return fetch(`${ENDPOINT}/api/ghAuth?code=${code}`).then(res => res.json());
+
+
+
+
+export const ghAuth = (options: { code?: string, access_token?: string }) => {
+    const code = options.code ? options.code : '';
+    const access_token = options.access_token ? options.access_token : '';
+    return fetch(`${ENDPOINT}/auth/ghAuth?code=${code}&access_token=${access_token}`).then(res => res.json());
 };
 
-export const getGHUserByAccessToken = (access_token: string) => {
-    return fetch(`${ENDPOINT}/api/getGHUser?access_token=${access_token}`).then(res => res.json());
+export const liAuth = (options: { code?: string, access_token?: string }) => {
+    const code = options.code ? options.code : '';
+    const access_token = options.access_token ? options.access_token : '';
+    return fetch(`${ENDPOINT}/auth/liAuth?code=${code}&access_token=${access_token}`).then(res => res.json());
 };

@@ -7,7 +7,7 @@ import styles from './Authorization.module.css';
 import { AppState } from '../../types/AppState';
 import setUser from '../../redux/actions/setUser';
 import { User } from '../../types/User';
-import { getFBUserId, setFBUserId, setGHUserId, setGHAccessToken, getGHUserId, getGHAccessToken, getFBAccessToken, setFBAccessToken } from '../../helpers/cookiesHelper';
+import { getFBUserId, getGHUserId, getGHAccessToken, getFBAccessToken, setFBAccessToken, getLIUserId, getLIAccessToken } from '../../helpers/cookiesHelper';
 import * as api from '../../api';
 import { ApiResponse } from '../../types/ApiResponse';
 import { ResponseStatus } from '../../enums/ResponseStatus';
@@ -34,6 +34,7 @@ class Authorization extends Component<Props, State> {
         this.initFacebook();
         this.checkFBStatus()
         this.initGitHub();
+        this.initLinkedIn();
     }
 
     initFacebook = () => {
@@ -89,61 +90,32 @@ class Authorization extends Component<Props, State> {
 
     initGitHub = async () => {
 
-        //TODO: move up
         //Check if the user has already logged in with GitHub
         const ghId = getGHUserId();
         const access_token = getGHAccessToken();
+
         if (ghId && access_token) {
-            const resp: ApiResponse = await api.getGHUserByAccessToken(access_token);
-            if (resp.status == ResponseStatus.SUCCESS && resp.payload && resp.payload['id'] == ghId) {
-                const resp1: ApiResponse = await api.getUser({ ghId: ghId });
-                let user: User;
-                if (resp1.status == ResponseStatus.SUCCESS && resp1.payload) {
-                    user = getTypeFromObject<User>(resp1.payload);
-                    user.name = resp.payload['name'];
-                    user.pictureUrl = resp.payload['avatar_url'];
-                    this.props.setUser(user);
-                    return;
-                }
-            }
-        }
-
-
-        const code = (new URLSearchParams(window.location.search)).get('code');
-        if (code) {
-            //Process GitHub request code
-            const resp1: ApiResponse = await api.getGHUserByRequestCode(code);
-            const ghUser: any = resp1.payload;
-            if (ghUser) {
-                //Add gh user
-                const resp: ApiResponse = await api.getUser({ ghId: ghUser.id });
-                let user: User;
-                if (resp.status == ResponseStatus.SUCCESS) {
-                    if (resp.payload) {
-                        user = getTypeFromObject<User>(resp.payload);
-                    } else {
-                        const addUserResp: ApiResponse = await api.addUser({ ghId: ghUser.id.toString() });
-                        if (addUserResp.status == ResponseStatus.SUCCESS) {
-                            if (addUserResp.payload) {
-                                user = getTypeFromObject<User>(addUserResp.payload);
-                            }
-                        }
-                    }
-                }
-
-                user.name = ghUser.name;
-                user.pictureUrl = ghUser.avatar_url;
+            const resp: ApiResponse = await api.ghAuth({ access_token });
+            if (resp.status == ResponseStatus.SUCCESS && resp.payload && resp.payload['ghId'] == ghId) {
+                const user: User = getTypeFromObject<User>(resp.payload);
                 this.props.setUser(user);
-                setFBUserId('');
-                setFBAccessToken('');
-                setGHUserId(ghUser.id);
-                setGHAccessToken(ghUser.access_token);
-                //this.setState({ redirect: '/' });
             }
-            return;
         }
+    };
 
+    initLinkedIn = async () => {
 
+        //Check if the user has already logged in with LinkedIn
+        const liId = getLIUserId();
+        const access_token = getLIAccessToken();
+
+        if (liId && access_token) {
+            const resp: ApiResponse = await api.liAuth({ access_token });
+            if (resp.status == ResponseStatus.SUCCESS && resp.payload && resp.payload['liId'] == liId) {
+                const user: User = getTypeFromObject<User>(resp.payload);
+                this.props.setUser(user);
+            }
+        }
     };
 
     render() {
