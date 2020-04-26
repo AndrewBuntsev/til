@@ -15,42 +15,6 @@ const testApi = app => {
 };
 
 
-const getUser = app => {
-    app.get('/api/getUser', async (req, res) => {
-        const { fbId, ghId } = req.query;
-        try {
-            const user = await dbClient.getUser({ fbId, ghId });
-            if (user) {
-                res.status(200);
-                res.json({ status: statusCodes.SUCCESS, message: '', payload: user });
-            } else {
-                res.status(200);
-                res.json({ status: statusCodes.SUCCESS, message: `User with fbId ${fbId} and ghId ${ghId} not found`, payload: null });
-            }
-        }
-        catch (err) {
-            res.status(500);
-            console.error(err);
-            res.json({ status: statusCodes.ERROR, message: err, payload: null })
-        }
-    });
-};
-
-const addUser = app => {
-    app.post('/api/addUser', async (req, res) => {
-        const { fbId, ghId } = req.body;
-        try {
-            const user = await dbClient.addUser({ fbId, ghId });
-            res.json({ status: statusCodes.SUCCESS, message: 'User has been created successfully', payload: user });
-        }
-        catch (err) {
-            res.status(500);
-            console.error(err);
-            res.json({ status: statusCodes.ERROR, message: err, payload: null });
-        }
-    });
-};
-
 const getTils = app => {
     app.get('/api/getTils', async (req, res) => {
         try {
@@ -81,38 +45,76 @@ const addTil = app => {
     });
 };
 
+// const fbAuth = app => {
+//     app.get('/auth/fbAuth', async (req, res) => {
+//         let { code, access_token } = req.query;
 
+//         try {
+//             if (code) {
+//                 //1. Get access_token from Facebook
+//                 const accessData = await fetch(`https://graph.facebook.com/v6.0/oauth/access_token?client_id=329060394744421&redirect_uri=https%3A%2F%2Flocalhost:3000%2FfbAuth&client_secret=ec9f44ad02f336f12a8fcb4df4d61f6b&code=${code}&grant_type=client_credentials`)
+//                     .then(response => response.json());
 
+//                 console.log(accessData);
+//                 access_token = accessData.access_token;
+//             }
 
+//             if (!access_token) {
+//                 res.status(200);
+//                 res.json({ status: statusCodes.SUCCESS, message: `Cannot get Facebook access_token`, payload: null });
+//                 return;
+//             }
 
-const getFBUser = app => {
-    app.get('/api/getFBUser', async (req, res) => {
-        const { user_id, access_token } = req.query;
-        console.log(JSON.stringify(req.cookies));
+//             //2. Get a user by access_token
+//             const fbUser = await fetch(`https://graph.facebook.com/v6.0/me?fields=name&access_token=${access_token}`, {
+//                 headers: { 'Authorization': `Bearer ${access_token}` }
+//             }).then(response => response.json());
 
-        try {
-            const user = await fetch(`https://graph.facebook.com/${user_id}?fields=name,picture&access_token=${access_token}`)
-                .then(response => response.json());
+//             console.log(fbUser);
+//             // if (!liUser) {
+//             //     res.status(200);
+//             //     res.json({ status: statusCodes.SUCCESS, message: `Cannot get LinkedIn user for the ${access_token} access_token`, payload: null });
+//             //     return;
+//             // }
 
-            if (user) {
-                const { name, picture } = user;
-                const avatar_url = picture && picture.data ? picture.data.url : '';
-                const payload = { name, avatar_url };
-                res.status(200);
-                res.json({ status: statusCodes.SUCCESS, message: '', payload: payload });
-            } else {
-                res.status(200);
-                res.json({ status: statusCodes.SUCCESS, message: `Cannot get Facebook user for the ${user_id} user_id & ${access_token} access_token`, payload: null });
-            }
-        }
-        catch (err) {
-            res.status(500);
-            console.error(err);
-            res.json({ status: statusCodes.ERROR, message: err, payload: null })
-        }
-    });
-};
+//             // const id = liUser.id;
+//             // const name = liUser.firstName.localized.en_US + ' ' + liUser.lastName.localized.en_US;
+//             // const avatar_url = liUser.profilePicture['displayImage~'].elements[0].identifiers[0].identifier;
 
+//             // //3. Check if liUser retrieved properly
+//             // if (!id) {
+//             //     res.status(200);
+//             //     res.json({ status: statusCodes.SUCCESS, message: `Cannot get LinkedIn user for the ${access_token} access_token`, payload: null });
+//             //     return;
+//             // }
+//             // if (!name) {
+//             //     res.status(200);
+//             //     res.json({ status: statusCodes.SUCCESS, message: `Cannot get LinkedIn user name for the ${id} user_id`, payload: null });
+//             //     return;
+//             // }
+
+//             // //4. Get associated user data from DB
+//             // let tilUser = await dbClient.getUser({ liId: id.toString() });
+//             // if (!tilUser) {
+//             //     //5. If the user does not exist in DB create it
+//             //     tilUser = await dbClient.addUser({ liId: id.toString() });
+//             // }
+
+//             // //6. Add liUser fields to the tilUser and send it back to the client
+//             // tilUser.name = name;
+//             // tilUser.pictureUrl = avatar_url;
+//             // tilUser.access_token = access_token;
+
+//             // res.status(200);
+//             // res.json({ status: statusCodes.SUCCESS, message: '', payload: tilUser });
+//         }
+//         catch (err) {
+//             res.status(500);
+//             console.error(err);
+//             res.json({ status: statusCodes.ERROR, message: err, payload: null })
+//         }
+//     });
+// };
 
 const ghAuth = app => {
     app.get('/auth/ghAuth', async (req, res) => {
@@ -253,14 +255,10 @@ const liAuth = app => {
 
 module.exports = app => {
     testApi(app);
-    getUser(app);
-    addUser(app);
+
     getTils(app);
     addTil(app);
+
     ghAuth(app);
-
-    getFBUser(app);
-
-
     liAuth(app);
 };

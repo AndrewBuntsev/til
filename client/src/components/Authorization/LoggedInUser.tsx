@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import styles from './LoggedInUser.module.css';
+
 import { AppState } from '../../types/AppState';
 import setUser from '../../redux/actions/setUser';
 import { Dispatch } from 'redux';
 import { User } from '../../types/User';
 import { connect } from 'react-redux';
 import { clearCookies } from '../../helpers/cookiesHelper';
+import styles from './Authorization.module.css';
 
 
 
@@ -26,20 +27,15 @@ class LoggedInUser extends Component<Props, State> {
         const user: User = this.props.user;
 
         return (
-            <div className={styles.container}>
-                <div className={styles.nameContainer}>
-                    <span>{user.name}</span>
+            <div>
+                <div className={styles.tooltip}>
+                    <img src={user.pictureUrl} className={styles.picture} />
+                    <div className={styles.tooltipText}>
+                        <span className={styles.name}>{user.name}</span>
+                        <span className={styles.loggedin}>Logged via {user.ghId ? 'GitHub' : user.liId ? 'LinkedId' : '???'}</span>
+                        <span className={styles.logout} onClick={this.logOut}>Logout</span>
+                    </div>
                 </div>
-
-                <div className={styles.pictureContainer}>
-                    <img src={user.pictureUrl} width={50} />
-                </div>
-
-                <div className={styles.loggedViaContainer}>
-                    {user.fbId ? 'FB' : user.ghId ? 'GH' : user.liId ? 'LI' : '?'}
-                </div>
-
-                <button onClick={this.logOut}>Log out</button>
             </div>
         );
     }

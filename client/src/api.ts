@@ -18,29 +18,6 @@ export const addTil = (til: Til) => {
     }).then(res => res.json());
 };
 
-export const getUser = options => {
-    const fbId = options.fbId ? options.fbId : '';
-    const ghId = options.ghId ? options.ghId : '';
-    return fetch(`${ENDPOINT}/api/getUser?fbId=${fbId}&ghId=${ghId}`).then(res => res.json());
-};
-
-export const addUser = (user: User) => {
-    return fetch(`${ENDPOINT}/api/addUser`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    }).then(res => res.json());
-};
-
-
-
-
-export const getFBUser = (user_id: string, access_token: string) => {
-    return fetch(`${ENDPOINT}/api/getFBUser?user_id=${user_id}&access_token=${access_token}`).then(res => res.json());
-};
-
-
-
 
 
 export const ghAuth = (options: { code?: string, access_token?: string }) => {

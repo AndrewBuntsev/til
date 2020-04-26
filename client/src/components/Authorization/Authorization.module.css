@@ -1,11 +1,63 @@
 .container{
-    text-transform: uppercase;
     position: fixed;
     top: 10px;
     right: 10px;
 }
 
 .login{
-    color: red;
+    color: #006da3;
+    font-weight: 700;
+    text-decoration: none;
 }
 
+.picture{
+    width: 5vw;
+    min-width: 30px;
+    max-width: 60px;
+    border-radius: 50%;
+}
+
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltipText {
+  visibility: hidden;
+  width: 200px;
+  background-color: #082736B3;
+  --opacity: 0.7;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tooltip:hover .tooltipText {
+  visibility: visible;
+}
+
+.tooltip .tooltipText .name {
+  font-size: 18px;
+}
+
+.tooltip .tooltipText .loggedin {
+  font-size: 14px;
+}
+
+.tooltip .tooltipText .logout {
+  margin-top: 15px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.tooltip .tooltipText .logout:hover {
+  color: #ff6600;
+}

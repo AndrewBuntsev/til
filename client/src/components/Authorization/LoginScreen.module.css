@@ -1,12 +1,28 @@
 .container{
-    margin-top: 17vw;
+    margin-top: 10vh;
     display: flex;
+    height: 80vh;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .loginContainer{
-    flex: 1 0;
+    background-color: #46616F;
+    border-radius: 3px;
+    width: 30%;
+    min-width: 250px;
+    max-width: 400px;
     display: flex;
+    flex-direction: column;
+    box-shadow: #006da322 7px -7px;
 }
 
+.loginContainer a {
+    padding: 10px;
+}
+
+.loginContainer a img{
+    border-radius: 7px;
+    max-width: 100%;
+}

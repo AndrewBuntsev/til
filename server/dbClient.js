@@ -8,14 +8,12 @@ const MONGO_CLIENT_OPTIONS = { useUnifiedTopology: true, useNewUrlParser: true }
 
 
 exports.getUser = async options => {
-    const { fbId, ghId, liId } = options;
+    const { ghId, liId } = options;
 
     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
     const db = mongoClient.db(MONGO_DB_NAME);
     let user = null;
-    if (fbId) {
-        user = await db.collection('users').findOne({ fbId });
-    } else if (ghId) {
+    if (ghId) {
         user = await db.collection('users').findOne({ ghId });
     } else if (liId) {
         user = await db.collection('users').findOne({ liId });
@@ -26,13 +24,13 @@ exports.getUser = async options => {
 };
 
 exports.addUser = async options => {
-    const { fbId, ghId, liId } = options;
+    const { ghId, liId } = options;
 
     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
     const db = mongoClient.db(MONGO_DB_NAME);
 
-    await db.collection('users').insertOne({ fbId, ghId, liId });
-    let user = await db.collection('users').findOne({ fbId, ghId, liId });
+    await db.collection('users').insertOne({ ghId, liId });
+    let user = await db.collection('users').findOne({ ghId, liId });
     mongoClient.close();
 
     return user;

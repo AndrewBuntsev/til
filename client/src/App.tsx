@@ -6,11 +6,13 @@ import './App.css';
 import LoginScreen from './components/Authorization/LoginScreen';
 import GhAuth from './components/Authorization/GhAuth';
 import LiAuth from './components/Authorization/LiAuth';
+import MainHeader from './components/MainHeader/MainHeader';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <MainHeader />
         <Route exact path="/" component={MainContainer} />
         <Route exact path="/ghAuth" component={GhAuth} />
         <Route exact path="/liAuth" component={LiAuth} />

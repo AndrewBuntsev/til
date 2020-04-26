@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import * as api from '../api';
 import { ApiResponse } from '../types/ApiResponse';
-import MainHeader from './MainHeader/MainHeader';
 import SideBar from './SideBar/SideBar';
 import TilsList from './TilsList/TilsList';
 import { Til } from '../types/Til';
@@ -31,7 +30,6 @@ export default class MainContainer extends Component<Props, State> {
     render() {
         return (
             <div>
-                <MainHeader />
                 <SideBar />
                 <TilsList tils={this.state.tils} />
                 <Authorization />

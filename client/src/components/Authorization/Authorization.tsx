@@ -7,13 +7,12 @@ import styles from './Authorization.module.css';
 import { AppState } from '../../types/AppState';
 import setUser from '../../redux/actions/setUser';
 import { User } from '../../types/User';
-import { getFBUserId, getGHUserId, getGHAccessToken, getFBAccessToken, setFBAccessToken, getLIUserId, getLIAccessToken } from '../../helpers/cookiesHelper';
+import { getGHUserId, getGHAccessToken, getLIUserId, getLIAccessToken } from '../../helpers/cookiesHelper';
 import * as api from '../../api';
 import { ApiResponse } from '../../types/ApiResponse';
 import { ResponseStatus } from '../../enums/ResponseStatus';
 import getTypeFromObject from '../../helpers/getTypeFromObject';
-import Login from './Login';
-import { FB_APP_ID, FB_API_VERSION } from '../../const/settings';
+import Login from './LoginButton';
 import LoggedInUser from './LoggedInUser';
 
 
@@ -31,62 +30,11 @@ class Authorization extends Component<Props, State> {
     state = { redirect: null };
 
     componentDidMount() {
-        this.initFacebook();
-        this.checkFBStatus()
         this.initGitHub();
         this.initLinkedIn();
     }
 
-    initFacebook = () => {
-        let that = this;
-        // load FB API
-        //TODO: move to separate file, use event bus
-        window['fbAsyncInit'] = function () {
-            window['FB'].init({
-                appId: FB_APP_ID.toString(),
-                cookie: true,
-                xfbml: true,
-                version: FB_API_VERSION
-            });
 
-            window['FB'].AppEvents.logPageView();
-
-            that.checkFBStatus();
-        };
-
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    };
-
-    checkFBStatus = () => {
-        if (!window['FB']) return;
-
-        const that = this;
-
-        window['FB'].getLoginStatus(async function (response) {
-            if (response.status == 'connected' && getFBUserId() == response.authResponse.userID) {
-                //update access_token
-                setFBAccessToken(response.authResponse.accessToken);
-
-                const resp: ApiResponse = await api.getUser({ fbId: response.authResponse.userID });
-                if (resp.status == ResponseStatus.SUCCESS) {
-                    let user: User = getTypeFromObject<User>(resp.payload);
-                    const fbUserRes: ApiResponse = await api.getFBUser(getFBUserId(), getFBAccessToken());
-                    if (fbUserRes.status == ResponseStatus.SUCCESS && fbUserRes.payload) {
-                        user.name = fbUserRes.payload['name'];
-                        user.pictureUrl = fbUserRes.payload['avatar_url'];
-                    }
-
-                    that.props.setUser(user);
-                }
-            }
-        });
-    };
 
     initGitHub = async () => {
 
