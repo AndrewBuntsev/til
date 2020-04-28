@@ -50,12 +50,12 @@ exports.getTils = async options => {
 };
 
 exports.addTil = async options => {
-    const { header, text, user } = options;
+    const { text, userId } = options;
 
     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
     const db = mongoClient.db(MONGO_DB_NAME);
 
-    await db.collection('tils').insertOne({ header, text, user });
+    await db.collection('tils').insertOne({ text, userId, time: new Date() });
     mongoClient.close();
 };
 

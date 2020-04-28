@@ -32,10 +32,75 @@ const getTils = app => {
 
 const addTil = app => {
     app.post('/api/addTil', async (req, res) => {
-        const { header, text, user } = req.body;
+        const { text, ghId, liId, ghAccessToken, liAccessToken } = req.body;
         try {
-            await dbClient.addTil({ header, text, user });
-            res.json({ status: statusCodes.SUCCESS, message: 'TIL has been added successfully', payload: null });
+            let tilUser = null;
+
+            if (ghId && ghAccessToken) {
+                // authorize against GitHub
+                const ghUser = await fetch('https://api.github.com/user', {
+                    headers: { Authorization: `token ${ghAccessToken}` }
+                }).then(response => response.json());
+
+                if (!ghUser) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${ghAccessToken} access_token`, payload: null });
+                    return;
+                }
+
+                const { id } = ghUser;
+                if (!id) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${ghAccessToken} access_token`, payload: null });
+                    return;
+                }
+
+                if (id != ghId) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `GitHub ${ghAccessToken} access_token is expired`, payload: null });
+                    return;
+                }
+
+                tilUser = await dbClient.getUser({ ghId: ghId });
+                if (!tilUser) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot find a user with ghId: ${ghId}`, payload: null });
+                    return;
+                }
+            } else if (liId && liAccessToken) {
+                // authorize against LinkedIn
+                const liUser = await fetch(`https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,profilePicture(displayImage~:playableStreams))`, {
+                    headers: { 'Authorization': `Bearer ${liAccessToken}` }
+                }).then(response => response.json());
+
+                if (!liUser) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot get LinkedIn user for the ${liAccessToken} access_token`, payload: null });
+                    return;
+                }
+
+                if (liUser.id != liId) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `GitHub ${liAccessToken} access_token is expired`, payload: null });
+                    return;
+                }
+
+                tilUser = await dbClient.getUser({ liId: liId });
+                if (!tilUser) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot find a user with liId: ${liId}`, payload: null });
+                    return;
+                }
+            }
+
+            if (!tilUser) {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot find a user. Parameters are incorrect`, payload: null });
+                return;
+            }
+
+            await dbClient.addTil({ text, userId: tilUser._id });
+            res.json({ status: statusCodes.SUCCESS, message: 'Article has been added successfully', payload: null });
         }
         catch (err) {
             res.status(500);

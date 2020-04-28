@@ -1,0 +1,19 @@
+.container{
+  margin-top: 10vh;
+  display: flex;
+  height: 80vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.textContainer{
+  width: 81%;
+  
+}
+
+.htmlContainer{
+  margin-top: 15px;
+  min-height: 20vh;
+  width: 80%;
+}

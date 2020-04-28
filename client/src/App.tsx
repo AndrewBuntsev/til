@@ -7,6 +7,7 @@ import LoginScreen from './components/Authorization/LoginScreen';
 import GhAuth from './components/Authorization/GhAuth';
 import LiAuth from './components/Authorization/LiAuth';
 import MainHeader from './components/MainHeader/MainHeader';
+import AddArticle from './components/AddArticle/AddArticle';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route exact path="/ghAuth" component={GhAuth} />
         <Route exact path="/liAuth" component={LiAuth} />
         <Route exact path="/login" component={LoginScreen} />
+        <Route exact path="/addArticle" component={AddArticle} />
 
       </BrowserRouter>
     </div>

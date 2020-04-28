@@ -1,6 +1,6 @@
 import { ENDPOINT } from "./const/settings";
-import { Til } from "./types/Til";
-import { User } from "./types/User";
+import { getGHUserId, getGHAccessToken, getLIUserId, getLIAccessToken } from "./helpers/cookiesHelper";
+
 
 export const testApi = () => {
     return fetch(`${ENDPOINT}/api/test`).then(res => res.json());
@@ -10,11 +10,16 @@ export const getTils = () => {
     return fetch(`${ENDPOINT}/api/getTils`).then(res => res.json());
 };
 
-export const addTil = (til: Til) => {
+export const addTil = (text: string) => {
+    const ghId = getGHUserId();
+    const ghAccessToken = getGHAccessToken();
+    const liId = getLIUserId();
+    const liAccessToken = getLIAccessToken();
+
     return fetch(`${ENDPOINT}/api/addTil`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(til)
+        body: JSON.stringify({ text, ghId, ghAccessToken, liId, liAccessToken })
     }).then(res => res.json());
 };
 

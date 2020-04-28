@@ -31,8 +31,8 @@ export default class MainContainer extends Component<Props, State> {
         return (
             <div>
                 <SideBar />
-                <TilsList tils={this.state.tils} />
                 <Authorization />
+                <TilsList tils={this.state.tils} />
             </div>
         );
     }
