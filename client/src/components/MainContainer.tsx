@@ -7,6 +7,7 @@ import TilsList from './TilsList/TilsList';
 import { Til } from '../types/Til';
 import getTypeFromObject from '../helpers/getTypeFromObject';
 import Authorization from './Authorization/Authorization';
+import { ResponseStatus } from '../enums/ResponseStatus';
 
 
 
@@ -24,7 +25,9 @@ export default class MainContainer extends Component<Props, State> {
 
     async componentDidMount() {
         const response: ApiResponse = await api.getTils();
-        this.setState({ tils: getTypeFromObject<Array<Til>>(response.payload) });
+        if (response.status == ResponseStatus.SUCCESS && response.payload) {
+            this.setState({ tils: getTypeFromObject<Array<Til>>(response.payload) });
+        }
     }
 
     render() {

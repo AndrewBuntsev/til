@@ -1,0 +1,19 @@
+.container{
+    background: #1b95e0;
+    color: #fff;
+    width: 60px;
+    height: 20px;
+    padding: 1px 8px 1px 6px;
+    border-radius: 3px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 13px;
+}
+.container:hover{
+    background: #0c7abf;
+}
+
+.text{
+    vertical-align: middle;
+}

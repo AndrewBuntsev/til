@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
 import RichTextEditor from 'react-rte';
 
-import * as api from './../../api';
+import * as api from '../../api';
 // import JoditEditor from "jodit-react";
 // import CKEditor from '@ckeditor/ckeditor5-react';
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-import styles from './AddArticle.module.css';
+import styles from './EditArticle.module.css';
 import { ApiResponse } from '../../types/ApiResponse';
 import Authorization from '../Authorization/Authorization';
+import Button from '../controls/Button/Button';
+import { ResponseStatus } from '../../enums/ResponseStatus';
 
 
 type Props = {};
 type State = {
+    articleId?: string;
     value: any;
 };
 
-export default class AddArticle extends Component<Props, State> {
+export default class EditArticle extends Component<Props, State> {
 
     state = {
+        articleId: null,
         value: RichTextEditor.createEmptyValue()
     }
 
@@ -27,16 +31,37 @@ export default class AddArticle extends Component<Props, State> {
     };
 
     onHtmlChange = e => {
-        this.setState({ value: RichTextEditor.createValueFromString(e.target.value, 'html') });
+        let html: string = e.target.value;
+        html = html
+            .replace(/<br>/g, '')
+            .replace(/<h1>/g, '<h2>')
+            .replace(/<\/h1>/g, '</h2>');
+        this.setState({ value: RichTextEditor.createValueFromString(html, 'html') });
     };
 
-    postArticle = async () => {
+    saveArticle = async () => {
+        const saveTilresponse: ApiResponse = await api.saveTil(this.state.value.toString('html'), this.state.articleId);
+        console.log(saveTilresponse);
+
         this.setState({
             value: RichTextEditor.createEmptyValue()
         });
-        const addTilresponse: ApiResponse = await api.addTil(this.state.value.toString('html'));
-        console.log(addTilresponse);
     };
+
+    async componentDidMount() {
+        const articleId = (new URLSearchParams(window.location.search)).get('articleId');
+
+        if (articleId) {
+            //load the article
+            const response: ApiResponse = await api.getTil(articleId);
+            if (response.status == ResponseStatus.SUCCESS && response.payload) {
+                this.setState({
+                    articleId: articleId,
+                    value: RichTextEditor.createValueFromString(response.payload['text'], 'html')
+                });
+            }
+        }
+    }
 
     render() {
         return (
@@ -55,7 +80,7 @@ export default class AddArticle extends Component<Props, State> {
                     value={this.state.value.toString('html')}
                     onChange={this.onHtmlChange} />
 
-                <button onClick={this.postArticle}>post</button>
+                <Button title={this.state.articleId ? 'Save' : 'Post'} onClick={this.saveArticle} />
             </div>
         );
     }

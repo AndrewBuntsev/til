@@ -7,7 +7,7 @@ import styles from './SideBar.module.css';
 type Props = {};
 type State = {};
 
-export default class SideBar extends Component<Props, State> {
+export default class SearchArticle extends Component<Props, State> {
 
     state = {
         // header: '',
@@ -19,9 +19,7 @@ export default class SideBar extends Component<Props, State> {
     render() {
         return (
             <div className={styles.container}>
-                <NavLink to="/editArticle" activeClassName={styles.header}>
-                    +
-                </NavLink>
+
             </div>
         );
     }

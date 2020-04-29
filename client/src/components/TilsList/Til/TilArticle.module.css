@@ -1,15 +1,17 @@
 .container{
     background: #ffffffe6;
-    --opacity: 0.9;
     padding: 25px;
+    display: flex;
+    flex-direction: column;
 }
 
 .content{
+    flex: 1 0;
     padding: 4vw;
     overflow: auto;
 }
 
-.header{
+/* .header{
     font-size: 1.6em;
 }
 .header a{
@@ -20,7 +22,7 @@
 }
 .header a:hover{
     color: #ae1f23;
-}
+} */
 
 .content p{
     line-height: 1.6;
@@ -28,6 +30,26 @@
     font-size: 1em;
     font-weight: normal;
 }
+
+.buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.editButtonContainer{
+    text-decoration: none
+}
+
+.signature{
+
+}
 .aside{
 
 }
+
+pre code{
+    background-color: #414347;
+}
+

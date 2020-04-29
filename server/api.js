@@ -30,9 +30,24 @@ const getTils = app => {
     });
 };
 
-const addTil = app => {
-    app.post('/api/addTil', async (req, res) => {
-        const { text, ghId, liId, ghAccessToken, liAccessToken } = req.body;
+const getTil = app => {
+    app.get('/api/getTil/:tilId', async (req, res) => {
+        try {
+            const til = await dbClient.getTil(req.params.tilId);
+            res.status(200);
+            res.json({ status: statusCodes.SUCCESS, message: '', payload: til });
+        }
+        catch (err) {
+            res.status(500);
+            console.error(err);
+            res.json({ status: statusCodes.ERROR, message: err, payload: null })
+        }
+    });
+};
+
+const saveTil = app => {
+    app.post('/api/saveTil', async (req, res) => {
+        const { text, tilId, ghId, liId, ghAccessToken, liAccessToken } = req.body;
         try {
             let tilUser = null;
 
@@ -99,7 +114,25 @@ const addTil = app => {
                 return;
             }
 
-            await dbClient.addTil({ text, userId: tilUser._id });
+            if (tilId) {
+                // try to update the til
+                const til = await dbClient.getTil(tilId);
+                if (til) {
+                    if (tilUser._id.toString() != til.userId.toString()) {
+                        res.status(500);
+                        console.log(tilUser._id);
+                        console.log(til.userId);
+                        res.json({ status: statusCodes.ERROR, message: 'Not enough permissions to edit the article', payload: null });
+                        return;
+                    }
+
+                    await dbClient.updateTil({ text, id: til._id });
+                    res.json({ status: statusCodes.SUCCESS, message: 'Article has been updated successfully', payload: null });
+                    return;
+                }
+            }
+
+            await dbClient.addTil({ text, userId: tilUser._id, userName: tilUser.name });
             res.json({ status: statusCodes.SUCCESS, message: 'Article has been added successfully', payload: null });
         }
         catch (err) {
@@ -226,11 +259,10 @@ const ghAuth = app => {
             let tilUser = await dbClient.getUser({ ghId: id.toString() });
             if (!tilUser) {
                 //5. If the user does not exist in DB create it
-                tilUser = await dbClient.addUser({ ghId: id.toString() });
+                tilUser = await dbClient.addUser({ ghId: id.toString(), name: name });
             }
 
             //6. Add ghUser fields to the tilUser and send it back to the client
-            tilUser.name = name;
             tilUser.pictureUrl = avatar_url;
             tilUser.access_token = access_token;
 
@@ -298,11 +330,10 @@ const liAuth = app => {
             let tilUser = await dbClient.getUser({ liId: id.toString() });
             if (!tilUser) {
                 //5. If the user does not exist in DB create it
-                tilUser = await dbClient.addUser({ liId: id.toString() });
+                tilUser = await dbClient.addUser({ liId: id.toString(), name: name });
             }
 
             //6. Add liUser fields to the tilUser and send it back to the client
-            tilUser.name = name;
             tilUser.pictureUrl = avatar_url;
             tilUser.access_token = access_token;
 
@@ -322,7 +353,8 @@ module.exports = app => {
     testApi(app);
 
     getTils(app);
-    addTil(app);
+    getTil(app);
+    saveTil(app);
 
     ghAuth(app);
     liAuth(app);

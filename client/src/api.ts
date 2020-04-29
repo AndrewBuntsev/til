@@ -10,16 +10,20 @@ export const getTils = () => {
     return fetch(`${ENDPOINT}/api/getTils`).then(res => res.json());
 };
 
-export const addTil = (text: string) => {
+export const getTil = (tilId: string) => {
+    return fetch(`${ENDPOINT}/api/getTil/${tilId}`).then(res => res.json());
+};
+
+export const saveTil = (text: string, tilId?: string) => {
     const ghId = getGHUserId();
     const ghAccessToken = getGHAccessToken();
     const liId = getLIUserId();
     const liAccessToken = getLIAccessToken();
 
-    return fetch(`${ENDPOINT}/api/addTil`, {
+    return fetch(`${ENDPOINT}/api/saveTil`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, ghId, ghAccessToken, liId, liAccessToken })
+        body: JSON.stringify({ text, tilId, ghId, ghAccessToken, liId, liAccessToken })
     }).then(res => res.json());
 };
 

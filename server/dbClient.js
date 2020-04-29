@@ -1,7 +1,8 @@
 const MONGO_DB_NAME = 'TIL';
 //const MONGO_URI = 'mongodb://username:password@server.andreibuntsev.com:27017/TIL';
 const MONGO_URI = `mongodb://localhost:27017/${MONGO_DB_NAME}`;
-const MongoClient = require('mongodb').MongoClient;
+const Mongo = require('mongodb');
+const MongoClient = Mongo.MongoClient;
 const MONGO_CLIENT_OPTIONS = { useUnifiedTopology: true, useNewUrlParser: true };
 
 
@@ -24,12 +25,12 @@ exports.getUser = async options => {
 };
 
 exports.addUser = async options => {
-    const { ghId, liId } = options;
+    const { ghId, liId, name } = options;
 
     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
     const db = mongoClient.db(MONGO_DB_NAME);
 
-    await db.collection('users').insertOne({ ghId, liId });
+    await db.collection('users').insertOne({ ghId, liId, name });
     let user = await db.collection('users').findOne({ ghId, liId });
     mongoClient.close();
 
@@ -42,11 +43,20 @@ exports.getTils = async options => {
     const db = mongoClient.db(MONGO_DB_NAME);
 
     //TODO: not effective
-    const results = await db.collection('tils').find().toArray();
-
+    const results = await db.collection('tils').find().sort({ time: -1 }).toArray();
     mongoClient.close();
-    // return list of unique clients (unique by clientId)
     return results;
+};
+
+exports.getTil = async tilId => {
+
+    const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
+    const db = mongoClient.db(MONGO_DB_NAME);
+
+    const objId = new Mongo.ObjectID(tilId);
+    const result = await db.collection('tils').findOne({ _id: objId });
+    mongoClient.close();
+    return result;
 };
 
 exports.addTil = async options => {
@@ -56,6 +66,18 @@ exports.addTil = async options => {
     const db = mongoClient.db(MONGO_DB_NAME);
 
     await db.collection('tils').insertOne({ text, userId, time: new Date() });
+    mongoClient.close();
+};
+
+exports.updateTil = async options => {
+    const { text, id } = options;
+
+    const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
+    const db = mongoClient.db(MONGO_DB_NAME);
+
+    await db.collection('tils').updateOne({ _id: id }, {
+        $set: { text }
+    });
     mongoClient.close();
 };
 
