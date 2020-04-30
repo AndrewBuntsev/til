@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import styles from './LoginScreen.module.css';
 import { AppState } from '../../types/AppState';
@@ -14,19 +13,11 @@ type Props = {
     user: User;
     setUser(user: User): void;
 };
-type State = {
-    redirect: string;
-};
+type State = {};
 
 class LoginScreen extends Component<Props, State> {
 
-    state = { redirect: null };
-
     render() {
-        if (this.state.redirect) {
-            return <Redirect to={this.state.redirect} />
-        }
-
         return (
             <div className={styles.container}>
                 <div className={styles.loginContainer}>

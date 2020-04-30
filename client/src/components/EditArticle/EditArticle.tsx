@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import RichTextEditor from 'react-rte';
 
 import * as api from '../../api';
@@ -17,13 +18,15 @@ type Props = {};
 type State = {
     articleId?: string;
     value: any;
+    redirect: string;
 };
 
 export default class EditArticle extends Component<Props, State> {
 
     state = {
         articleId: null,
-        value: RichTextEditor.createEmptyValue()
+        value: RichTextEditor.createEmptyValue(),
+        redirect: null
     }
 
     onTextChange = value => {
@@ -41,11 +44,8 @@ export default class EditArticle extends Component<Props, State> {
 
     saveArticle = async () => {
         const saveTilresponse: ApiResponse = await api.saveTil(this.state.value.toString('html'), this.state.articleId);
-        console.log(saveTilresponse);
-
-        this.setState({
-            value: RichTextEditor.createEmptyValue()
-        });
+        //TODO: process an error
+        this.setState({ redirect: '/' });
     };
 
     async componentDidMount() {
@@ -64,11 +64,37 @@ export default class EditArticle extends Component<Props, State> {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
+
+        const toolbarConfig = {
+            // Optionally specify the groups to display (displayed in the order listed).
+            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'LINK_BUTTONS', 'IMAGE_BUTTON', 'HISTORY_BUTTONS'],
+            INLINE_STYLE_BUTTONS: [
+                { label: 'Bold', style: 'BOLD', className: 'custom-css-class' },
+                { label: 'Italic', style: 'ITALIC' },
+                { label: 'Underline', style: 'UNDERLINE' }
+            ],
+            BLOCK_TYPE_DROPDOWN: [
+                { label: 'Normal', style: 'unstyled' },
+                { label: 'Heading', style: 'header-two' },
+                { label: 'Heading Small', style: 'header-three' },
+                { label: 'Code Block', style: 'code-block' }
+            ],
+            BLOCK_TYPE_BUTTONS: [
+                { label: 'Blockquote', style: 'blockquote' },
+                { label: 'Image', style: 'image' }
+            ]
+        };
+
         return (
             <div className={styles.container}>
+
                 <Authorization />
                 <div className={styles.textContainer}>
                     <RichTextEditor
+                        toolbarConfig={toolbarConfig}
                         value={this.state.value}
                         onChange={this.onTextChange}
                     />
@@ -80,7 +106,9 @@ export default class EditArticle extends Component<Props, State> {
                     value={this.state.value.toString('html')}
                     onChange={this.onHtmlChange} />
 
-                <Button title={this.state.articleId ? 'Save' : 'Post'} onClick={this.saveArticle} />
+                <div className={styles.buttonsPanel}>
+                    <Button title={this.state.articleId ? 'Save' : 'Post'} onClick={this.saveArticle} />
+                </div>
             </div>
         );
     }

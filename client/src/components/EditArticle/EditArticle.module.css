@@ -1,7 +1,7 @@
 .container{
-  margin-top: 10vh;
+  margin-top: 10vw;
   display: flex;
-  height: 80vh;
+  height: calc(100vh - 10vw);
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
@@ -9,11 +9,23 @@
 
 .textContainer{
   width: 81%;
-  
+  flex: 1;
 }
 
 .htmlContainer{
   margin-top: 15px;
-  min-height: 20vh;
+  flex: 1;
   width: 80%;
+}
+
+.buttonsPanel{
+  height: 5%;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+:global(.public-DraftEditor-content) {
+  height: 35vh;
+  overflow: auto;
 }
