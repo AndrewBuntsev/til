@@ -143,6 +143,107 @@ const saveTil = app => {
     });
 };
 
+const deleteTil = app => {
+    app.post('/api/deleteTil', async (req, res) => {
+        const { tilId, ghId, liId, ghAccessToken, liAccessToken } = req.body;
+        try {
+            if (!tilId) {
+                res.status(200);
+                res.json({ status: statusCodes.ERROR, message: `Article ID not provided`, payload: null });
+                return;
+            }
+
+            let tilUser = null;
+
+            if (ghId && ghAccessToken) {
+                // authorize against GitHub
+                const ghUser = await fetch('https://api.github.com/user', {
+                    headers: { Authorization: `token ${ghAccessToken}` }
+                }).then(response => response.json());
+
+                if (!ghUser) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${ghAccessToken} access_token`, payload: null });
+                    return;
+                }
+
+                const { id } = ghUser;
+                if (!id) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${ghAccessToken} access_token`, payload: null });
+                    return;
+                }
+
+                if (id != ghId) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `GitHub ${ghAccessToken} access_token is expired`, payload: null });
+                    return;
+                }
+
+                tilUser = await dbClient.getUser({ ghId: ghId });
+                if (!tilUser) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot find a user with ghId: ${ghId}`, payload: null });
+                    return;
+                }
+            } else if (liId && liAccessToken) {
+                // authorize against LinkedIn
+                const liUser = await fetch(`https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,profilePicture(displayImage~:playableStreams))`, {
+                    headers: { 'Authorization': `Bearer ${liAccessToken}` }
+                }).then(response => response.json());
+
+                if (!liUser) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot get LinkedIn user for the ${liAccessToken} access_token`, payload: null });
+                    return;
+                }
+
+                if (liUser.id != liId) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `GitHub ${liAccessToken} access_token is expired`, payload: null });
+                    return;
+                }
+
+                tilUser = await dbClient.getUser({ liId: liId });
+                if (!tilUser) {
+                    res.status(200);
+                    res.json({ status: statusCodes.SUCCESS, message: `Cannot find a user with liId: ${liId}`, payload: null });
+                    return;
+                }
+            }
+
+            if (!tilUser) {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot find a user. Parameters are incorrect`, payload: null });
+                return;
+            }
+
+            const til = await dbClient.getTil(tilId);
+            if (!til) {
+                res.status(200);
+                res.json({ status: statusCodes.ERROR, message: `Article with ID ${tilId} not found`, payload: null });
+                return;
+            }
+
+            if (tilUser._id.toString() != til.userId.toString()) {
+                res.status(500);
+                console.log(tilUser._id);
+                console.log(til.userId);
+                res.json({ status: statusCodes.ERROR, message: 'Not enough permissions to delete the article', payload: null });
+                return;
+            }
+
+            await dbClient.deleteTil({ id: til._id });
+            res.json({ status: statusCodes.SUCCESS, message: 'Article has been deleted successfully', payload: null });
+        }
+        catch (err) {
+            res.status(500);
+            console.error(err);
+            res.json({ status: statusCodes.ERROR, message: err, payload: null });
+        }
+    });
+};
+
 // const fbAuth = app => {
 //     app.get('/auth/fbAuth', async (req, res) => {
 //         let { code, access_token } = req.query;
@@ -355,6 +456,7 @@ module.exports = app => {
     getTils(app);
     getTil(app);
     saveTil(app);
+    deleteTil(app);
 
     ghAuth(app);
     liAuth(app);

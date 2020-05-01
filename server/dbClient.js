@@ -81,49 +81,17 @@ exports.updateTil = async options => {
     mongoClient.close();
 };
 
-// exports.updateClient = async options => {
-//     const { clientId, clientName, showNotifications, gender, status } = options;
-//     if (!clientId) {
-//         throw `Cannot update the client. The clientId parameter is mandatory.`;
-//     }
-//     if (!clientName) {
-//         throw `Cannot update the client. The clientName parameter is mandatory. Client ID: ${clientId}`;
-//     }
+exports.deleteTil = async options => {
+    const { id } = options;
 
-//     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-//     const db = mongoClient.db(MONGO_DB_NAME);
+    const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
+    const db = mongoClient.db(MONGO_DB_NAME);
 
-//     const exists = await db.collection('clients').find({ clientId: clientId }).limit(1).count();
-//     if (!exists) {
-//         throw `Cannot update the client. The client ID ${clientId} does not exist in the database`;
-//     }
+    await db.collection('tils').deleteOne({ _id: id });
+    mongoClient.close();
+};
 
-//     await db.collection('clients').updateOne({ clientId: clientId },
-//         {
-//             $set: { clientName, showNotifications, gender, status, isRefreshRequired: true }
-//         });
 
-//     mongoClient.close();
-// };
-
-// exports.addContact = async options => {
-//     const { clientId, contact } = options;
-//     if (!clientId) {
-//         throw `Cannot add the contact to non-existent client. The clientId parameter is mandatory.`;
-//     }
-
-//     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-//     const db = mongoClient.db(MONGO_DB_NAME);
-
-//     const exists = await db.collection('clients').find({ clientId: clientId }).limit(1).count();
-//     if (!exists) {
-//         throw `Cannot add the contact to non-existent client.`;
-//     }
-
-//     await addContactIfNotExists(db, clientId, contact.clientId);
-
-//     mongoClient.close();
-// };
 
 // exports.removeContact = async options => {
 //     const { clientId, contactId } = options;

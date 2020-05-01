@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import styles from './TilArticle.module.css';
 import { Til } from '../../../types/Til';
 import Button from '../../controls/Button/Button';
+import { AppState } from '../../../types/AppState';
+import { connect } from 'react-redux';
+import { User } from '../../../types/User';
 
 
 
 type Props = {
-    til: Til
+    til: Til,
+    user: User;
 };
-type State = {};
+type State = {
+    redirect: string;
+};
 
-export default class TilArticle extends Component<Props, State> {
+class TilArticle extends Component<Props, State> {
 
-    state = {};
+    state = {
+        redirect: null
+    };
 
     componentDidMount() {
         window['hljs'].initHighlighting();
@@ -24,7 +32,15 @@ export default class TilArticle extends Component<Props, State> {
         window['hljs'].initHighlighting();
     }
 
+    onEditClick = () => {
+        this.setState({ redirect: `/editArticle?articleId=${this.props.til._id}` });
+    };
+
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />;
+        }
+
         return (
             <div className={styles.container}>
 
@@ -32,11 +48,7 @@ export default class TilArticle extends Component<Props, State> {
 
                 <div className={styles.buttons}>
                     <Button title='Tweet' onClick={() => { }} />
-                    <NavLink to={`/editArticle?articleId=${this.props.til._id}`} className={styles.editButtonContainer}>
-                        {/* TODO: rewrito redirect */}
-                        <Button title='Edit' onClick={() => { }} />
-                    </NavLink>
-
+                    {this.props.user && this.props.user._id == this.props.til.userId && <Button title='Edit' onClick={this.onEditClick} />}
                 </div>
 
                 <div className={styles.signature}>
@@ -51,3 +63,9 @@ export default class TilArticle extends Component<Props, State> {
 
 
 
+const mapStateToProps = (state: AppState) => ({
+    user: state.user
+});
+
+
+export default connect(mapStateToProps)(TilArticle);

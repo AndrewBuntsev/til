@@ -48,6 +48,13 @@ export default class EditArticle extends Component<Props, State> {
         this.setState({ redirect: '/' });
     };
 
+    deleteArticle = async () => {
+        const deleteTilresponse: ApiResponse = await api.deleteTil(this.state.articleId);
+        //TODO: process an error
+        console.log(deleteTilresponse);
+        this.setState({ redirect: '/' });
+    };
+
     async componentDidMount() {
         const articleId = (new URLSearchParams(window.location.search)).get('articleId');
 
@@ -108,6 +115,7 @@ export default class EditArticle extends Component<Props, State> {
 
                 <div className={styles.buttonsPanel}>
                     <Button title={this.state.articleId ? 'Save' : 'Post'} onClick={this.saveArticle} />
+                    {this.state.articleId && <Button title={'Delete'} onClick={this.deleteArticle} />}
                 </div>
             </div>
         );

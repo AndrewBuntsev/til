@@ -27,6 +27,19 @@ export const saveTil = (text: string, tilId?: string) => {
     }).then(res => res.json());
 };
 
+export const deleteTil = (tilId?: string) => {
+    const ghId = getGHUserId();
+    const ghAccessToken = getGHAccessToken();
+    const liId = getLIUserId();
+    const liAccessToken = getLIAccessToken();
+
+    return fetch(`${ENDPOINT}/api/deleteTil`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tilId, ghId, ghAccessToken, liId, liAccessToken })
+    }).then(res => res.json());
+};
+
 
 
 export const ghAuth = (options: { code?: string, access_token?: string }) => {
