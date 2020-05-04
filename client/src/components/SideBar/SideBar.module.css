@@ -4,28 +4,16 @@
     position: fixed;
     bottom: 10px;
     left: 10px;
-    height: 150px;
-    width: 40px;
+    width: 35px;
 }
 
-.addContainer{
-    background-image: url('./../../assets/images/add.png');
-    background-repeat: no-repeat;
-    cursor: pointer;
-    height: 35px;
-}
-.addContainer:hover{
-    background-image: url('./../../assets/images/add_over.png');
-    --height: 10px;
- }
 
- .searchContainer{
-    background-image: url('./../../assets/images/search.png');
-    background-repeat: no-repeat;
-    cursor: pointer;
-    height: 35px;
-}
-.searchContainer:hover{
-    background-image: url('./../../assets/images/search_over.png');
-    --height: 10px;
+ .sideBarItemContainer{
+     cursor: pointer;
  }
+ .sideBarItemContainer img{
+    cursor: pointer;
+    margin: 10px; 
+    height: 100%;
+    width: 100%;
+}

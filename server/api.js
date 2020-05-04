@@ -211,8 +211,6 @@ const deleteTil = app => {
 
             if (tilUser._id.toString() != til.userId.toString()) {
                 res.status(500);
-                console.log(tilUser._id);
-                console.log(til.userId);
                 res.json({ status: statusCodes.ERROR, message: 'Not enough permissions to delete the article', payload: null });
                 return;
             }
@@ -335,7 +333,6 @@ const ghAuth = app => {
             //3. Check if ghUser retrieved properly
             let { id, name, login, avatar_url } = ghUser;
             if (!name) name = login;
-            console.log(name)
             if (!id || !name) {
                 res.status(200);
                 res.json({ status: statusCodes.SUCCESS, message: `Cannot get correct GitHub user for the ${access_token} access_token`, payload: null });

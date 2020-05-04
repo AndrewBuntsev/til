@@ -31,3 +31,10 @@ body {
     font-family: 'Lora', serif;
 }
 
+/*Not used - for reference purposes only*/
+.sideBarItemColor{
+  color: #45616F;
+}
+.sideBarItemColor:hover{
+  color: #082736;
+}
