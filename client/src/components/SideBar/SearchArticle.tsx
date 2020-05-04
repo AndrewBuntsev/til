@@ -15,10 +15,11 @@ export default class SearchArticle extends Component<Props, State> {
         // user: ''
     };
 
-
+    //#45616F
+    //#082736
     render() {
         return (
-            <div className={styles.container}>
+            <div className={styles.searchContainer}>
 
             </div>
         );

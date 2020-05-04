@@ -5,4 +5,5 @@ export type Til = {
     text: string;
     userName: string;
     time: Date;
+    date: string;
 };

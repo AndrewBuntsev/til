@@ -34,16 +34,20 @@ export default class EditArticle extends Component<Props, State> {
     };
 
     onHtmlChange = e => {
-        let html: string = e.target.value;
+        const html: string = e.target.value;
+        this.setState({ value: RichTextEditor.createValueFromString(this.cleanHtml(html), 'html') });
+    };
+
+    cleanHtml = (html: string): string => {
         html = html
             .replace(/<br>/g, '')
             .replace(/<h1>/g, '<h2>')
             .replace(/<\/h1>/g, '</h2>');
-        this.setState({ value: RichTextEditor.createValueFromString(html, 'html') });
+        return html;
     };
 
     saveArticle = async () => {
-        const saveTilresponse: ApiResponse = await api.saveTil(this.state.value.toString('html'), this.state.articleId);
+        const saveTilresponse: ApiResponse = await api.saveTil(this.cleanHtml(this.state.value.toString('html')), this.state.articleId);
         //TODO: process an error
         this.setState({ redirect: '/' });
     };
@@ -60,7 +64,7 @@ export default class EditArticle extends Component<Props, State> {
 
         if (articleId) {
             //load the article
-            const response: ApiResponse = await api.getTil(articleId);
+            const response: ApiResponse = await api.getTils({ _id: articleId });
             if (response.status == ResponseStatus.SUCCESS && response.payload) {
                 this.setState({
                     articleId: articleId,
@@ -114,8 +118,8 @@ export default class EditArticle extends Component<Props, State> {
                     onChange={this.onHtmlChange} />
 
                 <div className={styles.buttonsPanel}>
-                    <Button title={this.state.articleId ? 'Save' : 'Post'} onClick={this.saveArticle} />
-                    {this.state.articleId && <Button title={'Delete'} onClick={this.deleteArticle} />}
+                    <Button icon={require('./../../assets/images/save-16-white.png')} title={this.state.articleId ? 'Save' : 'Post'} onClick={this.saveArticle} />
+                    {this.state.articleId && <Button icon={require('./../../assets/images/delete-16-white.png')} title={'Delete'} onClick={this.deleteArticle} />}
                 </div>
             </div>
         );

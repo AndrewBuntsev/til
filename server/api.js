@@ -1,7 +1,6 @@
 const statusCodes = require('./const/statusCodes');
 const dbClient = require('./dbClient');
 const fetch = require('node-fetch');
-const https = require('https');
 
 
 
@@ -18,24 +17,9 @@ const testApi = app => {
 const getTils = app => {
     app.get('/api/getTils', async (req, res) => {
         try {
-            const tils = await dbClient.getTils({});
+            const tils = await dbClient.getTils(req.query);
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: '', payload: tils });
-        }
-        catch (err) {
-            res.status(500);
-            console.error(err);
-            res.json({ status: statusCodes.ERROR, message: err, payload: null })
-        }
-    });
-};
-
-const getTil = app => {
-    app.get('/api/getTil/:tilId', async (req, res) => {
-        try {
-            const til = await dbClient.getTil(req.params.tilId);
-            res.status(200);
-            res.json({ status: statusCodes.SUCCESS, message: '', payload: til });
         }
         catch (err) {
             res.status(500);
@@ -349,10 +333,12 @@ const ghAuth = app => {
             }
 
             //3. Check if ghUser retrieved properly
-            const { id, name, avatar_url } = ghUser;
+            let { id, name, login, avatar_url } = ghUser;
+            if (!name) name = login;
+            console.log(name)
             if (!id || !name) {
                 res.status(200);
-                res.json({ status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${access_token} access_token`, payload: null });
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get correct GitHub user for the ${access_token} access_token`, payload: null });
                 return;
             }
 
@@ -454,7 +440,6 @@ module.exports = app => {
     testApi(app);
 
     getTils(app);
-    getTil(app);
     saveTil(app);
     deleteTil(app);
 

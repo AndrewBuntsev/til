@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 
 import styles from './SideBar.module.css';
+import SearchArticle from './SearchArticle';
+import AddArticle from './AddArticle';
 
 
 type Props = {};
@@ -19,9 +20,8 @@ export default class SideBar extends Component<Props, State> {
     render() {
         return (
             <div className={styles.container}>
-                <NavLink to="/editArticle" activeClassName={styles.header}>
-                    +
-                </NavLink>
+                <AddArticle />
+                <SearchArticle />
             </div>
         );
     }

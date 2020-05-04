@@ -38,34 +38,41 @@ exports.addUser = async options => {
 };
 
 exports.getTils = async options => {
-
+    const { _id, author, date } = options;
     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
     const db = mongoClient.db(MONGO_DB_NAME);
 
-    //TODO: not effective
-    const results = await db.collection('tils').find().sort({ time: -1 }).toArray();
+
+    const criteria = {};
+    if (_id) {
+        criteria._id = new Mongo.ObjectID(_id);
+    }
+    if (author) {
+        criteria.userId = new Mongo.ObjectID(author);
+    }
+    if (date) {
+        criteria.date = date;
+    }
+
+    const results = await db.collection('tils').find(criteria).sort({ time: -1 }).toArray();
+
     mongoClient.close();
     return results;
 };
 
-exports.getTil = async tilId => {
-
-    const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-    const db = mongoClient.db(MONGO_DB_NAME);
-
-    const objId = new Mongo.ObjectID(tilId);
-    const result = await db.collection('tils').findOne({ _id: objId });
-    mongoClient.close();
-    return result;
-};
-
 exports.addTil = async options => {
-    const { text, userId } = options;
+    const { text, userId, userName } = options;
 
     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
     const db = mongoClient.db(MONGO_DB_NAME);
 
-    await db.collection('tils').insertOne({ text, userId, time: new Date() });
+    await db.collection('tils').insertOne({
+        text,
+        userId,
+        userName,
+        time: new Date(),
+        date: Intl.DateTimeFormat('en', { year: 'numeric', month: 'long', day: '2-digit' }).format(new Date())
+    });
     mongoClient.close();
 };
 
@@ -91,161 +98,3 @@ exports.deleteTil = async options => {
     mongoClient.close();
 };
 
-
-
-// exports.removeContact = async options => {
-//     const { clientId, contactId } = options;
-//     if (!clientId) {
-//         throw `Cannot remove the contact from non-existent client. The clientId parameter is mandatory.`;
-//     }
-
-//     if (!contactId) {
-//         throw `Cannot remove the contact from the client {Clientid: ${clientId}}. The contactId parameter is mandatory.`;
-//     }
-
-//     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-//     const db = mongoClient.db(MONGO_DB_NAME);
-
-//     await db.collection('clients').updateOne({ clientId: clientId },
-//         {
-//             $pull: { contacts: { clientId: contactId } }
-//         });
-
-//     mongoClient.close();
-// };
-
-
-
-// exports.sendMessage = async options => {
-//     const { senderId, receiverId, message } = options;
-//     if (!senderId) {
-//         throw `The senderId parameter is mandatory.`;
-//     }
-
-//     if (!receiverId) {
-//         throw `The receiverId parameter is mandatory.`;
-//     }
-
-//     if (!message) {
-//         throw `The message parameter is mandatory.`;
-//     }
-
-//     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-//     const db = mongoClient.db(MONGO_DB_NAME);
-
-//     await Promise.all([
-//         addMessage(db, senderId, receiverId, 'out', message),
-//         addMessage(db, receiverId, senderId, 'in', message)
-//     ]);
-
-//     mongoClient.close();
-// };
-
-
-
-
-
-// // ----------------------------------private functions-------------------------
-
-// const addContactIfNotExists = async (db, clientId, contactId) => {
-//     // if the contact already exists, do nothing
-//     const exists = await db.collection('clients').find({ clientId: clientId, 'contacts.clientId': contactId }).limit(1).count();
-//     if (exists) return;
-
-//     const contact = await db.collection('clients').find({ clientId: contactId }).limit(1).project({ clientId: 1, clientName: 1, gender: 1, status: 1, _id: 0 }).next();
-
-//     // create the contact
-//     await db.collection('clients').updateOne(
-//         { clientId: clientId },
-//         {
-//             $push:
-//             {
-//                 'contacts': { clientId: contact.clientId, clientName: contact.clientName, gender: contact.gender, status: contact.status }
-//             }
-//         });
-// };
-
-
-// const addMessage = async (db, clientId, contactId, type, msg) => {
-//     // add contact if it doesn't exist
-//     await addContactIfNotExists(db, clientId, contactId);
-
-//     // add the message
-//     await db.collection('clients').updateOne(
-//         { clientId: clientId, 'contacts.clientId': contactId },
-//         {
-//             $push:
-//             {
-//                 'contacts.$.messages': { type, msg, time: new Date() }
-//             }
-//         });
-// };
-
-
-// async function refreshClientsData() {
-//     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-//     const db = mongoClient.db(MONGO_DB_NAME);
-
-//     const clientsToRefresh = await db.collection('clients')
-//         .find({ isRefreshRequired: true })
-//         .toArray();
-
-//     await Promise.all(clientsToRefresh.map(client => db.collection('clients').updateOne({ clientId: client.clientId }, { $set: { isRefreshRequired: false } })));
-//     await Promise.all(clientsToRefresh.map(client => {
-//         const contacts = client.contacts ? client.contacts : [];
-//         return Promise.all(contacts.map(contact =>
-//             db.collection('clients').updateOne(
-//                 { clientId: contact.clientId, 'contacts.clientId': client.clientId },
-//                 {
-//                     $set:
-//                     {
-//                         'contacts.$.clientName': client.clientName,
-//                         'contacts.$.gender': client.gender,
-//                         'contacts.$.status': client.status
-//                     }
-//                 })
-//         ))
-//     }
-//     ));
-
-//     mongoClient.close();
-// }
-
-// async function refreshOnlineClients() {
-
-//     const time = new Date();
-//     onlineClients = onlineClients.filter(c => c.time.getTime() > time.getTime() - 10000);
-
-//     //console.log(onlineClients);
-
-//     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
-//     const db = mongoClient.db(MONGO_DB_NAME);
-
-//     await db.collection('clients').updateMany(
-//         {
-//             //status: { $nin: ['off', 'inv'] },
-//             clientId: { $nin: onlineClients.map(c => c.id) }
-//         },
-//         {
-//             $set:
-//             {
-//                 status: 'off',
-//                 isRefreshRequired: true
-//             }
-//         }
-//     )
-//     // await Promise.all(offlineClients.map(c => db.collection('clients').updateOne({ clientId: c.clientId },
-//     //     {
-//     //         $set:
-//     //         {
-//     //             status: 'off',
-//     //             isRefreshRequired: true
-//     //         }
-//     //     }
-//     // )));
-
-//     mongoClient.close();
-
-
-
-// }

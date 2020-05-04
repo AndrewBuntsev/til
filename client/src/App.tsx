@@ -15,11 +15,13 @@ function App() {
       <BrowserRouter>
         <MainHeader />
         <Route exact path="/" component={MainContainer} />
+        <Route exact path="/authors" component={MainContainer} />
+        <Route exact path="/posts" component={MainContainer} />
+        <Route exact path="/dates" component={MainContainer} />
         <Route exact path="/ghAuth" component={GhAuth} />
         <Route exact path="/liAuth" component={LiAuth} />
         <Route exact path="/login" component={LoginScreen} />
         <Route exact path="/editArticle" component={EditArticle} />
-        {/* <Route exact path="/editArticle/:articleId" component={EditArticle} /> */}
 
       </BrowserRouter>
     </div>

@@ -9,9 +9,17 @@
     cursor: pointer;
     font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
     font-size: 13px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
 }
 .container:hover{
     background: #0c7abf;
+}
+
+img{
+    width: 14px;
 }
 
 .text{
