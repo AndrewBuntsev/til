@@ -26,7 +26,7 @@ export default class TilsList extends Component<Props, State> {
             </div>
         );
         return (
-            <div className={styles.container}>
+            <div>
                 {tils}
             </div>
         );

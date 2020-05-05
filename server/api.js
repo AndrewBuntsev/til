@@ -202,7 +202,8 @@ const deleteTil = app => {
                 return;
             }
 
-            const til = await dbClient.getTil(tilId);
+            const til = (await dbClient.getTils({ _id: tilId }))[0];
+
             if (!til) {
                 res.status(200);
                 res.json({ status: statusCodes.ERROR, message: `Article with ID ${tilId} not found`, payload: null });

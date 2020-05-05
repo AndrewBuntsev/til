@@ -38,7 +38,7 @@ exports.addUser = async options => {
 };
 
 exports.getTils = async options => {
-    const { _id, author, date } = options;
+    const { _id, author, date, searchTerm } = options;
     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
     const db = mongoClient.db(MONGO_DB_NAME);
 
@@ -52,6 +52,9 @@ exports.getTils = async options => {
     }
     if (date) {
         criteria.date = date;
+    }
+    if (searchTerm) {
+        criteria.text = { $regex: searchTerm, $options: 'i' };
     }
 
     const results = await db.collection('tils').find(criteria).sort({ time: -1 }).toArray();

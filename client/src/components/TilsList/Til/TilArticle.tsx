@@ -55,14 +55,14 @@ class TilArticle extends PureComponent<Props, State> {
                 </div>
 
                 <div className={styles.signature}>
-                    <NavLink to={`/authors?author=${this.props.til.userId}`} className={styles.userName}>{this.props.til.userName}</NavLink>
-                    <NavLink to={`/dates?date=${this.props.til.date}`} className={styles.date}>
+                    <NavLink to={`/posts?author=${this.props.til.userId}`} className={styles.userName}>{this.props.til.userName}</NavLink>
+                    <NavLink to={`/posts?date=${this.props.til.date}`} className={styles.date}>
                         {this.props.til.date}
                     </NavLink>
                 </div>
 
                 <aside className={styles.aside}>
-                    <NavLink to={`/posts?post=${this.props.til._id}`} className={styles.userName}>permalink</NavLink>
+                    <NavLink to={`/posts?id=${this.props.til._id}`} className={styles.userName}>permalink</NavLink>
                 </aside>
             </div>
         );

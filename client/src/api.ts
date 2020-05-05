@@ -6,13 +6,13 @@ export const testApi = () => {
     return fetch(`${ENDPOINT}/api/test`).then(res => res.json());
 };
 
-export const getTils = (options?: { _id?: string, author?: string, post?: string, date?: string }) => {
+export const getTils = (options?: { _id?: string, author?: string, date?: string, searchTerm?: string }) => {
     const _id = options && options._id ? options._id : '';
     const author = options && options.author ? options.author : '';
-    const post = options && options.post ? options.post : '';
     const date = options && options.date ? options.date : '';
+    const searchTerm = options && options.searchTerm ? options.searchTerm : '';
 
-    return fetch(`${ENDPOINT}/api/getTils?_id=${_id}&author=${author}&post=${post}&date=${date}`).then(res => res.json());
+    return fetch(`${ENDPOINT}/api/getTils?_id=${_id}&author=${author}&date=${date}&searchTerm=${searchTerm}`).then(res => res.json());
 };
 
 export const saveTil = (text: string, tilId?: string) => {

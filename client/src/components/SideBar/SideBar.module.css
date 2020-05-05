@@ -7,8 +7,8 @@
     width: 35px;
 }
 
-
  .sideBarItemContainer{
+     width: 100%;
      cursor: pointer;
  }
  .sideBarItemContainer img{
@@ -16,4 +16,57 @@
     margin: 10px; 
     height: 100%;
     width: 100%;
+}
+
+.searchContainer{
+    overflow: visible;
+    position: relative;
+}
+
+.searchForm{
+    position: absolute;
+    top: 10%;
+    left: 160%;
+    display: flex;
+    flex-direction: row;
+    color: #414347;
+    height: 40px;
+    font-family: Lora,Helvetica Neue,Helvetica,sans-serif;
+    box-shadow: 0 0 3rem rgba(8,39,54,.2);
+}
+.searchForm input{
+    padding: 0.5rem;
+    width: 140px;
+    background: white;
+    border: none;
+    vertical-align: middle;
+    line-height: 3rem;
+    font-size: 1em;
+    font-family: Lora,Helvetica Neue,Helvetica,sans-serif;
+    color: #414347;
+    
+}
+.searchForm input:focus{
+    outline-width: 0;
+}
+.searchForm button{
+    vertical-align: middle;
+    padding: 0.7rem 1rem;
+    width: 120px;
+    border: none;
+    cursor: pointer;
+    background: #082736;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1em;
+    font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    
+}
+.searchForm button:focus{
+    outline-width: 0;
+}
+.searchForm button:hover{
+    background: #AE1F23;
 }
