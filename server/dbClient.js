@@ -38,7 +38,7 @@ exports.addUser = async options => {
 };
 
 exports.getTils = async options => {
-    const { _id, author, date, searchTerm } = options;
+    const { _id, author, date, searchTerm, random } = options;
     const mongoClient = await MongoClient.connect(MONGO_URI, MONGO_CLIENT_OPTIONS);
     const db = mongoClient.db(MONGO_DB_NAME);
 
@@ -46,18 +46,17 @@ exports.getTils = async options => {
     const criteria = {};
     if (_id) {
         criteria._id = new Mongo.ObjectID(_id);
-    }
-    if (author) {
+    } else if (author) {
         criteria.userId = new Mongo.ObjectID(author);
-    }
-    if (date) {
+    } else if (date) {
         criteria.date = date;
-    }
-    if (searchTerm) {
+    } else if (searchTerm) {
         criteria.text = { $regex: searchTerm, $options: 'i' };
     }
 
-    const results = await db.collection('tils').find(criteria).sort({ time: -1 }).toArray();
+    const results = random ?
+        await db.collection('tils').aggregate([{ $sample: { size: parseInt(random) } }]).toArray()
+        : await db.collection('tils').find(criteria).sort({ time: -1 }).toArray();
 
     mongoClient.close();
     return results;

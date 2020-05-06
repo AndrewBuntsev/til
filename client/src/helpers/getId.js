@@ -1,0 +1,1 @@
+export const getId = (() => { let i = 0; return () => i++; })();

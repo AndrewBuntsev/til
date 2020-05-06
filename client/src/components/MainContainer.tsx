@@ -20,8 +20,6 @@ type State = {
     queryString: string;
 };
 
-const getId = (() => { let i = 0; return () => i++; })();
-
 export default class MainContainer extends Component<Props, State> {
     state = {
         tils: [],
@@ -31,11 +29,9 @@ export default class MainContainer extends Component<Props, State> {
 
     async componentDidMount() {
         this.setState({ queryString: '' });
-        console.log('componentDidMount ' + getId());
     }
 
     async componentDidUpdate(prevProps: Props, prevState: State) {
-        console.log('componentDidUpdate ' + getId());
         const queryString = this.props.location['search'];
         if (queryString != prevState.queryString) {
             const params = new URLSearchParams(queryString);
@@ -43,7 +39,8 @@ export default class MainContainer extends Component<Props, State> {
                 _id: params.get('post') ?? '',
                 author: params.get('author') ?? '',
                 date: params.get('date') ?? '',
-                searchTerm: params.get('searchTerm') ?? ''
+                searchTerm: params.get('searchTerm') ?? '',
+                random: params.get('random') ?? ''
             });
 
             if (response.status == ResponseStatus.SUCCESS && response.payload) {
@@ -58,8 +55,6 @@ export default class MainContainer extends Component<Props, State> {
     }
 
     render() {
-        console.log('render ' + getId());
-
         const searchTerm = (new URLSearchParams(this.state.queryString)).get('searchTerm');
 
         return (
