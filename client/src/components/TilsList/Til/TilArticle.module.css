@@ -18,6 +18,24 @@
     font-weight: normal;
 }
 
+.content img{
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 150vh;
+}
+
+.content em{
+    background: #d5e9f5;
+    padding: 0 .4em;
+}
+
+.content a{
+    text-decoration: none;
+    color: #ae1f23;
+}
+
 .buttons{
     display: flex;
     flex-direction: row;

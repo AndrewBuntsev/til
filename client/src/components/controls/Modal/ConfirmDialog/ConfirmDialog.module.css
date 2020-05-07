@@ -1,0 +1,49 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 5px;
+}
+
+.headerSection{
+    display: flex;
+    flex-direction: row;
+    align-self: stretch;
+    justify-content: space-between;
+}
+
+.title{
+    padding: 5px 10px 10px 10px;
+    color: #006da3;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
+}
+
+.closeButton{
+    width: auto;
+    height: auto;
+    align-self: flex-start;
+    padding: 2px;;
+}
+.closeButton:hover{
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+.closeButton:active{
+    border: 2px gray inset;
+    border-radius: 5px;
+}
+
+.message{
+    padding: 0 10px;
+    font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
+}
+
+.buttons{
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-top: 10px; 
+}

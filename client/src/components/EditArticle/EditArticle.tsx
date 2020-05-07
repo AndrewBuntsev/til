@@ -12,6 +12,7 @@ import { ApiResponse } from '../../types/ApiResponse';
 import Authorization from '../Authorization/Authorization';
 import Button from '../controls/Button/Button';
 import { ResponseStatus } from '../../enums/ResponseStatus';
+import ConfirmDialog from '../controls/Modal/ConfirmDialog/ConfirmDialog';
 
 
 type Props = {};
@@ -19,6 +20,7 @@ type State = {
     articleId?: string;
     value: any;
     redirect: string;
+    isDeletePopupVisible: boolean;
 };
 
 export default class EditArticle extends Component<Props, State> {
@@ -26,7 +28,8 @@ export default class EditArticle extends Component<Props, State> {
     state = {
         articleId: null,
         value: RichTextEditor.createEmptyValue(),
-        redirect: null
+        redirect: null,
+        isDeletePopupVisible: false
     }
 
     onTextChange = value => {
@@ -52,7 +55,11 @@ export default class EditArticle extends Component<Props, State> {
         this.setState({ redirect: '/' });
     };
 
+    showDeletePopup = () => this.setState({ isDeletePopupVisible: true });
+    hideDeletePopup = () => this.setState({ isDeletePopupVisible: false });
+
     deleteArticle = async () => {
+        this.hideDeletePopup();
         const deleteTilresponse: ApiResponse = await api.deleteTil(this.state.articleId);
         //TODO: process an error
         console.log(deleteTilresponse);
@@ -68,8 +75,10 @@ export default class EditArticle extends Component<Props, State> {
             if (response.status == ResponseStatus.SUCCESS && response.payload) {
                 this.setState({
                     articleId: articleId,
-                    value: RichTextEditor.createValueFromString(response.payload['text'], 'html')
+                    value: RichTextEditor.createValueFromString(response.payload[0]['text'], 'html')
                 });
+            } else {
+                console.error(response);
             }
         }
     }
@@ -99,6 +108,7 @@ export default class EditArticle extends Component<Props, State> {
             ]
         };
 
+
         return (
             <div className={styles.container}>
 
@@ -119,8 +129,15 @@ export default class EditArticle extends Component<Props, State> {
 
                 <div className={styles.buttonsPanel}>
                     <Button icon={require('./../../assets/images/save-16-white.png')} title={this.state.articleId ? 'Save' : 'Post'} onClick={this.saveArticle} />
-                    {this.state.articleId && <Button icon={require('./../../assets/images/delete-16-white.png')} title={'Delete'} onClick={this.deleteArticle} />}
+                    {this.state.articleId && <Button icon={require('./../../assets/images/delete-16-white.png')} title={'Delete'} onClick={this.showDeletePopup} />}
                 </div>
+
+                {this.state.isDeletePopupVisible &&
+                    <ConfirmDialog
+                        title='Delete Article'
+                        message='Do You really want to delete the article? '
+                        yesClick={this.deleteArticle}
+                        noClick={this.hideDeletePopup} />}
             </div>
         );
     }

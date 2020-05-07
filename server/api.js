@@ -100,7 +100,7 @@ const saveTil = app => {
 
             if (tilId) {
                 // try to update the til
-                const til = await dbClient.getTil(tilId);
+                const til = (await dbClient.getTils({ _id: tilId }))[0];
                 if (til) {
                     if (tilUser._id.toString() != til.userId.toString()) {
                         res.status(500);
