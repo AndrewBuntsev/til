@@ -16,15 +16,23 @@ type Props = {
 };
 type State = {
     redirect: string;
+    isRaw: boolean;
 };
 
 class TilArticle extends PureComponent<Props, State> {
 
     state = {
-        redirect: null
+        redirect: null,
+        isRaw: false
     };
 
     componentDidMount() {
+        document.querySelectorAll('pre code').forEach((block) => {
+            window['hljs'].highlightBlock(block);
+        });
+    }
+
+    componentDidUpdate() {
         document.querySelectorAll('pre code').forEach((block) => {
             window['hljs'].highlightBlock(block);
         });
@@ -40,10 +48,14 @@ class TilArticle extends PureComponent<Props, State> {
             return <Redirect to={this.state.redirect} />;
         }
 
+
+
         return (
             <div className={styles.container}>
 
-                <div className={styles.content} dangerouslySetInnerHTML={{ __html: this.props.til.text }} />
+                {this.state.isRaw ?
+                    <div className={styles.content}>{this.props.til.text}</div>
+                    : <div className={styles.content} dangerouslySetInnerHTML={{ __html: this.props.til.text }} />}
 
                 <div className={styles.buttons}>
                     <a href="https://twitter.com/intent/tweet?hashtags=git&original_referer=https%3A%2F%2Ftil.hashrocket.com%2Fposts%2F40xglnjqnt-git-checkout-in-patches-&ref_src=twsrc%5Etfw&text=Today%20I%20learned%3A%20Git%20Checkout%20in%20Patches%20&tw_p=tweetbutton&url=http%3A%2F%2Ftil.hashrocket.com%2Fposts%2F40xglnjqnt-git-checkout-in-patches-&via=jwworth">
@@ -61,9 +73,13 @@ class TilArticle extends PureComponent<Props, State> {
                     </NavLink>
                 </div>
 
+
                 <aside className={styles.aside}>
                     <NavLink to={`/posts?id=${this.props.til._id}`} className={styles.userName}>permalink</NavLink>
+                    &nbsp;&nbsp;&nbsp;
                     <NavLink to={`/posts?tag=${this.props.til.tag}`} className={styles.userName}>#{this.props.til.tag}</NavLink>
+                    &nbsp;&nbsp;&nbsp;
+                    <span style={{ cursor: 'pointer' }} onClick={() => this.setState(state => ({ isRaw: !state.isRaw }))}>Raw</span>
                 </aside>
             </div>
         );
