@@ -11,6 +11,7 @@ type Props = {
     noText?: string;
     yesClick?(): void;
     noClick?(): void;
+    noButtonHidden?: boolean;
     closeClick?(): void;
 };
 type State = {};
@@ -29,9 +30,10 @@ export default class ConfirmDialog extends Component<Props, State> {
                     </div>
 
                     <div className={styles.message}>{this.props.message}</div>
+
                     <div className={styles.buttons}>
                         <Button title={this.props.yesText ?? 'YES'} icon={require('./../../../../assets/images/check-16.png')} onClick={this.props.yesClick} />
-                        <Button title={this.props.noText ?? 'NO'} icon={require('./../../../../assets/images/x-mark-16.png')} onClick={this.props.noClick} />
+                        {!this.props.noButtonHidden && <Button title={this.props.noText ?? 'NO'} icon={require('./../../../../assets/images/x-mark-16.png')} onClick={this.props.noClick} />}
                     </div>
                 </div>
             </Modal>

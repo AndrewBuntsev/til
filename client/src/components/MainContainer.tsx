@@ -36,9 +36,10 @@ export default class MainContainer extends Component<Props, State> {
         if (queryString != prevState.queryString) {
             const params = new URLSearchParams(queryString);
             const response: ApiResponse = await api.getTils({
-                _id: params.get('post') ?? '',
+                _id: params.get('id') ?? '',
                 author: params.get('author') ?? '',
                 date: params.get('date') ?? '',
+                tag: params.get('tag') ?? '',
                 searchTerm: params.get('searchTerm') ?? '',
                 random: params.get('random') ?? ''
             });

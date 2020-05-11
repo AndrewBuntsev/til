@@ -63,6 +63,7 @@ class TilArticle extends PureComponent<Props, State> {
 
                 <aside className={styles.aside}>
                     <NavLink to={`/posts?id=${this.props.til._id}`} className={styles.userName}>permalink</NavLink>
+                    <NavLink to={`/posts?tag=${this.props.til.tag}`} className={styles.userName}>#{this.props.til.tag}</NavLink>
                 </aside>
             </div>
         );

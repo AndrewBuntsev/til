@@ -1,0 +1,36 @@
+.container input{
+    padding: 0.5rem;
+    width: 120px;
+    background: #fff;
+    border: 1px #888 solid;
+    border-radius: 2px;
+    vertical-align: middle;
+    height: 0.7rem;
+    font-size: 1em;
+    font-family: Helvetica,sans-serif;
+    color: #414347;
+    margin-top: -1px;
+    background-color: #F7F7F7;
+}
+
+.autocompleteContainer{
+    position: relative;
+}
+.autocompleteContainer ul{
+    position: absolute;
+    z-index: 10;
+    list-style-type: none;
+    background-color: #F7F7F7;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: gray 1px dotted;
+}
+.autocompleteContainer ul li{
+    cursor: pointer;
+    font-family: Helvetica,sans-serif;
+    padding: 7px;
+}
+.autocompleteContainer ul li:hover{
+    background-color: #E0E0E0;
+}
