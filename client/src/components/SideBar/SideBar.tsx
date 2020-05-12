@@ -9,6 +9,7 @@ import SideBarItem from './SideBarItem';
 import { User } from '../../types/User';
 import { AppState } from '../../types/AppState';
 import { getId } from '../../helpers/getId';
+import { TWITTER_LINK } from '../../const/settings';
 
 
 type Props = {
@@ -24,6 +25,14 @@ class SideBar extends Component<Props, State> {
         redirect: ''
     };
 
+    onTwitterClick = () => {
+        window.open(TWITTER_LINK, '_blank', 'noopener noreferrer');
+    };
+
+    onDiceClick = () => {
+        this.setState({ redirect: `/posts?random=1&pid=${getId()}` });
+    };
+
     render() {
         return (
             <div className={styles.container}>
@@ -31,8 +40,14 @@ class SideBar extends Component<Props, State> {
                 <SearchArticle />
                 <SideBarItem img={require('./../../assets/images/question.png')} imgHover={require('./../../assets/images/question_over.png')} onClick={() => { }} />
                 <SideBarItem img={require('./../../assets/images/chart.png')} imgHover={require('./../../assets/images/chart_over.png')} onClick={() => { }} />
-                <SideBarItem img={require('./../../assets/images/twitter.png')} imgHover={require('./../../assets/images/twitter_over.png')} onClick={() => { }} />
-                <SideBarItem img={require('./../../assets/images/dice.png')} imgHover={require('./../../assets/images/dice_over.png')} onClick={() => this.setState({ redirect: `/posts?random=1&pid=${getId()}` })} />
+                <SideBarItem
+                    img={require('./../../assets/images/twitter.png')}
+                    imgHover={require('./../../assets/images/twitter_over.png')}
+                    onClick={this.onTwitterClick} />
+                <SideBarItem
+                    img={require('./../../assets/images/dice.png')}
+                    imgHover={require('./../../assets/images/dice_over.png')}
+                    onClick={this.onDiceClick} />
 
                 {this.state.redirect && <Redirect to={this.state.redirect} />}
             </div>

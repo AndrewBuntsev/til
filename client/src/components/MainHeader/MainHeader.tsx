@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import styles from './MainHeader.module.css';
+import { TWITTER_LINK } from '../../const/settings';
 
 
 type Props = {};
@@ -15,7 +16,7 @@ export default class MainHeader extends Component<Props, State> {
                     <NavLink to="/" activeClassName={styles.header}>
                         Today I Learned
                     </NavLink>
-                    <a href='https://twitter.com/TodayIL38903307'
+                    <a href={TWITTER_LINK}
                         title='Twitter'
                         target='_blank'
                         rel='noopener noreferrer'
