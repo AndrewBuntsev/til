@@ -75,11 +75,10 @@ class TilArticle extends PureComponent<Props, State> {
 
 
                 <aside className={styles.aside}>
-                    <NavLink to={`/posts?id=${this.props.til._id}`} className={styles.userName}>permalink</NavLink>
-                    &nbsp;&nbsp;&nbsp;
-                    <NavLink to={`/posts?tag=${this.props.til.tag}`} className={styles.userName}>#{this.props.til.tag}</NavLink>
-                    &nbsp;&nbsp;&nbsp;
-                    <span style={{ cursor: 'pointer' }} onClick={() => this.setState(state => ({ isRaw: !state.isRaw }))}>Raw</span>
+                    <NavLink to={`/posts?tag=${this.props.til.tag}`} className={`${styles.asideItem} ${styles.asideItemTag}`}>#{this.props.til.tag}</NavLink>
+                    <NavLink to={`/posts?id=${this.props.til._id}`} className={`${styles.asideItem} ${styles.asideItemPermalink}`}>permalink</NavLink>
+                    <span onClick={() => this.setState(state => ({ isRaw: !state.isRaw }))} className={`${styles.asideItem} ${styles.asideItemRaw}`}>Raw</span>
+                    <div className={`${styles.asideItem} ${styles.asideItemLikes}`}>Heart</div>
                 </aside>
             </div>
         );

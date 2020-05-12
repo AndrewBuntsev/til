@@ -1,6 +1,6 @@
 .container{
     background: #ffffffe6;
-    padding: 25px;
+    padding: 25px 25px 12px 25px;
     display: flex;
     flex-direction: column;
 }
@@ -77,5 +77,43 @@
 
 
 .aside{
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    align-items: center;
+}
 
+.asideItem{
+    flex: 1 0;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
+    font-weight: 700;
+    border-top-width: 2.4px;
+    border-top-style: solid;
+    font-size: 0.81rem;
+    padding-top: 12px;
+    margin: 2px;
+}
+
+.asideItemTag{
+    border-top-color: #080;
+    color: #080;
+}
+
+.asideItemPermalink{
+    border-top-color: #007dae;
+    color: #007dae;
+}
+
+.asideItemRaw{
+    border-top-color: #7b185d;
+    color: #7b185d;
+}
+
+.asideItemLikes{
+    border-top-color: #ee7567;
+    color: #ee7567;
 }
