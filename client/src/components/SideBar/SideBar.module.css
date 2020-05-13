@@ -18,6 +18,7 @@
     width: 100%;
 }
 
+/* Search */
 .searchContainer{
     overflow: visible;
     position: relative;
@@ -70,3 +71,68 @@
 .searchForm button:hover{
     background: #AE1F23;
 }
+
+
+
+
+/* About */
+.aboutContainer{
+    overflow: visible;
+    position: relative;
+}
+
+.aboutPopup{
+    position: absolute;
+    left: 160%;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 1.5em;
+    background: #fff;
+    width: 400px;
+    font-family: Lora,Helvetica Neue,Helvetica,sans-serif;
+    box-shadow: 0 0 3rem rgba(8,39,54,.2);
+}
+
+.aboutText{
+    font-style: italic;
+    color: #222222; 
+    font-size: .9em;
+}
+
+.aboutLinksPanel{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aboutLinksPanel img{
+    width: auto;
+    height: auto;
+    max-width: 25px;
+    max-height: 25px;
+}
+
+.aboutLinkText{
+    margin-left: 5px;
+    color: #414347;
+    font-size: 0.85rem;
+    font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+.aboutLinkText:hover{
+    color: #006DA3;
+}
+
+.linkContainer{
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+    align-items: center;
+}
+
+

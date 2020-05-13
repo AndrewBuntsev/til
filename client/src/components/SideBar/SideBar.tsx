@@ -10,6 +10,7 @@ import { User } from '../../types/User';
 import { AppState } from '../../types/AppState';
 import { getId } from '../../helpers/getId';
 import { TWITTER_LINK } from '../../const/settings';
+import About from './About';
 
 
 type Props = {
@@ -38,7 +39,7 @@ class SideBar extends Component<Props, State> {
             <div className={styles.container}>
                 {this.props.user && <AddArticle />}
                 <SearchArticle />
-                <SideBarItem img={require('./../../assets/images/question.png')} imgHover={require('./../../assets/images/question_over.png')} onClick={() => { }} />
+                <About />
                 <SideBarItem img={require('./../../assets/images/chart.png')} imgHover={require('./../../assets/images/chart_over.png')} onClick={() => { }} />
                 <SideBarItem
                     img={require('./../../assets/images/twitter.png')}
