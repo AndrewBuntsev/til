@@ -4,6 +4,10 @@ import { Redirect } from 'react-router-dom';
 import styles from './SideBar.module.css';
 import SideBarItem from './SideBarItem';
 import { TWITTER_LINK, GITHUB_LINK } from '../../const/settings';
+import { AppState } from '../../types/AppState';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import setIsAboutPopupVisible from '../../redux/actions/setIsAboutPopupVisible';
 
 
 const IMG = require('./../../assets/images/question.png');
@@ -13,25 +17,26 @@ const IMG_TWITTER_BLUE = require('./../../assets/images/twitter-32-blue.png');
 const IMG_GITHUB_DARK = require('./../../assets/images/github-32-dark.png');
 const IMG_GITHUB_BLUE = require('./../../assets/images/github-32-blue.png');
 
-type Props = {};
+type Props = {
+    isAboutPopupVisible: boolean;
+    setIsAboutPopupVisible: (isSearchFormVisible: boolean) => void;
+};
 type State = {
-    isPopupVisible: boolean;
     redirect: string;
 };
 
-export default class About extends Component<Props, State> {
+class About extends Component<Props, State> {
     state = {
-        isPopupVisible: false,
         redirect: null
     };
 
     togglePopupVisibility = () => {
-        this.setState(state => ({ isPopupVisible: !state.isPopupVisible }));
+        this.props.setIsAboutPopupVisible(!this.props.isAboutPopupVisible);
     };
 
     onKeyDown = e => {
         if (e.key == 'Escape') {
-            this.setState({ isPopupVisible: false });
+            this.props.setIsAboutPopupVisible(false);
         }
     };
 
@@ -57,10 +62,10 @@ export default class About extends Component<Props, State> {
         return (
             <div className={styles.aboutContainer}>
                 <SideBarItem
-                    img={this.state.isPopupVisible ? IMG_HOVER : IMG}
+                    img={this.props.isAboutPopupVisible ? IMG_HOVER : IMG}
                     imgHover={IMG_HOVER}
                     onClick={this.togglePopupVisibility} />
-                {this.state.isPopupVisible && (
+                {this.props.isAboutPopupVisible && (
                     <div className={styles.aboutPopup}>
                         <div className={styles.aboutText}>
                             Today I Learned is an open-source project that exists to catalogue the sharing & accumulation of knowledge as it happens day-to-day.
@@ -88,3 +93,12 @@ export default class About extends Component<Props, State> {
 
 
 
+const mapStateToProps = (state: AppState) => ({
+    isAboutPopupVisible: state.isAboutPopupVisible
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    setIsAboutPopupVisible: (isAboutPopupVisible: boolean) => dispatch(setIsAboutPopupVisible(isAboutPopupVisible))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(About);

@@ -3,27 +3,34 @@ import { Redirect } from 'react-router-dom';
 
 import styles from './SideBar.module.css';
 import SideBarItem from './SideBarItem';
+import { AppState } from '../../types/AppState';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import setIsSearchFormVisible from '../../redux/actions/setIsSearchFormVisible';
 
 
 const IMG = require('./../../assets/images/search.png');
 const IMG_HOVER = require('./../../assets/images/search_over.png');
 
-type Props = {};
+type Props = {
+    isSearchFormVisible: boolean;
+    setIsSearchFormVisible: (isSearchFormVisible: boolean) => void;
+};
 type State = {
-    isSearchFormvisible: boolean;
+
     redirect: string;
     searchTerm: string;
 };
 
-export default class SearchArticle extends Component<Props, State> {
+class SearchArticle extends Component<Props, State> {
     state = {
-        isSearchFormvisible: false,
+
         redirect: null,
         searchTerm: ''
     };
 
     toggleSearchFormVisibility = () => {
-        this.setState(state => ({ isSearchFormvisible: !state.isSearchFormvisible }));
+        this.props.setIsSearchFormVisible(!this.props.isSearchFormVisible);
     };
 
     onKeyDown = e => {
@@ -34,8 +41,8 @@ export default class SearchArticle extends Component<Props, State> {
 
     buttonSearchClick = () => {
         if (!this.state.searchTerm) return;
+        this.props.setIsSearchFormVisible(false);
         this.setState({
-            isSearchFormvisible: false,
             searchTerm: '',
             redirect: `/posts?searchTerm=${this.state.searchTerm}`
         });
@@ -45,10 +52,10 @@ export default class SearchArticle extends Component<Props, State> {
         return (
             <div className={styles.searchContainer}>
                 <SideBarItem
-                    img={this.state.isSearchFormvisible ? IMG_HOVER : IMG}
+                    img={this.props.isSearchFormVisible ? IMG_HOVER : IMG}
                     imgHover={IMG_HOVER}
                     onClick={this.toggleSearchFormVisibility} />
-                {this.state.isSearchFormvisible && (
+                {this.props.isSearchFormVisible && (
                     <div className={styles.searchForm}>
                         <input
                             type='text'
@@ -68,3 +75,13 @@ export default class SearchArticle extends Component<Props, State> {
 
 
 
+
+const mapStateToProps = (state: AppState) => ({
+    isSearchFormVisible: state.isSearchFormVisible
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    setIsSearchFormVisible: (isSearchFormVisible: boolean) => dispatch(setIsSearchFormVisible(isSearchFormVisible))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchArticle);

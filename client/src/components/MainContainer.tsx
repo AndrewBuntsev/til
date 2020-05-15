@@ -9,18 +9,24 @@ import getTypeFromObject from '../helpers/getTypeFromObject';
 import Authorization from './Authorization/Authorization';
 import { ResponseStatus } from '../enums/ResponseStatus';
 import styles from './MainContainer.module.css';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import setIsAboutPopupVisible from '../redux/actions/setIsAboutPopupVisible';
+import setIsSearchFormVisible from '../redux/actions/setIsSearchFormVisible';
 
 
 
 type Props = {
     location: object;
+    setIsSearchFormVisible: (isSearchFormVisible: boolean) => void;
+    setIsAboutPopupVisible: (isSearchFormVisible: boolean) => void;
 };
 type State = {
     tils: Array<Til>;
     queryString: string;
 };
 
-export default class MainContainer extends Component<Props, State> {
+class MainContainer extends Component<Props, State> {
     state = {
         tils: [],
         queryString: null
@@ -55,6 +61,11 @@ export default class MainContainer extends Component<Props, State> {
         }
     }
 
+    onClick = () => {
+        this.props.setIsAboutPopupVisible(false);
+        this.props.setIsSearchFormVisible(false);
+    };
+
     render() {
         const searchTerm = (new URLSearchParams(this.state.queryString)).get('searchTerm');
 
@@ -62,15 +73,22 @@ export default class MainContainer extends Component<Props, State> {
             <div>
                 <SideBar />
                 <Authorization />
-                <div className={styles.container}>
+                <div className={styles.container} onClick={this.onClick}>
                     {searchTerm && <h2 className={styles.searchResultsHeader}>{`${this.state.tils.length} post${this.state.tils.length != 1 ? 's' : ''} about ${searchTerm}`}</h2>}
                     <TilsList tils={this.state.tils} />
                 </div>
-
             </div>
         );
     }
 }
+
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    setIsSearchFormVisible: (isSearchFormVisible: boolean) => dispatch(setIsSearchFormVisible(isSearchFormVisible)),
+    setIsAboutPopupVisible: (isAboutPopupVisible: boolean) => dispatch(setIsAboutPopupVisible(isAboutPopupVisible))
+});
+
+export default connect(null, mapDispatchToProps)(MainContainer);
 
 
 

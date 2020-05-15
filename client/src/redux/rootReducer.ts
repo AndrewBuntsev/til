@@ -20,6 +20,14 @@ function handleAction(state: AppState, action: Action): AppState {
             const user = action.payload['user'];
             return { ...state, user };
 
+        case ActionType.SET_IS_SEARCH_FORM_VISIBLE:
+            const isSearchFormVisible = action.payload['isSearchFormVisible'];
+            return { ...state, isSearchFormVisible };
+
+        case ActionType.SET_IS_ABOUT_POPUP_VISIBLE:
+            const isAboutPopupVisible = action.payload['isAboutPopupVisible'];
+            return { ...state, isAboutPopupVisible };
+
         // case ActionType.SET_ACTIVE_SCREEN:
         //     return { ...state, activeScreen: action.payload['activeScreen'] };
 

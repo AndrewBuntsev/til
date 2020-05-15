@@ -6,7 +6,9 @@ import { AppState } from '../types/AppState';
 
 
 const defaultState: AppState = {
-    user: undefined
+    user: undefined,
+    isSearchFormVisible: false,
+    isAboutPopupVisible: false
 };
 
 
