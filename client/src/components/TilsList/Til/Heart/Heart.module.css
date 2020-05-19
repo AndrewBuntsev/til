@@ -1,0 +1,58 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.likedHeart{
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 1rem;
+    width: 1rem;
+    margin-right: 1rem;
+    background: url('./../../../../assets/images/heart-red-16.png') 50% no-repeat;
+    background-size: contain;
+    animation: jiggle 2s ease-in;    
+}
+  
+.unlikedHeart{
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 1rem;
+    width: 1rem;
+    margin-right: 1rem;
+    background: url('./../../../../assets/images/heart-blue-16.png') 50% no-repeat;
+    background-size: contain;
+    animation-name: heartbeat;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+.number{
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 5rem;
+    line-height: 1.2rem;
+    font-family: Raleway,Helvetica Neue,Helvetica,sans-serif;
+}
+
+.likedNumber{
+    color: #ae1f23;
+}
+
+.unlikedNumber{
+    color: #ee7567;
+}
+  
+  
+  
+  @keyframes heartbeat{
+    0% {transform: scale(1.0);}
+    50% {transform: scale(1.1);}
+    100% {transform: scale(1.0);}
+  }
+
+

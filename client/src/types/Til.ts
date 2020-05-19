@@ -7,4 +7,5 @@ export type Til = {
     userName: string;
     time: Date;
     date: string;
+    likes?: number;
 };

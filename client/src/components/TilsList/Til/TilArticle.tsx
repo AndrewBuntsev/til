@@ -7,11 +7,12 @@ import Button from '../../controls/Button/Button';
 import { AppState } from '../../../types/AppState';
 import { connect } from 'react-redux';
 import { User } from '../../../types/User';
+import Heart from './Heart/Heart';
 
 
 
 type Props = {
-    til: Til,
+    til: Til;
     user: User;
 };
 type State = {
@@ -43,12 +44,15 @@ class TilArticle extends PureComponent<Props, State> {
         this.setState({ redirect: `/editArticle?articleId=${this.props.til._id}` });
     };
 
+    onRawClick = () => {
+        this.setState(state => ({ isRaw: !state.isRaw }))
+    };
+
+
     render() {
         if (this.state.redirect) {
             return <Redirect to={this.state.redirect} />;
         }
-
-
 
         return (
             <div className={styles.container}>
@@ -77,8 +81,10 @@ class TilArticle extends PureComponent<Props, State> {
                 <aside className={styles.aside}>
                     <NavLink to={`/posts?tag=${this.props.til.tag}`} className={`${styles.asideItem} ${styles.asideItemTag}`}>#{this.props.til.tag}</NavLink>
                     <NavLink to={`/posts?id=${this.props.til._id}`} className={`${styles.asideItem} ${styles.asideItemPermalink}`}>permalink</NavLink>
-                    <span onClick={() => this.setState(state => ({ isRaw: !state.isRaw }))} className={`${styles.asideItem} ${styles.asideItemRaw}`}>Raw</span>
-                    <div className={`${styles.asideItem} ${styles.asideItemLikes}`}>Heart</div>
+                    <span onClick={this.onRawClick} className={`${styles.asideItem} ${styles.asideItemRaw}`}>Raw</span>
+                    <div className={`${styles.asideItem} ${styles.asideItemLikes}`}>
+                        <Heart til={this.props.til} />
+                    </div>
                 </aside>
             </div>
         );

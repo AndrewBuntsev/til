@@ -45,6 +45,45 @@ export const deleteTil = (tilId?: string) => {
     }).then(res => res.json());
 };
 
+export const likeTil = (tilId?: string) => {
+    const ghId = getGHUserId();
+    const ghAccessToken = getGHAccessToken();
+    const liId = getLIUserId();
+    const liAccessToken = getLIAccessToken();
+
+    return fetch(`${ENDPOINT}/api/likeTil`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tilId, ghId, ghAccessToken, liId, liAccessToken })
+    }).then(res => res.json());
+};
+
+export const unlikeTil = (tilId?: string) => {
+    const ghId = getGHUserId();
+    const ghAccessToken = getGHAccessToken();
+    const liId = getLIUserId();
+    const liAccessToken = getLIAccessToken();
+
+    return fetch(`${ENDPOINT}/api/unlikeTil`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tilId, ghId, ghAccessToken, liId, liAccessToken })
+    }).then(res => res.json());
+};
+
+// export const updateUser = (likedTils?: string) => {
+//     const ghId = getGHUserId();
+//     const ghAccessToken = getGHAccessToken();
+//     const liId = getLIUserId();
+//     const liAccessToken = getLIAccessToken();
+
+//     return fetch(`${ENDPOINT}/api/updateUser`, {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ likedTils, ghId, ghAccessToken, liId, liAccessToken })
+//     }).then(res => res.json());
+// };
+
 
 
 export const ghAuth = (options: { code?: string, access_token?: string }) => {

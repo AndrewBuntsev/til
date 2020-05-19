@@ -3,5 +3,6 @@ export type User = {
     ghId?: string;
     liId?: string;
     name?: string;
+    likedTils?: string;
     pictureUrl?: string;
 };

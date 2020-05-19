@@ -1,3 +1,4 @@
+const Mongo = require('mongodb');
 
 exports.getUser = async (db, options) => {
     const { ghId, liId } = options;
@@ -19,5 +20,14 @@ exports.addUser = async (db, options) => {
     let user = await db.collection('users').findOne({ ghId, liId });
 
     return user;
+};
+
+exports.updateUser = async (db, options) => {
+    const { id, likedTils } = options;
+
+    await db.collection('users').updateOne({ _id: id },
+        {
+            $set: { likedTils }
+        });
 };
 

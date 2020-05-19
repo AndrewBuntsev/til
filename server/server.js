@@ -23,7 +23,10 @@ app.use(bodyParser.json());
 
 
 // declare API methods
-require('./api')(app);
+require('./API/authAPI')(app);
+require('./API/usersAPI')(app);
+require('./API/tilsAPI')(app);
+require('./API/tagsAPI')(app);
 
 
 // run server listener

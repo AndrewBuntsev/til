@@ -6,7 +6,7 @@ import TilArticle from './Til/TilArticle';
 
 
 type Props = {
-    tils: Array<Til>
+    tils: Array<Til>;
 };
 type State = {};
 

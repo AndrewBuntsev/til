@@ -1,5 +1,4 @@
 const Mongo = require('mongodb');
-
 const tags = require('./tags');
 
 exports.getTils = async (db, options) => {
@@ -41,10 +40,10 @@ exports.addTil = async (db, options) => {
 };
 
 exports.updateTil = async (db, options) => {
-    const { text, tag, id } = options;
+    const { text, tag, likes, id } = options;
 
     await db.collection('tils').updateOne({ _id: id }, {
-        $set: { text, tag: tag.toUpperCase() }
+        $set: { text, tag: tag.toUpperCase(), likes }
     });
 
     await tags.addTag(db, { tag });

@@ -23,6 +23,7 @@ dbCall = async (func, options) => {
 //#region users
 exports.getUser = async options => await dbCall(users.getUser, options);
 exports.addUser = async options => await dbCall(users.addUser, options);
+exports.updateUser = async options => await dbCall(users.updateUser, options);
 //#endregion users
 
 
