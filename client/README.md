@@ -19,6 +19,7 @@ You will also see any lint errors in the console.
 
 Facebook Login documentation [https://developers.facebook.com/docs/facebook-login/web#](https://developers.facebook.com/docs/facebook-login/web#).
 Facebook user pictue [https://graph.facebook.com/USER_ID/picture?width=140&height=110](https://graph.facebook.com/USER_ID/picture?width=140&height=110)
+Inspired by [https://til.hashrocket.com/] https://til.hashrocket.com/
 
 ## Tips
 Include/Exclude folders to search    

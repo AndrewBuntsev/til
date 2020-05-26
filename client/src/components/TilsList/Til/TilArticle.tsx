@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Redirect, NavLink } from 'react-router-dom';
 
 import styles from './TilArticle.module.css';
@@ -20,7 +20,7 @@ type State = {
     isRaw: boolean;
 };
 
-class TilArticle extends PureComponent<Props, State> {
+class TilArticle extends Component<Props, State> {
 
     state = {
         redirect: null,
@@ -39,6 +39,19 @@ class TilArticle extends PureComponent<Props, State> {
         });
     }
 
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
+        return nextState.redirect != this.state.redirect
+            || nextState.isRaw != this.state.isRaw
+            || JSON.stringify(nextProps.til) != JSON.stringify(this.props.til)
+            || (nextProps.user && !this.props.user)
+            || (this.props.user && !nextProps.user)
+            || (nextProps.user
+                && this.props.user
+                && nextProps.user.likedTils != this.props.user.likedTils
+                && ((this.includesThisTil(nextProps.user.likedTils) && !this.includesThisTil(this.props.user.likedTils)) || (!this.includesThisTil(nextProps.user.likedTils) && this.includesThisTil(this.props.user.likedTils))));
+    }
+
+    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til._id},`);
 
     onEditClick = () => {
         this.setState({ redirect: `/editArticle?articleId=${this.props.til._id}` });

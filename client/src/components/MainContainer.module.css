@@ -6,6 +6,7 @@
 }
 
 .searchResultsHeader{
+    align-self: center;
     color: #414347;
     font-family: Lora,Helvetica Neue,Helvetica,sans-serif;
     font-size: 1.6em;

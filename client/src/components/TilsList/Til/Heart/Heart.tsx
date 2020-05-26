@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
 import * as api from './../../../../api';
 import styles from './Heart.module.css';
@@ -11,6 +11,7 @@ import setUser from '../../../../redux/actions/setUser';
 import { connect } from 'react-redux';
 import { Til } from '../../../../types/Til';
 import ConfirmDialog from '../../../controls/Modal/ConfirmDialog/ConfirmDialog';
+import { getId } from '../../../../helpers/getId';
 
 
 type Props = {
@@ -23,14 +24,27 @@ type State = {
     isCannotLikeMessageBoxVisible: boolean;
 };
 
-class Heart extends PureComponent<Props, State> {
+class Heart extends Component<Props, State> {
 
     state = {
         likes: this.props.til.likes ?? 0,
         isCannotLikeMessageBoxVisible: false
     };
 
-    isLiked = () => this.props.user && this.props.user.likedTils && this.props.user.likedTils.includes(`${this.props.til._id},`);
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
+        return nextState.likes != this.state.likes
+            || nextState.isCannotLikeMessageBoxVisible != this.state.isCannotLikeMessageBoxVisible
+            || (nextProps.user && !this.props.user)
+            || (this.props.user && !nextProps.user)
+            || (nextProps.user
+                && this.props.user
+                && nextProps.user.likedTils != this.props.user.likedTils
+                && ((this.includesThisTil(nextProps.user.likedTils) && !this.includesThisTil(this.props.user.likedTils)) || (!this.includesThisTil(nextProps.user.likedTils) && this.includesThisTil(this.props.user.likedTils))));
+    }
+
+    isLiked = () => this.props.user && this.includesThisTil(this.props.user.likedTils);
+
+    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til._id},`);
 
     onClick = async () => {
 

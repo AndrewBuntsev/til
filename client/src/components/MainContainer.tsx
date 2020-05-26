@@ -34,12 +34,14 @@ class MainContainer extends Component<Props, State> {
 
 
     async componentDidMount() {
-        this.setState({ queryString: '' });
+        console.log('componentDidMount');
+        // Don't remove - triggers componentDidUpdate
+        this.setState({ queryString: null });
     }
 
-    async componentDidUpdate(prevProps: Props, prevState: State) {
+    async componentDidUpdate() {
         const queryString = this.props.location['search'];
-        if (queryString != prevState.queryString) {
+        if (queryString != this.state.queryString) {
             const params = new URLSearchParams(queryString);
             const response: ApiResponse = await api.getTils({
                 _id: params.get('id') ?? '',
@@ -50,6 +52,7 @@ class MainContainer extends Component<Props, State> {
                 random: params.get('random') ?? ''
             });
 
+            console.log(response);
             if (response.status == ResponseStatus.SUCCESS && response.payload) {
                 this.setState({
                     tils: getTypeFromObject<Array<Til>>(response.payload),
@@ -67,14 +70,26 @@ class MainContainer extends Component<Props, State> {
     };
 
     render() {
-        const searchTerm = (new URLSearchParams(this.state.queryString)).get('searchTerm');
+        let keyword = null;
+        const params = new URLSearchParams(this.state.queryString);
+
+        if (params.get('author')) {
+            keyword = `by ${params.get('author')}`;
+        } else if (params.get('date')) {
+            keyword = `on ${params.get('date')}`;
+        } else if (params.get('tag')) {
+            keyword = `about #${params.get('tag')}`;
+        } else if (params.get('searchTerm')) {
+            keyword = `about ${params.get('searchTerm')}`;
+        }
+
 
         return (
             <div>
                 <SideBar />
                 <Authorization />
                 <div className={styles.container} onClick={this.onClick}>
-                    {searchTerm && <h2 className={styles.searchResultsHeader}>{`${this.state.tils.length} post${this.state.tils.length != 1 ? 's' : ''} about ${searchTerm}`}</h2>}
+                    {keyword && <h2 className={styles.searchResultsHeader}>{`${this.state.tils.length} post${this.state.tils.length != 1 ? 's' : ''} ${keyword}`}</h2>}
                     <TilsList tils={this.state.tils} />
                 </div>
             </div>

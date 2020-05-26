@@ -1,5 +1,3 @@
-const Mongo = require('mongodb');
-
 exports.getUser = async (db, options) => {
     const { ghId, liId } = options;
 
