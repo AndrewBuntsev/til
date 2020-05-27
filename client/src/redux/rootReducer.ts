@@ -28,11 +28,9 @@ function handleAction(state: AppState, action: Action): AppState {
             const isAboutPopupVisible = action.payload['isAboutPopupVisible'];
             return { ...state, isAboutPopupVisible };
 
-        // case ActionType.SET_ACTIVE_SCREEN:
-        //     return { ...state, activeScreen: action.payload['activeScreen'] };
-
-        // case ActionType.SET_ACTIVE_CONTACT:
-        //     return { ...state, activeContact: action.payload['activeContact'] };
+        case ActionType.SET_IS_USER_MENU_VISIBLE:
+            const isUserMenuVisible = action.payload['isUserMenuVisible'];
+            return { ...state, isUserMenuVisible };
 
         default:
             return state;

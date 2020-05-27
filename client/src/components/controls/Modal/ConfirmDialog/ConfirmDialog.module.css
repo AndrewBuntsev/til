@@ -24,7 +24,7 @@
     width: auto;
     height: auto;
     align-self: flex-start;
-    padding: 2px;;
+    padding: 2px;
 }
 .closeButton:hover{
     border: 1px solid gray;

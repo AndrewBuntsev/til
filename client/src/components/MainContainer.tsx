@@ -13,13 +13,15 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import setIsAboutPopupVisible from '../redux/actions/setIsAboutPopupVisible';
 import setIsSearchFormVisible from '../redux/actions/setIsSearchFormVisible';
+import setIsUserMenuVisible from '../redux/actions/setIsUserMenuVisible';
+import { Action } from '../redux/Action';
+import dispatchCombinedAction from '../redux/actions/dispatchCombinedAction';
 
 
 
 type Props = {
     location: object;
-    setIsSearchFormVisible: (isSearchFormVisible: boolean) => void;
-    setIsAboutPopupVisible: (isSearchFormVisible: boolean) => void;
+    dispatchCombinedAction(actions: Array<Action>): Action;
 };
 type State = {
     tils: Array<Til>;
@@ -65,8 +67,10 @@ class MainContainer extends Component<Props, State> {
     }
 
     onClick = () => {
-        this.props.setIsAboutPopupVisible(false);
-        this.props.setIsSearchFormVisible(false);
+        this.props.dispatchCombinedAction([
+            setIsAboutPopupVisible(false),
+            setIsSearchFormVisible(false),
+            setIsUserMenuVisible(false)]);
     };
 
     render() {
@@ -99,8 +103,7 @@ class MainContainer extends Component<Props, State> {
 
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    setIsSearchFormVisible: (isSearchFormVisible: boolean) => dispatch(setIsSearchFormVisible(isSearchFormVisible)),
-    setIsAboutPopupVisible: (isAboutPopupVisible: boolean) => dispatch(setIsAboutPopupVisible(isAboutPopupVisible))
+    dispatchCombinedAction: (actions: Array<Action>) => dispatch(dispatchCombinedAction(actions))
 });
 
 export default connect(null, mapDispatchToProps)(MainContainer);

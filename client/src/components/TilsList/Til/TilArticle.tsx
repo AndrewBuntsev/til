@@ -33,10 +33,12 @@ class TilArticle extends Component<Props, State> {
         });
     }
 
-    componentDidUpdate() {
-        document.querySelectorAll('pre code').forEach((block) => {
-            window['hljs'].highlightBlock(block);
-        });
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        if (prevState.isRaw && !this.state.isRaw) {
+            document.querySelectorAll('pre code').forEach((block) => {
+                window['hljs'].highlightBlock(block);
+            });
+        }
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: State) {

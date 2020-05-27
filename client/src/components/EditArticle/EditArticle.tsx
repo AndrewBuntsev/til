@@ -194,7 +194,8 @@ export default class EditArticle extends Component<Props, State> {
                         title='Delete Article'
                         message='Do You really want to delete the article? '
                         yesClick={this.deleteArticle}
-                        noClick={this.hideDeletePopup} />}
+                        noClick={this.hideDeletePopup}
+                        closeClick={this.hideDeletePopup} />}
 
                 {/* Show empty tag notification popup */}
                 {this.state.isTagEmptyMessageBoxVisible &&
@@ -203,6 +204,7 @@ export default class EditArticle extends Component<Props, State> {
                         message='Please specify a tag.. like "JAVASCRIPT" or "RUBY" or whatever your article is about.. If you unsure use "WORKFLOW"'
                         yesText='OK'
                         yesClick={() => this.setState({ isTagEmptyMessageBoxVisible: false })}
+                        closeClick={() => this.setState({ isTagEmptyMessageBoxVisible: false })}
                         noButtonHidden={true} />}
             </div>
         );

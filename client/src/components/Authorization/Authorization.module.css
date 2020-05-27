@@ -15,16 +15,17 @@
     min-width: 30px;
     max-width: 60px;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 
-.tooltip {
+.tooltipContainer {
   position: relative;
   display: inline-block;
 }
 
-.tooltip .tooltipText {
-  visibility: hidden;
+.tooltipContainer .tooltip {
+  --visibility: hidden;
   width: 200px;
   background-color: #082736B3;
   --opacity: 0.7;
@@ -40,24 +41,43 @@
   align-items: flex-start;
 }
 
-.tooltip:hover .tooltipText {
+/* .tooltipContainer:hover .tooltip {
   visibility: visible;
-}
+} */
 
-.tooltip .tooltipText .name {
+.tooltipContainer .tooltip .name {
   font-size: 18px;
 }
 
-.tooltip .tooltipText .loggedin {
+.tooltipContainer .tooltip .loggedin {
   font-size: 14px;
 }
 
-.tooltip .tooltipText .logout {
+.tooltipContainer .tooltip .logout {
   margin-top: 15px;
   font-size: 16px;
   cursor: pointer;
 }
 
-.tooltip .tooltipText .logout:hover {
+.tooltipContainer .tooltip .logout:hover {
   color: #ff6600;
+}
+
+
+.closeButton{
+  width: auto;
+  height: auto;
+  position: absolute;
+  right: 5px;
+  top: 7px;
+  padding: 2px;
+  border: 1px solid transparent;
+}
+.closeButton:hover{
+  border: 1px solid #fff;
+  border-radius: 5px;
+}
+.closeButton:active{
+  border: 2px #fff inset;
+  border-radius: 5px;
 }

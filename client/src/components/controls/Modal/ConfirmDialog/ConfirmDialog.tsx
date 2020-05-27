@@ -26,7 +26,11 @@ export default class ConfirmDialog extends Component<Props, State> {
                 <div className={styles.container}>
                     <div className={styles.headerSection}>
                         {this.props.title && <div className={styles.title}>{this.props.title}</div>}
-                        <img className={styles.closeButton} src={require('./../../../../assets/images/x-mark-black-16.png')} onClick={this.props.closeClick ?? this.props.noClick} />
+                        {this.props.closeClick &&
+                            <img
+                                className={styles.closeButton}
+                                src={require('./../../../../assets/images/x-mark-black-16.png')}
+                                onClick={this.props.closeClick} />}
                     </div>
 
                     <div className={styles.message}>{this.props.message}</div>
