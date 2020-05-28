@@ -15,17 +15,26 @@ exports.addUser = async (db, options) => {
     const { ghId, liId, name } = options;
 
     await db.collection('users').insertOne({ ghId, liId, name });
-    let user = await db.collection('users').findOne({ ghId, liId });
+    const user = await db.collection('users').findOne({ ghId, liId });
 
     return user;
 };
 
-exports.updateUser = async (db, options) => {
+exports.updateUserLikedTils = async (db, options) => {
     const { id, likedTils } = options;
 
     await db.collection('users').updateOne({ _id: id },
         {
             $set: { likedTils }
+        });
+};
+
+exports.updateUser = async (db, options) => {
+    const { id, twUrl, liUrl, fbUrl, wUrl } = options;
+
+    await db.collection('users').updateOne({ _id: id },
+        {
+            $set: { twUrl, liUrl, fbUrl, wUrl }
         });
 };
 

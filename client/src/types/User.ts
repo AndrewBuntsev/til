@@ -5,4 +5,8 @@ export type User = {
     name?: string;
     likedTils?: string;
     pictureUrl?: string;
+    twUrl?: string;
+    liUrl?: string;
+    fbUrl?: string;
+    wUrl?: string;
 };

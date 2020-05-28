@@ -71,18 +71,18 @@ export const unlikeTil = (tilId?: string) => {
     }).then(res => res.json());
 };
 
-// export const updateUser = (likedTils?: string) => {
-//     const ghId = getGHUserId();
-//     const ghAccessToken = getGHAccessToken();
-//     const liId = getLIUserId();
-//     const liAccessToken = getLIAccessToken();
+export const updateUser = (twUrl?: string, liUrl?: string, fbUrl?: string, wUrl?: string) => {
+    const ghId = getGHUserId();
+    const ghAccessToken = getGHAccessToken();
+    const liId = getLIUserId();
+    const liAccessToken = getLIAccessToken();
 
-//     return fetch(`${ENDPOINT}/api/updateUser`, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ likedTils, ghId, ghAccessToken, liId, liAccessToken })
-//     }).then(res => res.json());
-// };
+    return fetch(`${ENDPOINT}/api/updateUser`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ghId, ghAccessToken, liId, liAccessToken, twUrl, liUrl, fbUrl, wUrl })
+    }).then(res => res.json());
+};
 
 
 

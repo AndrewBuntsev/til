@@ -139,7 +139,7 @@ const likeTil = app => {
             const likes = til.likes ? parseInt(til.likes) : 0;
 
             await dbClient.updateTil({ id: til._id, text: til.text, tag: til.tag, likes: likes + 1 });
-            await dbClient.updateUser({ id: tilUser._id, likedTils: `${tilUser.likedTils}${til._id.toString()},` });
+            await dbClient.updateUserLikedTils({ id: tilUser._id, likedTils: `${tilUser.likedTils}${til._id.toString()},` });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: 'Article has been liked successfully', payload: null });
         }

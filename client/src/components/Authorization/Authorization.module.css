@@ -51,17 +51,10 @@
 
 .tooltipContainer .tooltip .loggedin {
   font-size: 14px;
+  margin-bottom: 20px;
 }
 
-.tooltipContainer .tooltip .logout {
-  margin-top: 15px;
-  font-size: 16px;
-  cursor: pointer;
-}
 
-.tooltipContainer .tooltip .logout:hover {
-  color: #ff6600;
-}
 
 
 .closeButton{
@@ -80,4 +73,63 @@
 .closeButton:active{
   border: 2px #fff inset;
   border-radius: 5px;
+}
+
+.userSettingsInputContainer{
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: stretch;
+}
+.userSettingsInput{
+  padding: 0.5rem;
+  background: #fff;
+  border: 1px #888 solid;
+  border-radius: 5px;
+  vertical-align: middle;
+  height: 0.4rem;
+  font-size: 0.8em;
+  font-family: Helvetica,sans-serif;
+  color: #414347;
+  margin-top: -1px;
+  margin-left: 5px;
+  background-color: #F7F7F7;
+}
+.userSettingsInput::placeholder{
+  color: #b0b0b0;
+}
+.userSettingsInput:focus{
+  outline-width: 0;
+}
+.userSettingsIcon{
+  height: auto;
+  width: auto;
+}
+
+
+.bottomPanelContainer {
+  align-self: stretch;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+}
+.bottomPanelContainer .save {
+  font-size: 16px;
+  cursor: pointer;
+  flex-grow: 1;
+  text-align: left;
+}
+.bottomPanelContainer .save:hover {
+  color: #ff6600;
+}
+.bottomPanelContainer .logout {
+  font-size: 16px;
+  cursor: pointer;
+  flex-grow: 1;
+  text-align: right;
+}
+.bottomPanelContainer .logout:hover {
+  color: #ff6600;
 }
