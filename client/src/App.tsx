@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, BrowserRouter } from "react-router-dom";
 
 import * as api from './api';
-import MainContainer from './components/MainContainer';
+import MainContainer from './components/MainContainer/MainContainer';
 import './App.css';
 import LoginScreen from './components/Authorization/LoginScreen';
 import GhAuth from './components/Authorization/GhAuth';

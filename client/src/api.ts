@@ -71,6 +71,12 @@ export const unlikeTil = (tilId?: string) => {
     }).then(res => res.json());
 };
 
+
+export const getUserData = (id: string) => {
+    return fetch(`${ENDPOINT}/api/getUserData?id=${id}`).then(res => res.json());
+};
+
+
 export const updateUser = (twUrl?: string, liUrl?: string, fbUrl?: string, wUrl?: string) => {
     const ghId = getGHUserId();
     const ghAccessToken = getGHAccessToken();

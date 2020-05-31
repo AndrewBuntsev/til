@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 
-import * as api from '../api';
-import { ApiResponse } from '../types/ApiResponse';
-import SideBar from './SideBar/SideBar';
-import TilsList from './TilsList/TilsList';
-import { Til } from '../types/Til';
-import getTypeFromObject from '../helpers/getTypeFromObject';
-import Authorization from './Authorization/Authorization';
-import { ResponseStatus } from '../enums/ResponseStatus';
+import * as api from '../../api';
+import { ApiResponse } from '../../types/ApiResponse';
+import SideBar from '../SideBar/SideBar';
+import TilsList from '../TilsList/TilsList';
+import { Til } from '../../types/Til';
+import getTypeFromObject from '../../helpers/getTypeFromObject';
+import Authorization from '../Authorization/Authorization';
+import { ResponseStatus } from '../../enums/ResponseStatus';
 import styles from './MainContainer.module.css';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import setIsAboutPopupVisible from '../redux/actions/setIsAboutPopupVisible';
-import setIsSearchFormVisible from '../redux/actions/setIsSearchFormVisible';
-import setIsUserMenuVisible from '../redux/actions/setIsUserMenuVisible';
-import { Action } from '../redux/Action';
-import dispatchCombinedAction from '../redux/actions/dispatchCombinedAction';
+import setIsAboutPopupVisible from '../../redux/actions/setIsAboutPopupVisible';
+import setIsSearchFormVisible from '../../redux/actions/setIsSearchFormVisible';
+import setIsUserMenuVisible from '../../redux/actions/setIsUserMenuVisible';
+import { Action } from '../../redux/Action';
+import dispatchCombinedAction from '../../redux/actions/dispatchCombinedAction';
+import { User } from '../../types/User';
+import SearchResultsHeader from './SearchResultsHeader';
 
 
 
@@ -26,17 +28,18 @@ type Props = {
 type State = {
     tils: Array<Til>;
     queryString: string;
+    author?: User;
 };
 
 class MainContainer extends Component<Props, State> {
     state = {
         tils: [],
+        author: null,
         queryString: null
     };
 
 
     async componentDidMount() {
-        console.log('componentDidMount');
         // Don't remove - triggers componentDidUpdate
         this.setState({ queryString: null });
     }
@@ -54,11 +57,19 @@ class MainContainer extends Component<Props, State> {
                 random: params.get('random') ?? ''
             });
 
-            console.log(response);
             if (response.status == ResponseStatus.SUCCESS && response.payload) {
+                let author: User = null;
+                if (params.get('author')) {
+                    const authorDataResponse: ApiResponse = await api.getUserData(params.get('author'));
+                    console.log(authorDataResponse);
+                    if (authorDataResponse.status == ResponseStatus.SUCCESS && authorDataResponse.payload) {
+                        author = getTypeFromObject<User>(authorDataResponse.payload)
+                    }
+                }
                 this.setState({
                     tils: getTypeFromObject<Array<Til>>(response.payload),
-                    queryString: queryString
+                    queryString: queryString,
+                    author: author
                 });
             } else {
                 console.error(response);
@@ -74,26 +85,17 @@ class MainContainer extends Component<Props, State> {
     };
 
     render() {
-        let keyword = null;
         const params = new URLSearchParams(this.state.queryString);
-
-        if (params.get('author')) {
-            keyword = `by ${params.get('author')}`;
-        } else if (params.get('date')) {
-            keyword = `on ${params.get('date')}`;
-        } else if (params.get('tag')) {
-            keyword = `about #${params.get('tag')}`;
-        } else if (params.get('searchTerm')) {
-            keyword = `about ${params.get('searchTerm')}`;
-        }
-
 
         return (
             <div>
                 <SideBar />
                 <Authorization />
                 <div className={styles.container} onClick={this.onClick}>
-                    {keyword && <h2 className={styles.searchResultsHeader}>{`${this.state.tils.length} post${this.state.tils.length != 1 ? 's' : ''} ${keyword}`}</h2>}
+                    <SearchResultsHeader
+                        params={params}
+                        author={this.state.author}
+                        tilCount={this.state.tils.length} />
                     <TilsList tils={this.state.tils} />
                 </div>
             </div>

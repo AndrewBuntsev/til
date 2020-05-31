@@ -11,6 +11,13 @@ exports.getUser = async (db, options) => {
     return user;
 };
 
+exports.getUserData = async (db, options) => {
+    const { id } = options;
+    console.log(options)
+    const user = await db.collection('users').findOne({ _id: id });
+    return user;
+};
+
 exports.addUser = async (db, options) => {
     const { ghId, liId, name } = options;
 
