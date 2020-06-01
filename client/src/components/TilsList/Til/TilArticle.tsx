@@ -27,11 +27,6 @@ class TilArticle extends Component<Props, State> {
         isRaw: false
     };
 
-    componentDidMount() {
-        document.querySelectorAll('pre code').forEach((block) => {
-            window['hljs'].highlightBlock(block);
-        });
-    }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
         if (prevState.isRaw && !this.state.isRaw) {

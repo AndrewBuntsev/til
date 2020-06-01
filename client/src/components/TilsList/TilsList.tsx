@@ -14,7 +14,17 @@ export default class TilsList extends Component<Props, State> {
 
     state = {};
 
+    componentDidMount() {
+        document.querySelectorAll('pre code').forEach((block) => {
+            window['hljs'].highlightBlock(block);
+        });
+    }
 
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        document.querySelectorAll('pre code').forEach((block) => {
+            window['hljs'].highlightBlock(block);
+        });
+    }
 
 
     render() {
