@@ -122,3 +122,8 @@ export const addTag = (tag: string) => {
         body: JSON.stringify({ tag, ghId, ghAccessToken, liId, liAccessToken })
     }).then(res => res.json());
 };
+
+
+export const getStatistics = () => {
+    return fetch(`${ENDPOINT}/api/getStatistics`).then(res => res.json());
+};

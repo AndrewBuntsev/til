@@ -13,6 +13,7 @@ import { ApiResponse } from './types/ApiResponse';
 import { ResponseStatus } from './enums/ResponseStatus';
 import { setTags } from './globalData';
 import getTypeFromObject from './helpers/getTypeFromObject';
+import Statistics from './components/Statistics/Statistics';
 
 export default class App extends React.Component {
 
@@ -36,6 +37,7 @@ export default class App extends React.Component {
           <Route exact path="/liAuth" component={LiAuth} />
           <Route exact path="/login" component={LoginScreen} />
           <Route exact path="/editArticle" component={EditArticle} />
+          <Route exact path="/statistics" component={Statistics} />
 
         </BrowserRouter>
       </div>

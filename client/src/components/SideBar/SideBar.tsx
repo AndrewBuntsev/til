@@ -34,13 +34,17 @@ class SideBar extends Component<Props, State> {
         this.setState({ redirect: `/posts?random=1&pid=${getId()}` });
     };
 
+    onChartClick = () => {
+        this.setState({ redirect: '/statistics' });
+    };
+
     render() {
         return (
             <div className={styles.container}>
                 {this.props.user && <AddArticle />}
                 <SearchArticle />
                 <About />
-                <SideBarItem img={require('./../../assets/images/chart.png')} imgHover={require('./../../assets/images/chart_over.png')} onClick={() => { }} />
+                <SideBarItem img={require('./../../assets/images/chart.png')} imgHover={require('./../../assets/images/chart_over.png')} onClick={this.onChartClick} />
                 <SideBarItem
                     img={require('./../../assets/images/twitter.png')}
                     imgHover={require('./../../assets/images/twitter_over.png')}

@@ -27,6 +27,7 @@ require('./API/authAPI')(app);
 require('./API/usersAPI')(app);
 require('./API/tilsAPI')(app);
 require('./API/tagsAPI')(app);
+require('./API/statisticsAPI')(app);
 
 
 // run server listener

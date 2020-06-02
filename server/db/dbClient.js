@@ -8,6 +8,7 @@ const MONGO_CLIENT_OPTIONS = { useUnifiedTopology: true, useNewUrlParser: true }
 const users = require('./users');
 const tils = require('./tils');
 const tags = require('./tags');
+const statistics = require('./statistics');
 
 
 dbCall = async (func, options) => {
@@ -41,3 +42,8 @@ exports.deleteTil = async options => await dbCall(tils.deleteTil, options);
 exports.getTags = async options => await dbCall(tags.getTags, options);
 exports.addTag = async options => await dbCall(tags.addTag, options);
 //#endregion tags
+
+
+//#region statistics
+exports.getStatistics = async options => await dbCall(statistics.getStatistics, options);
+//#endregion statistics
