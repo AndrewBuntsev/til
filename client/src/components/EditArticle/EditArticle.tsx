@@ -53,10 +53,14 @@ export default class EditArticle extends Component<Props, State> {
     };
 
     cleanHtml = (html: string): string => {
+        console.log(html);
         html = html
             .replace(/<br>/g, '')
             .replace(/<h1>/g, '<h2>')
-            .replace(/<\/h1>/g, '</h2>');
+            .replace(/<\/h1>/g, '</h2>')
+            .replace(/<\/code><\/pre>[\n ?]<pre><code>/g, '\n');
+
+        console.log(html);
         return html;
     };
 

@@ -1,0 +1,75 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: stretch;
+    height: 250px;
+}
+
+.container h3{
+    color: #082736;
+    align-self: center;
+    font-size: 1em;
+}
+
+.barsContainer{
+    flex-grow: 1;
+    background: hsla(0,0%,100%,.9);
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    align-items: flex-end;
+    margin: 0 1vw 0 1vw;
+    height: 100%;
+}
+
+
+.barContainer{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: stretch;
+    height: 100%;
+    cursor: pointer;
+}
+.barContainer .text{
+    height: 20px;
+    visibility: hidden;
+    white-space: nowrap;
+    overflow: visible;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 0.8em;
+    color: #414347;
+    font-family: Lora,Helvetica Neue,Helvetica,sans-serif;
+    width: 1px;
+    margin-left: -50%;
+}
+.barContainer:hover .text{
+    visibility: visible;
+}
+
+
+.bar{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.bar .even{
+    background: #007dae;
+}
+
+.bar .odd{
+    background: #00a2e1;
+}
+
+.bar .odd:hover{
+    background: #082736;
+}
+.bar .even:hover{
+    background: #082736;
+}
