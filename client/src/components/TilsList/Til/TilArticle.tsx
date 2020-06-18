@@ -34,6 +34,10 @@ class TilArticle extends Component<Props, State> {
                 window['hljs'].highlightBlock(block);
             });
         }
+
+        if (!prevState.isRaw && this.state.isRaw) {
+            this.rawTextRef.current.style.height = this.rawTextRef.current.scrollHeight + 'px';
+        }
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: State) {
@@ -59,6 +63,8 @@ class TilArticle extends Component<Props, State> {
     };
 
 
+    rawTextRef = React.createRef<HTMLTextAreaElement>();
+
     render() {
         if (this.state.redirect) {
             return <Redirect to={this.state.redirect} />;
@@ -68,7 +74,11 @@ class TilArticle extends Component<Props, State> {
             <div className={styles.container}>
 
                 {this.state.isRaw ?
-                    <div className={styles.content}>{this.props.til.text}</div>
+                    <textarea
+                        ref={this.rawTextRef}
+                        value={this.props.til.text.replace(/&nbsp;/g, ' ')}
+                        readOnly={true} />
+
                     : <div className={styles.content} dangerouslySetInnerHTML={{ __html: this.props.til.text }} />}
 
                 <div className={styles.buttons}>

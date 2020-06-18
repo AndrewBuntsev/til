@@ -2,11 +2,18 @@
     background: #ffffffe6;
     padding: 25px 25px 12px 25px;
     display: flex;
+    max-width: 100%;
     flex-direction: column;
 }
 
+.container textarea{
+    min-width: 55vw;
+    max-width: 55vw;
+    margin-bottom: 40px;
+}
+
 .content{
-    flex: 1 0;
+    --flex: 1 0;
     padding: 4vw;
     overflow: auto;
 }

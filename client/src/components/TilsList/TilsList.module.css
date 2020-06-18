@@ -6,4 +6,5 @@
 
 .tilWrapper{
     max-width: 60%;
+    display: flex;
 }
