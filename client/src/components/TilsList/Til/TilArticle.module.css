@@ -1,6 +1,6 @@
 .container{
     background: #ffffffe6;
-    padding: 25px 25px 12px 25px;
+    padding: 25px 0 12px 0;
     display: flex;
     max-width: 100%;
     flex-direction: column;
@@ -45,6 +45,7 @@
 
 .buttons{
     display: flex;
+    padding: 0 4vw 0 4vw;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -56,6 +57,7 @@
 
 .signature{
     margin-top: 10px;
+    margin-right: 4vw;
     align-self: flex-end;
     display: flex;
     flex-direction: column;
@@ -86,6 +88,7 @@
 .aside{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: stretch;
     align-items: center;
 }
@@ -124,3 +127,19 @@
     border-top-color: #ee7567;
     color: #ee7567;
 }
+
+
+
+
+
+@media only screen and (min-width: 100px) {
+    .content h2{
+        font-size: 1.25em;
+    }
+  }
+
+@media only screen and (min-width: 600px) {
+    .content h2{
+        font-size: 1.5em;
+    }
+  }

@@ -53,14 +53,12 @@ export default class EditArticle extends Component<Props, State> {
     };
 
     cleanHtml = (html: string): string => {
-        console.log(html);
         html = html
             .replace(/<br>/g, '')
             .replace(/<h1>/g, '<h2>')
             .replace(/<\/h1>/g, '</h2>')
             .replace(/<\/code><\/pre>[\n ?]<pre><code>/g, '\n');
 
-        console.log(html);
         return html;
     };
 
@@ -151,7 +149,7 @@ export default class EditArticle extends Component<Props, State> {
 
         const toolbarConfig = {
             // Optionally specify the groups to display (displayed in the order listed).
-            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'LINK_BUTTONS', 'IMAGE_BUTTON', 'HISTORY_BUTTONS'],
+            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
             INLINE_STYLE_BUTTONS: [
                 { label: 'Bold', style: 'BOLD', className: 'custom-css-class' },
                 { label: 'Italic', style: 'ITALIC' },

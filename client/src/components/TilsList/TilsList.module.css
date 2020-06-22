@@ -4,7 +4,21 @@
     margin-bottom: 3vw;
 }
 
-.tilWrapper{
+/* .tilWrapper{
     max-width: 60%;
     display: flex;
-}
+} */
+
+@media only screen and (min-width: 100px) {
+    .tilWrapper{
+        max-width: 90%;
+        display: flex;
+    }
+  }
+
+@media only screen and (min-width: 600px) {
+    .tilWrapper{
+        max-width: 60%;
+        display: flex;
+    }
+  }
