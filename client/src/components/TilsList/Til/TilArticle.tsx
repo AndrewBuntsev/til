@@ -41,7 +41,7 @@ class TilArticle extends Component<Props, State> {
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: State) {
-        return nextState.redirect != this.state.redirect
+        const shouldUpdate = nextState.redirect != this.state.redirect
             || nextState.isRaw != this.state.isRaw
             || JSON.stringify(nextProps.til) != JSON.stringify(this.props.til)
             || (nextProps.user && !this.props.user)
@@ -50,6 +50,8 @@ class TilArticle extends Component<Props, State> {
                 && this.props.user
                 && nextProps.user.likedTils != this.props.user.likedTils
                 && ((this.includesThisTil(nextProps.user.likedTils) && !this.includesThisTil(this.props.user.likedTils)) || (!this.includesThisTil(nextProps.user.likedTils) && this.includesThisTil(this.props.user.likedTils))));
+
+        return shouldUpdate;
     }
 
     includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til._id},`);

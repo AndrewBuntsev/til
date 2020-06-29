@@ -55,6 +55,7 @@ export default class EditArticle extends Component<Props, State> {
     cleanHtml = (html: string): string => {
         html = html
             .replace(/<br>/g, '')
+            .replace(/<em> <\/em>/g, '')
             .replace(/<h1>/g, '<h2>')
             .replace(/<\/h1>/g, '</h2>')
             .replace(/<\/code><\/pre>[\n ?]<pre><code>/g, '\n');
@@ -73,7 +74,6 @@ export default class EditArticle extends Component<Props, State> {
         }
 
         const saveTilresponse: ApiResponse = await api.saveTil(this.cleanHtml(this.state.value.toString('html')), this.state.tag, this.state.articleId);
-        console.log(saveTilresponse);
         this.setState({ redirect: '/' });
     };
 
@@ -90,7 +90,6 @@ export default class EditArticle extends Component<Props, State> {
     deleteArticle = async () => {
         this.hideDeletePopup();
         const deleteTilresponse: ApiResponse = await api.deleteTil(this.state.articleId);
-        console.log(deleteTilresponse);
         this.setState({ redirect: '/' });
     };
 

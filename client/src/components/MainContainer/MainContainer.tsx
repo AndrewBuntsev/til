@@ -61,7 +61,6 @@ class MainContainer extends Component<Props, State> {
                 let author: User = null;
                 if (params.get('author')) {
                     const authorDataResponse: ApiResponse = await api.getUserData(params.get('author'));
-                    console.log(authorDataResponse);
                     if (authorDataResponse.status == ResponseStatus.SUCCESS && authorDataResponse.payload) {
                         author = getTypeFromObject<User>(authorDataResponse.payload)
                     }
@@ -71,6 +70,8 @@ class MainContainer extends Component<Props, State> {
                     queryString: queryString,
                     author: author
                 });
+
+                window.scrollTo(0, 0);
             } else {
                 console.error(response);
             }

@@ -65,7 +65,6 @@ export default class Statistics extends Component<Props, State> {
                 authors: authors.map(a => ({ authorId: a._id.userId, authorName: a._id.userName, tilsCount: a.tilsCount }))
             });
 
-            console.log(resp.payload);
         } else {
             console.error(resp);
         }
