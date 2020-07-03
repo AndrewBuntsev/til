@@ -5,6 +5,7 @@ const { dbCall, users, tils, tags, statistics } = dbConnector;
 //#region users
 exports.getUser = async options => await dbCall(users.getUser, options);
 exports.getUserData = async options => await dbCall(users.getUserData, options);
+exports.getUsersData = async options => await dbCall(users.getUsersData, options);
 exports.addUser = async options => await dbCall(users.addUser, options);
 exports.updateUser = async options => await dbCall(users.updateUser, options);
 exports.updateUserLikedTils = async options => await dbCall(users.updateUserLikedTils, options);

@@ -18,6 +18,13 @@ exports.getUserData = async (db, options) => {
     return user;
 };
 
+//For transfer data purposes only - not to expose the function as API
+exports.getUsersData = async (db, options) => {
+    console.log(options)
+    const user = await db.collection('users').find().toArray();
+    return user;
+};
+
 exports.addUser = async (db, options) => {
     const { ghId, liId, name } = options;
 
