@@ -29,7 +29,7 @@ export default class TilsList extends Component<Props, State> {
 
     render() {
         const tils = this.props.tils.map(til =>
-            <div className={styles.tilContainer} key={til._id}>
+            <div className={styles.tilContainer} key={til.id}>
                 <div className={styles.tilWrapper}>
                     <TilArticle til={til} />
                 </div>

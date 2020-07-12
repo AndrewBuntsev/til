@@ -102,7 +102,7 @@ export default class EditArticle extends Component<Props, State> {
         }
 
         //load the article
-        const response: ApiResponse = await api.getTils({ _id: articleId });
+        const response: ApiResponse = await api.getTils({ id: articleId });
         if (response.status == ResponseStatus.SUCCESS && response.payload) {
             const til: Til = getTypeFromObject<Til>(response.payload[0]);
             this.setState({

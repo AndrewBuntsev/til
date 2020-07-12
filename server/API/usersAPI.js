@@ -8,7 +8,7 @@ const getUserData = app => {
     app.get('/api/getUserData', async (req, res) => {
         const { id } = req.query;
         try {
-            const user = await dbClient.getUserData({ id: new Mongo.ObjectID(id) });
+            const user = await dbClient.getUserData({ id });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: null, payload: user });
         }
@@ -33,7 +33,7 @@ const updateUser = app => {
                 return;
             }
 
-            await dbClient.updateUser({ id: tilUser._id, twUrl, liUrl, fbUrl, wUrl });
+            await dbClient.updateUser({ id: tilUser.id, twUrl, liUrl, fbUrl, wUrl });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: 'User data has been updated successfully', payload: null });
         }

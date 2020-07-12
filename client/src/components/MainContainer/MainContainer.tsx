@@ -49,13 +49,15 @@ class MainContainer extends Component<Props, State> {
         if (queryString != this.state.queryString) {
             const params = new URLSearchParams(queryString);
             const response: ApiResponse = await api.getTils({
-                _id: params.get('id') ?? '',
+                id: params.get('id') ?? '',
                 author: params.get('author') ?? '',
                 date: params.get('date') ?? '',
                 tag: params.get('tag') ?? '',
                 searchTerm: params.get('searchTerm') ?? '',
                 random: params.get('random') ?? ''
             });
+
+            console.log(response)
 
             if (response.status == ResponseStatus.SUCCESS && response.payload) {
                 let author: User = null;

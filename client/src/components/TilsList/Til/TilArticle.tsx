@@ -54,10 +54,10 @@ class TilArticle extends Component<Props, State> {
         return shouldUpdate;
     }
 
-    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til._id},`);
+    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til.id},`);
 
     onEditClick = () => {
-        this.setState({ redirect: `/editArticle?articleId=${this.props.til._id}` });
+        this.setState({ redirect: `/editArticle?articleId=${this.props.til.id}` });
     };
 
     onRawClick = () => {
@@ -88,7 +88,7 @@ class TilArticle extends Component<Props, State> {
                         <Button icon={require('./../../../assets/images/twitter-16-white.png')} title='Tweet' />
                     </a>
                     {this.props.user
-                        && this.props.user._id == this.props.til.userId
+                        && this.props.user.id == this.props.til.userId
                         && <Button icon={require('./../../../assets/images/edit-16-white.png')} title='Edit' onClick={this.onEditClick} />}
                 </div>
 
@@ -102,7 +102,7 @@ class TilArticle extends Component<Props, State> {
 
                 <aside className={styles.aside}>
                     <NavLink to={`/posts?tag=${this.props.til.tag}`} className={`${styles.asideItem} ${styles.asideItemTag}`}>#{this.props.til.tag}</NavLink>
-                    <NavLink to={`/posts?id=${this.props.til._id}`} className={`${styles.asideItem} ${styles.asideItemPermalink}`}>permalink</NavLink>
+                    <NavLink to={`/posts?id=${this.props.til.id}`} className={`${styles.asideItem} ${styles.asideItemPermalink}`}>permalink</NavLink>
                     <span onClick={this.onRawClick} className={`${styles.asideItem} ${styles.asideItemRaw}`}>Raw</span>
                     <div className={`${styles.asideItem} ${styles.asideItemLikes}`}>
                         <Heart til={this.props.til} />

@@ -44,7 +44,7 @@ class Heart extends Component<Props, State> {
 
     isLiked = () => this.props.user && this.includesThisTil(this.props.user.likedTils);
 
-    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til._id},`);
+    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til.id},`);
 
     onClick = async () => {
 
@@ -54,25 +54,25 @@ class Heart extends Component<Props, State> {
         }
 
         if (this.isLiked()) {
-            const response: ApiResponse = await api.unlikeTil(this.props.til._id);
+            const response: ApiResponse = await api.unlikeTil(this.props.til.id);
             if (response.status == ResponseStatus.SUCCESS) {
                 this.setState(state => ({
                     likes: state.likes - 1
                 }));
                 const updatedUser: User = JSON.parse(JSON.stringify(this.props.user));
-                updatedUser.likedTils = this.props.user.likedTils.replace(`${this.props.til._id},`, '');
+                updatedUser.likedTils = this.props.user.likedTils.replace(`${this.props.til.id},`, '');
                 this.props.setUser(updatedUser);
             } else {
                 console.error(response);
             }
         } else {
-            const response: ApiResponse = await api.likeTil(this.props.til._id);
+            const response: ApiResponse = await api.likeTil(this.props.til.id);
             if (response.status == ResponseStatus.SUCCESS) {
                 this.setState(state => ({
                     likes: state.likes + 1
                 }));
                 const updatedUser: User = JSON.parse(JSON.stringify(this.props.user));
-                updatedUser.likedTils = (this.props.user.likedTils ?? '') + `${this.props.til._id},`;
+                updatedUser.likedTils = (this.props.user.likedTils ?? '') + `${this.props.til.id},`;
                 this.props.setUser(updatedUser);
             } else {
                 console.error(response);

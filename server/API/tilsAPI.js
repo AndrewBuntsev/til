@@ -32,23 +32,23 @@ const saveTil = app => {
 
             if (tilId) {
                 // try to update the til
-                const til = (await dbClient.getTils({ _id: tilId }))[0];
+                const til = (await dbClient.getTils({ id: tilId }))[0];
                 if (til) {
-                    if (tilUser._id.toString() != til.userId.toString()) {
+                    if (tilUser.id.toString() != til.userId.toString()) {
                         res.status(500);
-                        console.log(tilUser._id);
+                        console.log(tilUser.id);
                         console.log(til.userId);
                         res.json({ status: statusCodes.ERROR, message: 'Not enough permissions to edit the article', payload: null });
                         return;
                     }
 
-                    await dbClient.updateTil({ text, tag, id: til._id });
+                    await dbClient.updateTil({ text, tag, id: til.id });
                     res.json({ status: statusCodes.SUCCESS, message: 'Article has been updated successfully', payload: null });
                     return;
                 }
             }
 
-            await dbClient.addTil({ text, tag, userId: tilUser._id, userName: tilUser.name });
+            await dbClient.addTil({ text, tag, userId: tilUser.id, userName: tilUser.name });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: 'Article has been added successfully', payload: null });
         }
@@ -78,7 +78,7 @@ const deleteTil = app => {
                 return;
             }
 
-            const til = (await dbClient.getTils({ _id: tilId }))[0];
+            const til = (await dbClient.getTils({ id: tilId }))[0];
 
             if (!til) {
                 res.status(200);
@@ -86,13 +86,13 @@ const deleteTil = app => {
                 return;
             }
 
-            if (tilUser._id.toString() != til.userId.toString()) {
+            if (tilUser.id.toString() != til.userId.toString()) {
                 res.status(500);
                 res.json({ status: statusCodes.ERROR, message: 'Not enough permissions to delete the article', payload: null });
                 return;
             }
 
-            await dbClient.deleteTil({ id: til._id });
+            await dbClient.deleteTil({ id: til.id });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: 'Article has been deleted successfully', payload: null });
         }
@@ -122,7 +122,7 @@ const likeTil = app => {
                 return;
             }
 
-            const til = (await dbClient.getTils({ _id: tilId }))[0];
+            const til = (await dbClient.getTils({ id: tilId }))[0];
 
             if (!til) {
                 res.status(200);
@@ -130,7 +130,7 @@ const likeTil = app => {
                 return;
             }
 
-            if (tilUser.likedTils && tilUser.likedTils.includes(`${til._id.toString()},`)) {
+            if (tilUser.likedTils && tilUser.likedTils.includes(`${til.id.toString()},`)) {
                 res.status(500);
                 res.json({ status: statusCodes.ERROR, message: 'Cannot like already liked article', payload: null });
                 return;
@@ -138,8 +138,8 @@ const likeTil = app => {
 
             const likes = til.likes ? parseInt(til.likes) : 0;
 
-            await dbClient.updateTil({ id: til._id, text: til.text, tag: til.tag, likes: likes + 1 });
-            await dbClient.updateUserLikedTils({ id: tilUser._id, likedTils: `${tilUser.likedTils}${til._id.toString()},` });
+            await dbClient.updateTil({ id: til.id, text: til.text, tag: til.tag, likes: likes + 1 });
+            await dbClient.updateUserLikedTils({ id: tilUser.id, likedTils: `${tilUser.likedTils}${til.id.toString()},` });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: 'Article has been liked successfully', payload: null });
         }
@@ -169,7 +169,7 @@ const unlikeTil = app => {
                 return;
             }
 
-            const til = (await dbClient.getTils({ _id: tilId }))[0];
+            const til = (await dbClient.getTils({ id: tilId }))[0];
 
             if (!til) {
                 res.status(200);
@@ -177,7 +177,7 @@ const unlikeTil = app => {
                 return;
             }
 
-            if (!tilUser.likedTils || !tilUser.likedTils.includes(`${til._id.toString()},`)) {
+            if (!tilUser.likedTils || !tilUser.likedTils.includes(`${til.id.toString()},`)) {
                 res.status(500);
                 res.json({ status: statusCodes.ERROR, message: 'Cannot unlike not liked article', payload: null });
                 return;
@@ -185,8 +185,8 @@ const unlikeTil = app => {
 
             const likes = til.likes ? parseInt(til.likes) : 0;
 
-            await dbClient.updateTil({ id: til._id, text: til.text, tag: til.tag, likes: likes - 1 });
-            await dbClient.updateUser({ id: tilUser._id, likedTils: `${tilUser.likedTils.replace(`${til._id.toString()},`, '')}` });
+            await dbClient.updateTil({ id: til.id, text: til.text, tag: til.tag, likes: likes - 1 });
+            await dbClient.updateUser({ id: tilUser.id, likedTils: `${tilUser.likedTils.replace(`${til.id.toString()},`, '')}` });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: 'Article has been liked successfully', payload: null });
         }

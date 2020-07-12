@@ -1,6 +1,6 @@
 
 export type Til = {
-    _id: string;
+    id: string;
     userId: string;
     text: string;
     tag: string;
