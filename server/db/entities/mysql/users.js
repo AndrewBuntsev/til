@@ -24,7 +24,7 @@ exports.addUser = async (query, options) => {
     const dbLiId = liId ? `'${liId}'` : 'NULL';
 
     const userId = await query(`INSERT INTO users (name, fbId, ghId, liId, fbUrl, liUrl, twUrl, wUrl, likedTils) 
-        VALUES ('${name}', NULL, ${dbGhId}, ${dbLiId}, NULL, NULL, NULL, NULL, NULL);
+        VALUES ('${name}', NULL, ${dbGhId}, ${dbLiId}, NULL, NULL, NULL, NULL, '');
         SELECT LAST_INSERT_ID();`);
 
     const user = await query(`SELECT * FROM users where id = ${userId}`);
@@ -32,14 +32,6 @@ exports.addUser = async (query, options) => {
     return user && Array.isArray(user) && user.length > 0 ? user[0] : null;
 };
 
-// exports.updateUserLikedTils = async (db, options) => {
-//     const { id, likedTils } = options;
-
-//     await db.collection('users').updateOne({ id: id },
-//         {
-//             $set: { likedTils }
-//         });
-// };
 
 exports.updateUser = async (db, options) => {
     const { id, twUrl, liUrl, fbUrl, wUrl } = options;

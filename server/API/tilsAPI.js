@@ -122,24 +122,14 @@ const likeTil = app => {
                 return;
             }
 
-            const til = (await dbClient.getTils({ id: tilId }))[0];
-
-            if (!til) {
-                res.status(200);
-                res.json({ status: statusCodes.ERROR, message: `Article with ID ${tilId} not found`, payload: null });
-                return;
-            }
-
-            if (tilUser.likedTils && tilUser.likedTils.includes(`${til.id.toString()},`)) {
+            if (tilUser.likedTils && tilUser.likedTils.includes(`,${tilId},`)) {
                 res.status(500);
                 res.json({ status: statusCodes.ERROR, message: 'Cannot like already liked article', payload: null });
                 return;
             }
 
-            const likes = til.likes ? parseInt(til.likes) : 0;
+            await dbClient.likeTil({ tilId, userId: tilUser.id });
 
-            await dbClient.updateTil({ id: til.id, text: til.text, tag: til.tag, likes: likes + 1 });
-            await dbClient.updateUserLikedTils({ id: tilUser.id, likedTils: `${tilUser.likedTils}${til.id.toString()},` });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: 'Article has been liked successfully', payload: null });
         }
@@ -169,26 +159,16 @@ const unlikeTil = app => {
                 return;
             }
 
-            const til = (await dbClient.getTils({ id: tilId }))[0];
-
-            if (!til) {
-                res.status(200);
-                res.json({ status: statusCodes.ERROR, message: `Article with ID ${tilId} not found`, payload: null });
-                return;
-            }
-
-            if (!tilUser.likedTils || !tilUser.likedTils.includes(`${til.id.toString()},`)) {
+            if (!tilUser.likedTils || !tilUser.likedTils.includes(`,${tilId},`)) {
                 res.status(500);
                 res.json({ status: statusCodes.ERROR, message: 'Cannot unlike not liked article', payload: null });
                 return;
             }
 
-            const likes = til.likes ? parseInt(til.likes) : 0;
+            await dbClient.unlikeTil({ tilId, userId: tilUser.id });
 
-            await dbClient.updateTil({ id: til.id, text: til.text, tag: til.tag, likes: likes - 1 });
-            await dbClient.updateUser({ id: tilUser.id, likedTils: `${tilUser.likedTils.replace(`${til.id.toString()},`, '')}` });
             res.status(200);
-            res.json({ status: statusCodes.SUCCESS, message: 'Article has been liked successfully', payload: null });
+            res.json({ status: statusCodes.SUCCESS, message: 'Article has been unliked successfully', payload: null });
         }
         catch (err) {
             res.status(500);

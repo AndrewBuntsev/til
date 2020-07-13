@@ -54,7 +54,7 @@ class TilArticle extends Component<Props, State> {
         return shouldUpdate;
     }
 
-    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til.id},`);
+    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`,${this.props.til.id},`);
 
     onEditClick = () => {
         this.setState({ redirect: `/editArticle?articleId=${this.props.til.id}` });

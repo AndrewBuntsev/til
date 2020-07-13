@@ -35,18 +35,30 @@ exports.addTil = async (query, options) => {
     const { text, tag, userId } = options;
     const upperTag = deleteCommas(tag).toUpperCase();
 
-    //TODO: add transaction
     await query(`INSERT INTO tils (text, tag, userId, timestamp, likes) 
-                VALUES ('${escapeCommas(text)}', '${upperTag}', ${userId}, '${(new Date()).toISOString().slice(0, 19).replace('T', ' ')}', 0);`);
+                    VALUES ('${escapeCommas(text)}', '${upperTag}', ${userId}, '${(new Date()).toISOString().slice(0, 19).replace('T', ' ')}', 0);`);
     await tags.addTag(query, { tag });
 };
 
 exports.updateTil = async (query, options) => {
     let { text, tag, id } = options;
 
-    //TODO: Add transaction
     await query(`UPDATE tils SET text = '${escapeCommas(text)}', tag = '${deleteCommas(tag).toUpperCase()}' where id = ${id}`);
     await tags.addTag(query, { tag });
+};
+
+exports.likeTil = async (query, options) => {
+    let { tilId, userId } = options;
+
+    await query(`UPDATE tils SET likes = likes + 1 where id = ${tilId};`);
+    await query(`UPDATE users SET likedTils = CONCAT(likedTils, ',${tilId.toString()},') where id = ${userId};`);
+};
+
+exports.unlikeTil = async (query, options) => {
+    let { tilId, userId } = options;
+
+    await query(`UPDATE tils SET likes = likes - 1 where id = ${tilId};`);
+    await query(`UPDATE users SET likedTils = REPLACE(likedTils, ',${tilId.toString()},', '') where id = ${userId};`);
 };
 
 exports.deleteTil = async (query, options) => {

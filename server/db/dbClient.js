@@ -17,6 +17,8 @@ exports.updateUserLikedTils = async options => await dbCall(users.updateUserLike
 exports.getTils = async options => await dbCall(tils.getTils, options);
 exports.addTil = async options => await dbCall(tils.addTil, options);
 exports.updateTil = async options => await dbCall(tils.updateTil, options);
+exports.likeTil = async options => await dbCall(tils.likeTil, options);
+exports.unlikeTil = async options => await dbCall(tils.unlikeTil, options);
 exports.deleteTil = async options => await dbCall(tils.deleteTil, options);
 //#endregion tils
 

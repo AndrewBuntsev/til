@@ -44,7 +44,7 @@ class Heart extends Component<Props, State> {
 
     isLiked = () => this.props.user && this.includesThisTil(this.props.user.likedTils);
 
-    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`${this.props.til.id},`);
+    includesThisTil = (likedTils: string) => likedTils && likedTils.includes(`,${this.props.til.id},`);
 
     onClick = async () => {
 
