@@ -1,3 +1,4 @@
+const { deleteCommas } = require("../../../helpers/textHelper");
 
 exports.getTags = async (query, options) => {
 
@@ -6,7 +7,7 @@ exports.getTags = async (query, options) => {
 };
 
 exports.addTag = async (query, options) => {
-    const { tag } = options;
+    const tag = deleteCommas(options.tag);
     const existentTag = await query(`SELECT * FROM tags WHERE tag = '${tag}';`);
     if (!existentTag || existentTag.length == 0) {
         await query(`INSERT INTO tags (tag) VALUES ('${tag.toUpperCase()}');`);

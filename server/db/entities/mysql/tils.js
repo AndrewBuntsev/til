@@ -1,4 +1,5 @@
 const tags = require('./tags');
+const { escapeCommas, deleteCommas } = require('../../../helpers/textHelper');
 
 exports.getTils = async (query, options) => {
     const { id, author, date, tag, searchTerm, random } = options;
@@ -32,19 +33,19 @@ exports.getTils = async (query, options) => {
 
 exports.addTil = async (query, options) => {
     const { text, tag, userId } = options;
-    const upperTag = tag.toUpperCase();
+    const upperTag = deleteCommas(tag).toUpperCase();
 
     //TODO: add transaction
     await query(`INSERT INTO tils (text, tag, userId, timestamp, likes) 
-                VALUES ('${text}', '${upperTag}', ${userId}, '${(new Date()).toISOString().slice(0, 19).replace('T', ' ')}', 0);`);
+                VALUES ('${escapeCommas(text)}', '${upperTag}', ${userId}, '${(new Date()).toISOString().slice(0, 19).replace('T', ' ')}', 0);`);
     await tags.addTag(query, { tag });
 };
 
 exports.updateTil = async (query, options) => {
-    const { text, tag, id } = options;
+    let { text, tag, id } = options;
 
     //TODO: Add transaction
-    await query(`UPDATE tils SET text = '${text}', tag = '${tag.toUpperCase()}' where id = ${id}`);
+    await query(`UPDATE tils SET text = '${escapeCommas(text)}', tag = '${deleteCommas(tag).toUpperCase()}' where id = ${id}`);
     await tags.addTag(query, { tag });
 };
 
