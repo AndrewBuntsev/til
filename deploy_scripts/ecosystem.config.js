@@ -5,13 +5,14 @@
 module.exports = {
   apps: [{
     name: 'TIL (backend)',
-    script: './../server/server.js',
+    cwd: './../server',
+    script: './server.js',
     instances: 1,
     autorestart: true,
     watch: false,
     max_memory_restart: '1G',
     exp_backoff_restart_delay: 100,
-    append_env_to_name: true
+    append_env_to_name: false
   },
   {
     name: 'TIL (Frontend)',
@@ -22,6 +23,6 @@ module.exports = {
     watch: false,
     max_memory_restart: '1G',
     exp_backoff_restart_delay: 100,
-    append_env_to_name: true
+    append_env_to_name: false
   }]
 };
