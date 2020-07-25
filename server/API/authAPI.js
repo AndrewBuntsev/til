@@ -1,6 +1,7 @@
 const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
 const fetch = require('node-fetch');
+const { WEB_URL } = require('../const/settings');
 
 
 // const fbAuth = app => {
@@ -146,7 +147,7 @@ const liAuth = app => {
         try {
             if (code) {
                 //1. Get access_token from LinkedIn
-                const accessData = await fetch(`https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=${code}&redirect_uri=https%3A%2F%2Flocalhost:3000%2FliAuth&client_id=86v6z3n8v3ybvo&client_secret=CnRJxkYpJWlCalKz`, {
+                const accessData = await fetch(`https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=${code}&redirect_uri=${WEB_URL}%2FliAuth&client_id=86v6z3n8v3ybvo&client_secret=CnRJxkYpJWlCalKz`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                 }).then(response => response.json());

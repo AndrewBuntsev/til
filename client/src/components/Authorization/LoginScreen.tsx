@@ -6,7 +6,7 @@ import { Dispatch } from 'redux';
 import { User } from '../../types/User';
 import setUser from '../../redux/actions/setUser';
 import { connect } from 'react-redux';
-import { GH_APP_ID } from '../../const/settings';
+import { GH_APP_ID, THIS_URL } from '../../const/settings';
 
 
 type Props = {
@@ -21,7 +21,7 @@ class LoginScreen extends Component<Props, State> {
         return (
             <div className={styles.container}>
                 <div className={styles.loginContainer}>
-                    <a href={`https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86v6z3n8v3ybvo&redirect_uri=https%3A%2F%2Flocalhost:3000/liAuth&scope=r_liteprofile`}>
+                    <a href={`https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86v6z3n8v3ybvo&redirect_uri=${THIS_URL}/liAuth&scope=r_liteprofile`}>
                         <img src={require('./../../assets/images/liLogin.png')} />
                     </a>
 
