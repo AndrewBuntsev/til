@@ -4,6 +4,8 @@ require('dotenv').config();
 // express
 const express = require('express');
 const app = new express();
+const https = require('https');
+const fs = require('fs');
 
 // cors
 const cors = require('cors');
@@ -31,6 +33,12 @@ require('./API/statisticsAPI')(app);
 
 
 // run server listener
-const listener = app.listen(process.env.PORT, () => {
+const options = {
+    key: fs.readFileSync(`${process.env.CERT_PATH}/private.key`),
+    cert: fs.readFileSync(`${process.env.CERT_PATH}/certificate.crt`),
+    ca: fs.readFileSync(`${process.env.CERT_PATH}/ca_bundle.crt`)
+};
+const httpsServer = https.createServer(options, app);
+const listener = httpsServer.listen(process.env.PORT, () => {
     console.log(`Server is listening on the port ${listener.address().port}`);
 });

@@ -17,7 +17,8 @@
     "express": "4.17.1",
     "mongodb": "3.5.7",
     "mysql": "2.18.1",
-    "node-fetch": "2.6.0"
+    "node-fetch": "2.6.0",
+    "fs": "0.0.1-security"
   },
   "devDependencies": {
     "nodemon": "2.0.2"
