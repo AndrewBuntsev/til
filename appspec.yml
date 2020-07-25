@@ -4,10 +4,10 @@ files:
   - source: /
     destination: /home/ec2-user/til
 hooks:
-  ApplicationStop:
-    - location: deploy_scripts/app_stop.sh
-      timeout: 500
-      runas: ec2-user
+  # ApplicationStop:
+  #   - location: deploy_scripts/app_stop.sh
+  #     timeout: 500
+  #     runas: ec2-user
   BeforeInstall:
     - location: deploy_scripts/before_install.sh
       timeout: 500
