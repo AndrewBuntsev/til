@@ -31,14 +31,22 @@ require('./API/tilsAPI')(app);
 require('./API/tagsAPI')(app);
 require('./API/statisticsAPI')(app);
 
+const isLocal = process.env.ENV == 'local';
 
 // run server listener
-const options = {
-    key: fs.readFileSync(`${process.env.CERT_PATH}/private.key`),
-    cert: fs.readFileSync(`${process.env.CERT_PATH}/certificate.crt`),
-    ca: fs.readFileSync(`${process.env.CERT_PATH}/ca_bundle.crt`)
-};
-const httpsServer = https.createServer(options, app);
-const listener = httpsServer.listen(process.env.PORT, () => {
-    console.log(`Server is listening on the port ${listener.address().port}`);
-});
+if (isLocal) {
+    const listener = app.listen(process.env.PORT, () => {
+        console.log(`Server is listening on the port ${listener.address().port}`);
+    });
+} else {
+    const options = {
+        key: fs.readFileSync(`${process.env.CERT_PATH}/private.key`),
+        cert: fs.readFileSync(`${process.env.CERT_PATH}/certificate.crt`),
+        ca: fs.readFileSync(`${process.env.CERT_PATH}/ca_bundle.crt`)
+    };
+    const httpsServer = https.createServer(options, app);
+    const listener = httpsServer.listen(process.env.PORT, () => {
+        console.log(`Server is listening on the port ${listener.address().port}`);
+    });
+}
+
