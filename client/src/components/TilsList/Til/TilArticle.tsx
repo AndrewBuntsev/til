@@ -8,6 +8,7 @@ import { AppState } from '../../../types/AppState';
 import { connect } from 'react-redux';
 import { User } from '../../../types/User';
 import Heart from './Heart/Heart';
+import { THIS_URL } from '../../../const/settings';
 
 
 
@@ -72,6 +73,9 @@ class TilArticle extends Component<Props, State> {
             return <Redirect to={this.state.redirect} />;
         }
 
+        const foundTitleMatch = this.props.til.text.match(/(?<=<h2>)(.|\n)*?(?=<\/h2>)/i);
+        const title = foundTitleMatch && foundTitleMatch[0] ? foundTitleMatch[0] : this.props.til.text.substring(0, 25);
+
         return (
             <div className={styles.container}>
 
@@ -84,7 +88,7 @@ class TilArticle extends Component<Props, State> {
                     : <div className={styles.content} dangerouslySetInnerHTML={{ __html: this.props.til.text }} />}
 
                 <div className={styles.buttons}>
-                    <a href="https://twitter.com/intent/tweet?hashtags=git&original_referer=https%3A%2F%2Ftil.hashrocket.com%2Fposts%2F40xglnjqnt-git-checkout-in-patches-&ref_src=twsrc%5Etfw&text=Today%20I%20learned%3A%20Git%20Checkout%20in%20Patches%20&tw_p=tweetbutton&url=http%3A%2F%2Ftil.hashrocket.com%2Fposts%2F40xglnjqnt-git-checkout-in-patches-&via=jwworth">
+                    <a href={`https://twitter.com/intent/tweet?hashtags=${this.props.til.tag}&ref_src=twsrc%5Etfw&related=twitterapi%2Ctwitter&text=${title}&url=${THIS_URL}/posts?id=${this.props.til.id}&via=TodayIL38903307`} target='_blank'>
                         <Button icon={require('./../../../assets/images/twitter-16-white.png')} title='Tweet' />
                     </a>
                     {this.props.user
