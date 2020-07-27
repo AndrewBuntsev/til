@@ -1,6 +1,7 @@
 const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
 const fetch = require('node-fetch');
+const logger = require('./../logger');
 const { WEB_URL } = require('../const/settings');
 
 
@@ -134,6 +135,7 @@ const ghAuth = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null })
         }
     });
@@ -205,6 +207,7 @@ const liAuth = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null })
         }
     });

@@ -17,8 +17,8 @@ const query = util.promisify(pool.query).bind(pool);
 const end = util.promisify(pool.end).bind(pool);
 
 
-(async () => {
-    await query(`ALTER TABLE tils
-    ADD COLUMN isDeleted TINYINT(1) NOT NULL DEFAULT 0 AFTER likes`);
-    await end();
-})();
+// (async () => {
+//     await query(`ALTER TABLE tils
+//     ADD COLUMN isDeleted TINYINT(1) NOT NULL DEFAULT 0 AFTER likes`);
+//     await end();
+// })();

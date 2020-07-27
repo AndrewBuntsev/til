@@ -1,5 +1,6 @@
 const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
+const logger = require('./../logger');
 const { authoriseTilUser } = require('./../authoriseTilUser');
 
 
@@ -13,6 +14,7 @@ const getTils = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null })
         }
     });
@@ -55,6 +57,7 @@ const saveTil = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null });
         }
     });
@@ -99,6 +102,7 @@ const deleteTil = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null });
         }
     });
@@ -136,6 +140,7 @@ const likeTil = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null });
         }
     });
@@ -173,6 +178,7 @@ const unlikeTil = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null });
         }
     });

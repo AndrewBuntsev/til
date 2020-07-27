@@ -12,6 +12,10 @@ const cors = require('cors');
 app.use(cors());
 app.options('*', cors());
 
+// secure with helmet
+const helmet = require('helmet');
+app.use(helmet());
+
 // compress all responses
 const compression = require('compression');
 app.use(compression());
@@ -20,6 +24,13 @@ app.use(compression());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// logging
+const logger = require('./logger');
+app.use((req, res, next) => {
+    logger.trace(req.originalUrl);
+    next();
+});
 
 
 
@@ -37,6 +48,7 @@ const isLocal = process.env.ENV == 'local';
 if (isLocal) {
     const listener = app.listen(process.env.PORT, () => {
         console.log(`Server is listening on the port ${listener.address().port}`);
+        logger.important(`Server is listening on the port ${listener.address().port}`);
     });
 } else {
     const options = {
@@ -47,6 +59,7 @@ if (isLocal) {
     const httpsServer = https.createServer(options, app);
     const listener = httpsServer.listen(process.env.PORT, () => {
         console.log(`Server is listening on the port ${listener.address().port}`);
+        logger.important(`Server is listening on the port ${listener.address().port}`);
     });
 }
 

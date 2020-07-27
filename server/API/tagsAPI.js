@@ -1,5 +1,6 @@
 const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
+const logger = require('./../logger');
 const { authoriseTilUser } = require('./../authoriseTilUser');
 
 
@@ -13,6 +14,7 @@ const getTags = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null })
         }
     });
@@ -37,6 +39,7 @@ const addTag = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null });
         }
     });

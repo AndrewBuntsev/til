@@ -1,6 +1,7 @@
 const Mongo = require('mongodb');
 const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
+const logger = require('./../logger');
 const { authoriseTilUser } = require('./../authoriseTilUser');
 
 
@@ -15,6 +16,7 @@ const getUserData = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null });
         }
     });
@@ -40,6 +42,7 @@ const updateUser = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null });
         }
     });

@@ -1,5 +1,6 @@
 const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
+const logger = require('./../logger');
 
 
 const getStatistics = app => {
@@ -12,6 +13,7 @@ const getStatistics = app => {
         catch (err) {
             res.status(500);
             console.error(err);
+            logger.error(err.stack);
             res.json({ status: statusCodes.ERROR, message: err, payload: null });
         }
     });

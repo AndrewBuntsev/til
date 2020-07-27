@@ -18,7 +18,10 @@
     "mongodb": "3.5.7",
     "mysql": "2.18.1",
     "node-fetch": "2.6.0",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "helmet": "3.21.0",
+    "winston": "3.2.1",
+    "winston-daily-rotate-file": "4.2.1"
   },
   "devDependencies": {
     "nodemon": "2.0.2"
