@@ -9,7 +9,7 @@ exports.getStatistics = async (query) => {
 
 
 const getTopTils = async (query) => {
-    const topTils = await query('SELECT * FROM tils order by likes desc limit 10');
+    const topTils = await query('SELECT * FROM tils where isDeleted = 0 order by likes desc limit 10');
     const shortenTopTils = topTils.map(til => {
         const foundTitleMatch = til.text.match(/(?<=<h2>)(.|\n)*?(?=<\/h2>)/i);
         const title = foundTitleMatch && foundTitleMatch[0] ? foundTitleMatch[0] : 'Untitled'
@@ -21,7 +21,7 @@ const getTopTils = async (query) => {
 
 
 const getTagStatistics = async (query) => {
-    const tags = await query('select tag, count(tag) as tilsCount from tils group by tag order by tilsCount desc');
+    const tags = await query('select tag, count(tag) as tilsCount from tils where isDeleted = 0 group by tag order by tilsCount desc');
 
     return tags;
 };
@@ -31,6 +31,7 @@ const getAuthorStatistics = async (query) => {
     const authors = await query(`select t.userId, u.name as userName, count(t.userId) as tilsCount 
         from tils t 
         inner join users u on u.id = t.userId
+        where t.isDeleted = 0
         group by userId order by tilsCount desc`);
 
     return authors;
@@ -40,6 +41,7 @@ const getAuthorStatistics = async (query) => {
 const getDateStatistics = async (query) => {
     const dates = await query(`select date_format(timestamp, '%M %d, %Y') as date, count(date_format(timestamp, '%M %d, %Y')) as tilsCount 
         from tils
+        where isDeleted = 0
         group by date_format(timestamp, '%M %d, %Y') order by timestamp desc limit 31`);
 
     // compose the result

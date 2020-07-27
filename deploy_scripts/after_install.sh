@@ -6,4 +6,5 @@ cp -R /home/ec2-user/til/cert /home/ec2-user/til/server/cert
 cp -R /home/ec2-user/til/cert /home/ec2-user/til/client/cert
 cp /home/ec2-user/til/webpackDevServer.config.js /home/ec2-user/til/client/node_modules/react-scripts/config/webpackDevServer.config.js
 cd /home/ec2-user/til/server 
+node db/preDeploy.js
 pm2 start server.js &

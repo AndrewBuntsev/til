@@ -20,11 +20,11 @@ exports.getTils = async (query, options) => {
     const results = random ?
         await query(`SELECT t.*, date_format(t.timestamp, '%M %d, %Y') as date, u.name as userName 
             FROM tils t
-            inner join users u on u.id = t.userId
+            inner join users u on u.id = t.userId and t.isDeleted = 0
             ORDER BY RAND() LIMIT 1`)
         : await query(`SELECT t.*, date_format(t.timestamp, '%M %d, %Y') as date, u.name as userName 
             FROM tils t
-            inner join users u on u.id = t.userId
+            inner join users u on u.id = t.userId and t.isDeleted = 0
             ${whereClause} 
             order by timestamp desc`);
 
@@ -64,6 +64,6 @@ exports.unlikeTil = async (query, options) => {
 exports.deleteTil = async (query, options) => {
     const { id } = options;
 
-    await query(`DELETE FROM tils WHERE id = ${id}`);
+    await query(`UPDATE tils SET isDeleted = 1 where id = ${id}`);
 };
 
