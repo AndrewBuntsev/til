@@ -28,11 +28,11 @@ exports.addUser = async (query, options) => {
     const insertDataPacket = await query(`INSERT INTO users (name, fbId, ghId, liId, fbUrl, liUrl, twUrl, wUrl, likedTils) 
         VALUES ('${name}', NULL, ${dbGhId}, ${dbLiId}, NULL, NULL, NULL, NULL, '')`);
     logger.info('insertDataPacket:');
-    logger.info(insertDataPacket);
+    logger.info(JSON.stringify(insertDataPacket));
 
     const dataPacket = await query(`SELECT LAST_INSERT_ID()`);
     logger.info('dataPacket:');
-    logger.info(dataPacket);
+    logger.info(JSON.stringify(dataPacket));
 
     const userId = dataPacket[0]['LAST_INSERT_ID()'];
     logger.info('userId:');
