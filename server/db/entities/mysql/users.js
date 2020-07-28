@@ -5,7 +5,7 @@ exports.getUser = async (query, options) => {
     if (ghId) {
         user = await query(`SELECT * FROM users where ghId = '${ghId}'`);
     } else if (liId) {
-        user = await query(`SELECT * FROM users where ghId = '${liId}'`);
+        user = await query(`SELECT * FROM users where liId = '${liId}'`);
     }
 
     return user && Array.isArray(user) && user.length > 0 ? user[0] : null;
