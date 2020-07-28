@@ -23,11 +23,14 @@ exports.addUser = async (query, options) => {
     const dbGhId = ghId ? `'${ghId}'` : 'NULL';
     const dbLiId = liId ? `'${liId}'` : 'NULL';
 
-    const userId = await query(`INSERT INTO users (name, fbId, ghId, liId, fbUrl, liUrl, twUrl, wUrl, likedTils) 
-        VALUES ('${name}', NULL, ${dbGhId}, ${dbLiId}, NULL, NULL, NULL, NULL, '');
-        SELECT LAST_INSERT_ID();`);
+    await query(`INSERT INTO users (name, fbId, ghId, liId, fbUrl, liUrl, twUrl, wUrl, likedTils) 
+        VALUES ('${name}', NULL, ${dbGhId}, ${dbLiId}, NULL, NULL, NULL, NULL, '')`);
+
+    const dataPacket = await query(`SELECT LAST_INSERT_ID()`);
+    const userId = dataPacket[0]['LAST_INSERT_ID()'];
 
     const user = await query(`SELECT * FROM users where id = ${userId}`);
+    console.log(user);
 
     return user && Array.isArray(user) && user.length > 0 ? user[0] : null;
 };
