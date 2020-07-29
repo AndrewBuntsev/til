@@ -39,7 +39,7 @@ exports.addUser = async (query, options) => {
 };
 
 
-exports.updateUser = async (db, options) => {
+exports.updateUser = async (query, options) => {
     const { id, twUrl, liUrl, fbUrl, wUrl } = options;
 
     await query(`UPDATE users SET twUrl = '${twUrl}', liUrl = '${liUrl}', fbUrl = '${fbUrl}', wUrl = '${wUrl}' where id = ${id}`);
