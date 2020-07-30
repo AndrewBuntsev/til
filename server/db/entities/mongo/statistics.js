@@ -12,7 +12,9 @@ const getTopTils = async (db) => {
     const topTils = await db.collection('tils').find().sort({ likes: -1 }).limit(10).toArray();
     const shortenTopTils = topTils.map(til => {
         const foundTitleMatch = til.text.match(/(?<=<h2>)(.|\n)*?(?=<\/h2>)/i);
-        const title = foundTitleMatch && foundTitleMatch[0] ? foundTitleMatch[0] : 'Untitled'
+        const title = (foundTitleMatch && foundTitleMatch[0] ? foundTitleMatch[0] : 'Untitled')
+            .replace(/&amp;/g, 'and')
+            .replace(/&nbsp;/g, ' ');
         return { _id: til._id, title, tag: til.tag, likes: til.likes }
     });
 

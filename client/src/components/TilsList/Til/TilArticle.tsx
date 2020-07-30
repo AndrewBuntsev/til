@@ -74,7 +74,9 @@ class TilArticle extends Component<Props, State> {
         }
 
         const foundTitleMatch = this.props.til.text.match(/(?<=<h2>)(.|\n)*?(?=<\/h2>)/i);
-        const title = foundTitleMatch && foundTitleMatch[0] ? foundTitleMatch[0] : this.props.til.text.substring(0, 25);
+        const title = (foundTitleMatch && foundTitleMatch[0] ? foundTitleMatch[0] : this.props.til.text.substring(0, 25))
+            .replace(/&amp;/g, 'and')
+            .replace(/&nbsp;/g, ' ');
 
         return (
             <div className={styles.container}>
