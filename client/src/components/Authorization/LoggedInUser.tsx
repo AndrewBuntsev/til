@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { AppState } from '../../types/AppState';
@@ -25,6 +26,7 @@ type Props = {
     dispatchCombinedAction(actions: Array<Action>): Action;
 };
 type State = {
+    redirect: string,
     twUrl?: string;
     liUrl?: string;
     fbUrl?: string;
@@ -34,6 +36,7 @@ type State = {
 
 class LoggedInUser extends Component<Props, State> {
     state = {
+        redirect: null,
         twUrl: this.props.user.twUrl ?? '',
         liUrl: this.props.user.liUrl ?? '',
         fbUrl: this.props.user.fbUrl ?? '',
@@ -62,7 +65,14 @@ class LoggedInUser extends Component<Props, State> {
         }
     };
 
+    showMyPosts = () => {
+        this.hidePopup();
+        this.setState({ redirect: `/posts?author=${this.props.user.id}` });
+    };
+
+
     showPopup = () => this.props.setIsUserMenuVisible(true);
+
     hidePopup = () => {
         this.props.setIsUserMenuVisible(false);
         this.setState({
@@ -75,6 +85,10 @@ class LoggedInUser extends Component<Props, State> {
     };
 
     render() {
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />;
+        }
+
         const user: User = this.props.user;
 
         return (
@@ -133,6 +147,10 @@ class LoggedInUser extends Component<Props, State> {
                                     placeholder='Personal website URL...'
                                     onChange={e => this.setState({ wUrl: e.target.value, isDirty: true })} />
                             </div>
+
+                            {/* My Posts */}
+                            <span className={styles.userSettingsLink} onClick={this.showMyPosts}>My Posts</span>
+
 
                             <div className={styles.bottomPanelContainer}>
                                 {this.state.isDirty && <span className={styles.save} onClick={this.save}>Update</span>}

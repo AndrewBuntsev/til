@@ -108,6 +108,16 @@
   width: auto;
 }
 
+.userSettingsLink{
+  margin-top: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  flex-grow: 1;
+  align-self: center;
+}
+.userSettingsLink:hover{
+  color: #ff6600;
+}
 
 .bottomPanelContainer {
   align-self: stretch;
