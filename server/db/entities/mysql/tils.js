@@ -10,7 +10,7 @@ exports.getTils = async (query, options) => {
     } else if (author) {
         whereClause += `where t.userId = ${author}`;
     } else if (likedBy) {
-        whereClause += `where u.id = ${likedBy} and u.likedTils like concat('%,', t.id, ',%')`;
+        whereClause += `where exists(select 1 from users u1 where u1.id = ${likedBy} and u1.likedTils like concat('%,', t.id, ',%'))`;
     } else if (date) {
         whereClause += `where date_format(timestamp, '%M %d, %Y') = '${date}'`;
     } else if (tag) {
