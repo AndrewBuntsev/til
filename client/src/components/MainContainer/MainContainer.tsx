@@ -51,6 +51,7 @@ class MainContainer extends Component<Props, State> {
             const response: ApiResponse = await api.getTils({
                 id: params.get('id') ?? '',
                 author: params.get('author') ?? '',
+                likedBy: params.get('likedBy') ?? '',
                 date: params.get('date') ?? '',
                 tag: params.get('tag') ?? '',
                 searchTerm: params.get('searchTerm') ?? '',

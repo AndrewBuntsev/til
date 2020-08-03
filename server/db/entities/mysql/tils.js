@@ -2,13 +2,15 @@ const tags = require('./tags');
 const { escapeCommas, deleteCommas } = require('../../../helpers/textHelper');
 
 exports.getTils = async (query, options) => {
-    const { id, author, date, tag, searchTerm, random } = options;
+    const { id, author, likedBy, date, tag, searchTerm, random } = options;
 
     let whereClause = '';
     if (id) {
         whereClause += `where t.id = ${id}`;
     } else if (author) {
-        whereClause += `where userId = ${author}`;
+        whereClause += `where t.userId = ${author}`;
+    } else if (likedBy) {
+        whereClause += `where u.id = ${likedBy} and u.likedTils like concat('%,', t.id, ',%')`;
     } else if (date) {
         whereClause += `where date_format(timestamp, '%M %d, %Y') = '${date}'`;
     } else if (tag) {

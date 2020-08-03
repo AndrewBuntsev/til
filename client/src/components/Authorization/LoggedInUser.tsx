@@ -70,6 +70,11 @@ class LoggedInUser extends Component<Props, State> {
         this.setState({ redirect: `/posts?author=${this.props.user.id}` });
     };
 
+    showLikedPosts = () => {
+        this.hidePopup();
+        this.setState({ redirect: `/posts?likedBy=${this.props.user.id}` });
+    };
+
 
     showPopup = () => this.props.setIsUserMenuVisible(true);
 
@@ -150,6 +155,9 @@ class LoggedInUser extends Component<Props, State> {
 
                             {/* My Posts */}
                             <span className={styles.userSettingsLink} onClick={this.showMyPosts}>My Posts</span>
+
+                            {/* ❤ Posts */}
+                            <span className={styles.userSettingsLink} onClick={this.showLikedPosts}>My ❤ Posts</span>
 
 
                             <div className={styles.bottomPanelContainer}>

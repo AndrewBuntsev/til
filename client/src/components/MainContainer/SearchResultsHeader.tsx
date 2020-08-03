@@ -46,6 +46,8 @@ export default class SearchResultsHeader extends Component<Props> {
                     </a>}
                 </div>
             );
+        } else if (params.get('likedBy')) {
+            keyword = ` I ❤`;
         } else if (params.get('date')) {
             keyword = `on ${params.get('date')}`;
         } else if (params.get('tag')) {
