@@ -7,7 +7,7 @@ import styles from './Authorization.module.css';
 import { AppState } from '../../types/AppState';
 import setUser from '../../redux/actions/setUser';
 import { User } from '../../types/User';
-import { getGHUserId, getGHAccessToken, getLIUserId, getLIAccessToken } from '../../helpers/cookiesHelper';
+import { getGHUserId, getGHAccessToken, getLIUserId, getLIAccessToken, getCogUserId, getCogAccessToken } from '../../helpers/cookiesHelper';
 import * as api from '../../api';
 import { ApiResponse } from '../../types/ApiResponse';
 import { ResponseStatus } from '../../enums/ResponseStatus';
@@ -32,6 +32,7 @@ class Authorization extends Component<Props, State> {
     componentDidMount() {
         this.initGitHub();
         this.initLinkedIn();
+        this.initCognito();
     }
 
 
@@ -60,6 +61,21 @@ class Authorization extends Component<Props, State> {
         if (liId && access_token) {
             const resp: ApiResponse = await api.liAuth({ access_token });
             if (resp.status == ResponseStatus.SUCCESS && resp.payload && resp.payload['liId'] == liId) {
+                const user: User = getTypeFromObject<User>(resp.payload);
+                this.props.setUser(user);
+            }
+        }
+    };
+
+    initCognito = async () => {
+
+        //Check if the user has already logged in with Cognito
+        const cogId = getCogUserId();
+        const access_token = getCogAccessToken();
+
+        if (cogId && access_token) {
+            const resp: ApiResponse = await api.cogAuth({ access_token });
+            if (resp.status == ResponseStatus.SUCCESS && resp.payload && resp.payload['cogId'] == cogId) {
                 const user: User = getTypeFromObject<User>(resp.payload);
                 this.props.setUser(user);
             }

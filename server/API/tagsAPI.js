@@ -22,9 +22,9 @@ const getTags = app => {
 
 const addTag = app => {
     app.put('/api/addTag', async (req, res) => {
-        const { tag, ghId, liId, ghAccessToken, liAccessToken } = req.body;
+        const { tag, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken } = req.body;
         try {
-            let authResult = await authoriseTilUser({ ghId, liId, ghAccessToken, liAccessToken });
+            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken });
             let tilUser = authResult.payload;
             if (!tilUser) {
                 res.status(200);

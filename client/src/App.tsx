@@ -7,6 +7,7 @@ import './App.css';
 import LoginScreen from './components/Authorization/LoginScreen';
 import GhAuth from './components/Authorization/GhAuth';
 import LiAuth from './components/Authorization/LiAuth';
+import CogAuth from './components/Authorization/CogAuth';
 import MainHeader from './components/MainHeader/MainHeader';
 import EditArticle from './components/EditArticle/EditArticle';
 import { ApiResponse } from './types/ApiResponse';
@@ -35,6 +36,7 @@ export default class App extends React.Component {
           <Route exact path="/posts" component={MainContainer} />
           <Route exact path="/ghAuth" component={GhAuth} />
           <Route exact path="/liAuth" component={LiAuth} />
+          <Route exact path="/cogAuth" component={CogAuth} />
           <Route exact path="/login" component={LoginScreen} />
           <Route exact path="/editArticle" component={EditArticle} />
           <Route exact path="/statistics" component={Statistics} />

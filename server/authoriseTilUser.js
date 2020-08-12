@@ -1,9 +1,12 @@
+const util = require('util');
+const AWS = require('aws-sdk');
+const fetch = require('node-fetch');
 const statusCodes = require('./const/statusCodes');
 const dbClient = require('./db/dbClient');
-const fetch = require('node-fetch');
+
 
 exports.authoriseTilUser = async function (options) {
-    const { ghId, liId, ghAccessToken, liAccessToken } = options;
+    const { ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken } = options;
 
     let tilUser = null;
 
@@ -42,12 +45,36 @@ exports.authoriseTilUser = async function (options) {
 
         if (liUser.id != liId) {
             res.status(200);
-            return { status: statusCodes.SUCCESS, message: `GitHub ${liAccessToken} access_token is expired`, payload: null };
+            return { status: statusCodes.SUCCESS, message: `LinkedIn ${liAccessToken} access_token is expired`, payload: null };
         }
 
         tilUser = await dbClient.getUser({ liId: liId });
         if (!tilUser) {
             return { status: statusCodes.SUCCESS, message: `Cannot find a user with liId: ${liId}`, payload: null };
+        }
+    } else if (cogId && cogAccessToken) {
+        // authorize against Cognito
+        const cognitoService = new AWS.CognitoIdentityServiceProvider();
+        const getUser = util.promisify(cognitoService.getUser).bind(cognitoService);
+        const cogUser = await getUser({ AccessToken: cogAccessToken });
+
+        if (!cogUser || !cogUser.Username || !cogUser.UserAttributes) {
+            res.status(200);
+            res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito user for the ${cogAccessToken} access_token`, payload: null });
+            return;
+        }
+
+        const idAttr = cogUser.UserAttributes.find(att => att.Name == 'sub');
+        const id = idAttr && idAttr.Value;
+
+        if (id != cogId) {
+            res.status(200);
+            return { status: statusCodes.SUCCESS, message: `Cognito ${cogAccessToken} access_token is expired`, payload: null };
+        }
+
+        tilUser = await dbClient.getUser({ cogId: cogId });
+        if (!tilUser) {
+            return { status: statusCodes.SUCCESS, message: `Cannot find a user with cogId: ${cogId}`, payload: null };
         }
     }
 

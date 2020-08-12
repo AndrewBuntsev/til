@@ -99,7 +99,10 @@ class LoggedInUser extends Component<Props, State> {
         return (
             <div>
                 <div className={styles.tooltipContainer}>
-                    <img src={user.pictureUrl} className={styles.picture} onClick={this.showPopup} />
+                    {user.pictureUrl
+                        ? <img src={user.pictureUrl} className={styles.picture} onClick={this.showPopup} />
+                        : <div className={styles.picture} onClick={this.showPopup}><span>{user.name.slice(0, 1)}</span></div>}
+
                     {this.props.isUserMenuVisible && (
                         <div className={styles.tooltip}>
                             <img
@@ -107,7 +110,7 @@ class LoggedInUser extends Component<Props, State> {
                                 src={require('./../../assets/images/x-mark-16.png')}
                                 onClick={this.hidePopup} />
                             <span className={styles.name}>{user.name}</span>
-                            <span className={styles.loggedin}>Logged via {user.ghId ? 'GitHub' : user.liId ? 'LinkedId' : '???'}</span>
+                            {(user.ghId || user.liId) && <span className={styles.loggedin}>{user.ghId ? 'Logged via GitHub' : user.liId ? 'Logged via LinkedId' : '???'}</span>}
 
                             {/* Twitter */}
                             <div className={styles.userSettingsInputContainer}>

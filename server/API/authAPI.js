@@ -1,8 +1,13 @@
+const util = require('util');
+const AWS = require('aws-sdk');
 const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
 const fetch = require('node-fetch');
 const logger = require('./../logger');
 const { WEB_URL } = require('../const/settings');
+
+
+AWS.config.update({ region: 'ap-southeast-2' });
 
 
 // const fbAuth = app => {
@@ -214,8 +219,89 @@ const liAuth = app => {
 };
 
 
+const cogAuth = app => {
+    app.get('/auth/cogAuth', async (req, res) => {
+        let { code, access_token } = req.query;
+
+        try {
+            if (code) {
+                //1. Get access_token from Cognito
+                const client_id = '438vn2gdv98kv5bu1viqvqmgjc';
+                const client_secret = '1r4l51icutdiu5jhittog7h75b5l3j5nn6hiefbn3b9s5bk5a70';
+                const accessData = await fetch(`https://today-i-learned.auth.ap-southeast-2.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${client_id}&code=${code}&redirect_uri=${WEB_URL}%2FcogAuth&scope=email+openid+profile+aws.cognito.signin.user.admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Authorization': `Basic ${Buffer.from(client_id + ':' + client_secret).toString('base64')}`
+                    }
+                }).then(response => response.json());
+
+                //console.log(accessData);
+                access_token = accessData.access_token;
+                //const id_token = accessData.id_token;
+            }
+
+            if (!access_token) {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito access_token`, payload: null });
+                return;
+            }
+
+            //2. Get a user by access_token
+            const cognitoService = new AWS.CognitoIdentityServiceProvider();
+            const getUser = util.promisify(cognitoService.getUser).bind(cognitoService);
+            const cogUser = await getUser({ AccessToken: access_token });
+            //console.log(cogUser);
+
+            if (!cogUser || !cogUser.Username || !cogUser.UserAttributes) {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito user for the ${access_token} access_token`, payload: null });
+                return;
+            }
+
+            const idAttr = cogUser.UserAttributes.find(att => att.Name == 'sub');
+            const id = idAttr && idAttr.Value;
+            const nameAttr = cogUser.UserAttributes.find(att => att.Name == 'nickname');
+            const name = nameAttr && nameAttr.Value;
+
+            //3. Check if cogUser retrieved properly
+            if (!id) {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito user for the ${access_token} access_token`, payload: null });
+                return;
+            }
+            if (!name) {
+                res.status(200);
+                res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito user name for the ${id} user_id`, payload: null });
+                return;
+            }
+
+            //4. Get associated user data from DB
+            let tilUser = await dbClient.getUser({ cogId: id.toString() });
+            if (!tilUser) {
+                //5. If the user does not exist in DB create it
+                tilUser = await dbClient.addUser({ cogId: id.toString(), name: name });
+            }
+
+            //6. Add cogUser fields to the tilUser and send it back to the client
+            tilUser.access_token = access_token;
+
+            res.status(200);
+            res.json({ status: statusCodes.SUCCESS, message: '', payload: tilUser });
+        }
+        catch (err) {
+            res.status(500);
+            console.error(err);
+            logger.error(err.stack);
+            res.json({ status: statusCodes.ERROR, message: err, payload: null })
+        }
+    });
+};
+
+
 
 module.exports = app => {
     ghAuth(app);
     liAuth(app);
+    cogAuth(app);
 };

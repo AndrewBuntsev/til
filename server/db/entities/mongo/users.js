@@ -1,5 +1,5 @@
 exports.getUser = async (db, options) => {
-    const { ghId, liId } = options;
+    const { ghId, liId, cogId } = options;
 
     let user = null;
     if (ghId) {

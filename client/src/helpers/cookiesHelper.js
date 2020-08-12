@@ -13,10 +13,17 @@ export const setLIUserId = userId => cookies.set(COOKIES.LI_USER_ID, userId);
 export const getLIAccessToken = () => cookies.get(COOKIES.LI_ACCESS_TOKEN);
 export const setLIAccessToken = accessToken => cookies.set(COOKIES.LI_ACCESS_TOKEN, accessToken);
 
+export const getCogUserId = () => cookies.get(COOKIES.COG_USER_ID);
+export const setCogUserId = userId => cookies.set(COOKIES.COG_USER_ID, userId);
+export const getCogAccessToken = () => cookies.get(COOKIES.COG_ACCESS_TOKEN);
+export const setCogAccessToken = accessToken => cookies.set(COOKIES.COG_ACCESS_TOKEN, accessToken);
+
 
 export const clearCookies = () => {
     setGHUserId('');
     setGHAccessToken('');
     setLIUserId('');
     setLIAccessToken('');
+    setCogUserId('');
+    setCogAccessToken('');
 };
