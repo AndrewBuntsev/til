@@ -93,7 +93,9 @@ class TilArticle extends Component<Props, State> {
                     <a href={`https://twitter.com/intent/tweet?hashtags=${this.props.til.tag}&ref_src=twsrc%5Etfw&related=twitterapi%2Ctwitter&text=${title}&url=${THIS_URL}/posts?id=${this.props.til.id}&via=TodayIL38903307`} target='_blank'>
                         <Button icon={require('./../../../assets/images/twitter-16-white.png')} title='Tweet' />
                     </a>
-                    <Button icon={require('./../../../assets/images/edit-16-white.png')} title='Edit' onClick={this.onEditClick} />
+                    {this.props.user
+                        && this.props.user.id == this.props.til.userId
+                        && <Button icon={require('./../../../assets/images/edit-16-white.png')} title='Edit' onClick={this.onEditClick} />}
                 </div>
 
                 <div className={styles.signature}>
