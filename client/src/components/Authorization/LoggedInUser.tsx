@@ -101,7 +101,7 @@ class LoggedInUser extends Component<Props, State> {
                 <div className={styles.tooltipContainer}>
                     {user.pictureUrl
                         ? <img src={user.pictureUrl} className={styles.picture} onClick={this.showPopup} />
-                        : <div className={styles.picture} onClick={this.showPopup}><span>{user.name.slice(0, 1)}</span></div>}
+                        : <div className={styles.picturePlaceholder} onClick={this.showPopup}><span>{user.name.slice(0, 1)}</span></div>}
 
                     {this.props.isUserMenuVisible && (
                         <div className={styles.tooltip}>

@@ -17,12 +17,22 @@
     max-width: 60px;
     border-radius: 50%;
     cursor: pointer;
-    background-color: rgb(190, 151, 137);
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
-.picture span{
+.picturePlaceholder{
+  width: 5vw;
+  height: 5vw;
+  min-width: 30px;
+  min-height: 30px;
+  max-width: 60px;
+  max-height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: rgb(190, 151, 137);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.picturePlaceholder span{
   font-size: 2.5vw;
   font-weight: bold;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
