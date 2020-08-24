@@ -3,10 +3,12 @@ const AWS = require('aws-sdk');
 const fetch = require('node-fetch');
 const statusCodes = require('./const/statusCodes');
 const dbClient = require('./db/dbClient');
+const logger = require('./logger');
+const { COGNITO_CLIENT_ID } = require('./const/settings');
 
 
 exports.authoriseTilUser = async function (options) {
-    const { ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken } = options;
+    const { ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken } = options;
 
     let tilUser = null;
 
@@ -52,11 +54,8 @@ exports.authoriseTilUser = async function (options) {
         if (!tilUser) {
             return { status: statusCodes.SUCCESS, message: `Cannot find a user with liId: ${liId}`, payload: null };
         }
-    } else if (cogId && cogAccessToken) {
-        // authorize against Cognito
-        const cognitoService = new AWS.CognitoIdentityServiceProvider();
-        const getUser = util.promisify(cognitoService.getUser).bind(cognitoService);
-        const cogUser = await getUser({ AccessToken: cogAccessToken });
+    } else if (cogId && cogAccessToken && cogRefreshToken) {
+        const cogUser = await getCognitoUser(cogAccessToken, cogRefreshToken);
 
         if (!cogUser || !cogUser.Username || !cogUser.UserAttributes) {
             res.status(200);
@@ -83,4 +82,59 @@ exports.authoriseTilUser = async function (options) {
     }
 
     return { status: statusCodes.SUCCESS, message: '', payload: tilUser };
-}
+};
+
+
+async function getCognitoUser(cogAccessToken, cogRefreshToken) {
+    // authorize against Cognito
+    const cognitoService = new AWS.CognitoIdentityServiceProvider();
+    const getUser = util.promisify(cognitoService.getUser).bind(cognitoService);
+    let cogUser;
+    try {
+        cogUser = await getUser({ AccessToken: cogAccessToken });
+        cogUser.access_token = cogAccessToken;
+    } catch (err) {
+        // access_token is expired, refresh it
+        const access_token = await refreshCognitoAccessToken(cogRefreshToken);
+        try {
+            cogUser = await getUser({ AccessToken: access_token });
+            cogUser.access_token = access_token;
+        } catch (err) {
+            logger.error('Cannot get Cognito User after the Access Token has been refreshed');
+            throw err;
+        }
+    }
+
+    return cogUser;
+};
+
+exports.getCognitoUser = getCognitoUser;
+
+
+async function refreshCognitoAccessToken(refresh_token) {
+    logger.info('A user Access Token is about to refresh');
+    console.log('A user Access Token is about to refresh');
+
+    // access_token is expired, refresh it
+    const refreshedAccessData = await fetch("https://cognito-idp.ap-southeast-2.amazonaws.com/", {
+        headers: {
+            "X-Amz-Target": "AWSCognitoIdentityProviderService.InitiateAuth",
+            "Content-Type": "application/x-amz-json-1.1",
+        },
+        mode: 'cors',
+        cache: 'no-cache',
+        method: 'POST',
+        body: JSON.stringify({
+            ClientId: COGNITO_CLIENT_ID,
+            AuthFlow: 'REFRESH_TOKEN_AUTH',
+            AuthParameters: {
+                REFRESH_TOKEN: refresh_token,
+                SECRET_HASH: process.env.COGNITO_CLIENT_SECRET,
+            }
+        }),
+    }).then(res => res.json());
+
+    logger.info('Access Token has been refreshed');
+    console.log('Access Token has been refreshed');
+    return refreshedAccessData.AuthenticationResult.AccessToken;
+};

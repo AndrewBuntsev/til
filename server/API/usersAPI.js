@@ -25,9 +25,9 @@ const getUserData = app => {
 
 const updateUser = app => {
     app.post('/api/updateUser', async (req, res) => {
-        const { ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, twUrl, liUrl, fbUrl, wUrl } = req.body;
+        const { ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken, twUrl, liUrl, fbUrl, wUrl } = req.body;
         try {
-            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken });
+            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken });
             let tilUser = authResult.payload;
             if (!tilUser) {
                 res.status(200);

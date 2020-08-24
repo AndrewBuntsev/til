@@ -17,6 +17,8 @@ export const getCogUserId = () => cookies.get(COOKIES.COG_USER_ID);
 export const setCogUserId = userId => cookies.set(COOKIES.COG_USER_ID, userId);
 export const getCogAccessToken = () => cookies.get(COOKIES.COG_ACCESS_TOKEN);
 export const setCogAccessToken = accessToken => cookies.set(COOKIES.COG_ACCESS_TOKEN, accessToken);
+export const getCogRefreshToken = () => cookies.get(COOKIES.COG_REFRESH_TOKEN);
+export const setCogRefreshToken = refreshToken => cookies.set(COOKIES.COG_REFRESH_TOKEN, refreshToken);
 
 
 export const clearCookies = () => {
@@ -26,4 +28,5 @@ export const clearCookies = () => {
     setLIAccessToken('');
     setCogUserId('');
     setCogAccessToken('');
+    setCogRefreshToken('');
 };

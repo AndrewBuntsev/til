@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import styles from './Authorization.module.css';
 import setUser from '../../redux/actions/setUser';
 import { User } from '../../types/User';
-import { setCogUserId, setCogAccessToken, clearCookies } from '../../helpers/cookiesHelper';
+import { setCogUserId, setCogAccessToken, setCogRefreshToken, clearCookies } from '../../helpers/cookiesHelper';
 import * as api from '../../api';
 import { ApiResponse } from '../../types/ApiResponse';
 import { ResponseStatus } from '../../enums/ResponseStatus';
@@ -42,6 +42,7 @@ class CogAuth extends Component<Props, State> {
             clearCookies();
             setCogUserId(user.cogId);
             setCogAccessToken(user['access_token']);
+            setCogRefreshToken(user['refresh_token']);
             this.setState({ redirect: '/' });
         }
     }

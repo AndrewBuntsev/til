@@ -22,9 +22,9 @@ const getTils = app => {
 
 const saveTil = app => {
     app.post('/api/saveTil', async (req, res) => {
-        const { text, tag, tilId, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken } = req.body;
+        const { text, tag, tilId, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken } = req.body;
         try {
-            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken });
+            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken });
             let tilUser = authResult.payload;
             if (!tilUser) {
                 res.status(200);
@@ -65,7 +65,7 @@ const saveTil = app => {
 
 const deleteTil = app => {
     app.delete('/api/deleteTil', async (req, res) => {
-        const { tilId, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken } = req.body;
+        const { tilId, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken } = req.body;
         try {
             if (!tilId) {
                 res.status(200);
@@ -73,7 +73,7 @@ const deleteTil = app => {
                 return;
             }
 
-            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken });
+            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken });
             let tilUser = authResult.payload;
             if (!tilUser) {
                 res.status(200);
@@ -110,7 +110,7 @@ const deleteTil = app => {
 
 const likeTil = app => {
     app.patch('/api/likeTil', async (req, res) => {
-        const { tilId, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken } = req.body;
+        const { tilId, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken } = req.body;
         try {
             if (!tilId) {
                 res.status(200);
@@ -118,7 +118,7 @@ const likeTil = app => {
                 return;
             }
 
-            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken });
+            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken });
             let tilUser = authResult.payload;
             if (!tilUser) {
                 res.status(200);
@@ -148,7 +148,7 @@ const likeTil = app => {
 
 const unlikeTil = app => {
     app.patch('/api/unlikeTil', async (req, res) => {
-        const { tilId, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken } = req.body;
+        const { tilId, ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken } = req.body;
         try {
             if (!tilId) {
                 res.status(200);
@@ -156,7 +156,7 @@ const unlikeTil = app => {
                 return;
             }
 
-            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken });
+            let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken });
             let tilUser = authResult.payload;
             if (!tilUser) {
                 res.status(200);
