@@ -1,3 +1,4 @@
+const requestIp = require('request-ip');
 const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
 const logger = require('./../logger');
@@ -32,7 +33,8 @@ const getViewers = app => {
                     ip2: req.connection.remoteAddress,
                     ip3: req.headers['x-forwarded-for'],
                     ip4: req.ip,
-                    ip5: req.ips
+                    ip5: req.ips,
+                    ip6: requestIp.getClientIp(req)
                 }
             });
         }
