@@ -20,6 +20,7 @@ exports.users = require('../entities/mysql/users');
 exports.tils = require('../entities/mysql/tils');
 exports.tags = require('../entities/mysql/tags');
 exports.statistics = require('../entities/mysql/statistics');
+exports.viewers = require('../entities/mysql/viewers');
 
 
 exports.dbCall = async (func, options) => {

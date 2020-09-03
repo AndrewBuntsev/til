@@ -1,14 +1,13 @@
-const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
 const logger = require('./../logger');
 
 
-const getStatistics = app => {
-    app.get('/api/getStatistics', async (req, res) => {
+const getViewers = app => {
+    app.get('/api/getViewers', async (req, res) => {
         try {
-            const statistics = await dbClient.getStatistics();
+            const viewers = await dbClient.getViewers({});
             res.status(200);
-            res.json({ status: statusCodes.SUCCESS, message: null, payload: statistics });
+            res.json(viewers);
         }
         catch (err) {
             res.status(500);
@@ -21,5 +20,5 @@ const getStatistics = app => {
 
 
 module.exports = app => {
-    getStatistics(app);
+    getViewers(app);
 };

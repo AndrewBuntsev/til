@@ -41,6 +41,7 @@ require('./API/usersAPI')(app);
 require('./API/tilsAPI')(app);
 require('./API/tagsAPI')(app);
 require('./API/statisticsAPI')(app);
+require('./API/viewersAPI')(app);
 
 const isLocal = process.env.ENV == 'local';
 

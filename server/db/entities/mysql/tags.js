@@ -1,7 +1,6 @@
 const { deleteCommas } = require("../../../helpers/textHelper");
 
 exports.getTags = async (query, options) => {
-
     const tags = await query('SELECT * FROM tags;');
     return tags.map(r => r.tag);
 };

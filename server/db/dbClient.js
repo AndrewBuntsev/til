@@ -1,6 +1,6 @@
 //const dbConnector = require('./connectors/mongoConnector');
 const dbConnector = require('./connectors/mysqlConnector');
-const { dbCall, users, tils, tags, statistics } = dbConnector;
+const { dbCall, users, tils, tags, statistics, viewers } = dbConnector;
 
 
 //#region users
@@ -32,3 +32,9 @@ exports.addTag = async options => await dbCall(tags.addTag, options);
 //#region statistics
 exports.getStatistics = async options => await dbCall(statistics.getStatistics, options);
 //#endregion statistics
+
+
+//#region viewers
+exports.addViewer = async options => await dbCall(viewers.addViewer, options);
+exports.getViewers = async options => await dbCall(viewers.getViewers, options);
+//#endregion viewers
