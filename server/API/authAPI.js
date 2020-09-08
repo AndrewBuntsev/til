@@ -90,7 +90,7 @@ const ghAuth = app => {
         try {
             if (code) {
                 //1. Get access_token from GitHub
-                const accessData = await fetch(`https://github.com/login/oauth/access_token?client_id=5c2258cb88831cea80c2&client_secret=process.env.GITHUB_CLIENT_SECRET&code=${code}`, {
+                const accessData = await fetch(`https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${code}`, {
                     method: 'POST',
                     headers: { 'accept': 'application/json' },
                     body: JSON.stringify({})
@@ -156,7 +156,7 @@ const liAuth = app => {
         try {
             if (code) {
                 //1. Get access_token from LinkedIn
-                const accessData = await fetch(`https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=${code}&redirect_uri=${WEB_URL}%2FliAuth&client_id=86v6z3n8v3ybvo&client_secret=process.env.LINKEDIN_CLIENT_SECRET`, {
+                const accessData = await fetch(`https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=${code}&redirect_uri=${WEB_URL}%2FliAuth&client_id=86v6z3n8v3ybvo&client_secret=${process.env.LINKEDIN_CLIENT_SECRET}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                 }).then(response => response.json());
