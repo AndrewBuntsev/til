@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { User } from '../../../types/User';
 import Heart from './Heart/Heart';
 import { THIS_URL } from '../../../const/settings';
+import * as textHelper from '../../../helpers/textHelper';
 
 
 
@@ -73,8 +74,7 @@ class TilArticle extends Component<Props, State> {
             return <Redirect to={this.state.redirect} />;
         }
 
-        const foundTitleMatch = this.props.til.text.match(/(?<=<h2>)(.|\n)*?(?=<\/h2>)/i);
-        const title = (foundTitleMatch && foundTitleMatch[0] ? foundTitleMatch[0] : this.props.til.text.substring(0, 25))
+        const title = textHelper.getTitle(this.props.til.text)
             .replace(/&amp;/g, 'and')
             .replace(/&nbsp;/g, ' ');
 
