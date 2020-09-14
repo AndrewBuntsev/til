@@ -1,6 +1,6 @@
 
 exports.getViewers = async (query, options) => {
-    const viewers = await query('SELECT * FROM viewers;');
+    const viewers = await query('SELECT * FROM viewers order by timestamp desc;');
     return viewers;
 };
 
