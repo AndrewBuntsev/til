@@ -1,4 +1,5 @@
 const logger = require('./../../../logger');
+const notificationHelper = require('./../../../helpers/notificationHelper');
 
 exports.getUser = async (query, options) => {
     const { ghId, liId, cogId } = options;
@@ -36,6 +37,13 @@ exports.addUser = async (query, options) => {
     const user = await query(`SELECT * FROM users where id = ${userId}`);
     if (!user) {
         logger.error(`Error while creating new user. User ID: ${userId}`);
+    } else {
+        notificationHelper.sendNotification(
+            'Today I Learned User Created',
+            `Created new user:
+            Name: ${name}
+            Id: ${userId}`,
+            'arn:aws:sns:ap-southeast-2:845915544577:til-account-created-notification-topic');
     }
 
     return user && Array.isArray(user) && user.length > 0 ? user[0] : null;
