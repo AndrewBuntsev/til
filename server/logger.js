@@ -5,6 +5,9 @@ const winston = require('winston');
 const { format } = require('logform');
 require('winston-daily-rotate-file');
 
+const AWS = require('aws-sdk');
+AWS.config.update({ region: 'ap-southeast-2' });
+
 const timeHelper = require('./helpers/timeHelper');
 
 const logLevels = {
@@ -68,7 +71,23 @@ logger.add(
 
 //Wrapping logging methods
 exports.error = function (message) {
-    logger.log({ level: 'error', message: message, stack: Error().stack });
+    const stackTrace = Error().stack;
+    logger.log({ level: 'error', message: message, stack: stackTrace });
+
+    // send error notification via AWS SNS
+    var params = {
+        Subject: 'Today I Learned Backend Error',
+        Message: `${message}
+
+    Stack Trace:
+    ${stackTrace}`,
+        TopicArn: 'arn:aws:sns:ap-southeast-2:845915544577:til-errors-notification-topic'
+    };
+
+    (new AWS.SNS()).publish(params, (err, data) => {
+        if (err) console.log(err, err.stack);
+        else console.log(data);
+    });
 };
 
 exports.warn = function (message) {
