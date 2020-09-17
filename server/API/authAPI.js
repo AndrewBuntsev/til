@@ -239,11 +239,9 @@ const cogAuth = app => {
                 access_token = accessData.access_token;
                 refresh_token = accessData.refresh_token;
                 //const id_token = accessData.id_token;
-                logger.info(`Cognito auth with code`);
             }
 
             if (!access_token) {
-                logger.info(`Cognito auth failed: no access_token provided`);
                 res.status(200);
                 res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito access_token`, payload: null });
                 return;
@@ -253,7 +251,6 @@ const cogAuth = app => {
             const cogUser = await getCognitoUser(access_token, refresh_token);
 
             if (!cogUser || !cogUser.Username || !cogUser.UserAttributes) {
-                logger.info(`Cannot get cognito user`);
                 res.status(200);
                 res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito user for the ${access_token} access_token`, payload: null });
                 return;
@@ -266,13 +263,11 @@ const cogAuth = app => {
 
             //3. Check if cogUser retrieved properly
             if (!id) {
-                logger.info(`Cannot get cognito user: id`);
                 res.status(200);
                 res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito user for the ${cogUser.access_token} access_token`, payload: null });
                 return;
             }
             if (!name) {
-                logger.info(`Cannot get cognito user: name`);
                 res.status(200);
                 res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito user name for the ${id} user_id`, payload: null });
                 return;
@@ -281,7 +276,6 @@ const cogAuth = app => {
             //4. Get associated user data from DB
             let tilUser = await dbClient.getUser({ cogId: id.toString() });
             if (!tilUser) {
-                logger.info(`Cannot get cognito user: tilUser`);
                 //5. If the user does not exist in DB create it
                 tilUser = await dbClient.addUser({ cogId: id.toString(), name: name });
             }
