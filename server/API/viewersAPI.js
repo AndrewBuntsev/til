@@ -6,7 +6,6 @@ const statusCodes = require('../const/statusCodes');
 const getViewers = app => {
     app.get('/api/getViewers', async (req, res) => {
         try {
-            throw Error('test error');
             const viewers = await dbClient.getViewers({});
             const uniqueViewers = viewers.reduce((acc, el) => {
                 if (acc.every(x => x.ip != el.ip)) {
