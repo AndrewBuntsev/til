@@ -1,3 +1,4 @@
+const notificationHelper = require('./../../../helpers/notificationHelper');
 const tags = require('./tags');
 const { escapeCommas, deleteCommas } = require('../../../helpers/textHelper');
 
@@ -40,6 +41,11 @@ exports.addTil = async (query, options) => {
     await query(`INSERT INTO tils (text, tag, userId, timestamp, likes) 
                     VALUES ('${escapeCommas(text)}', '${upperTag}', ${userId}, '${(new Date()).toISOString().slice(0, 19).replace('T', ' ')}', 0);`);
     await tags.addTag(query, { tag });
+
+    notificationHelper.sendNotification(
+        'Today I Learned Article Added',
+        `Added new article by the user (ID): ${userId}`,
+        'arn:aws:sns:ap-southeast-2:845915544577:til-article-added-notification-topic');
 };
 
 exports.updateTil = async (query, options) => {
