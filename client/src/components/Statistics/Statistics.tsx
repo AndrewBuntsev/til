@@ -9,6 +9,13 @@ import StatisticsGrid from './StatisticsGrid';
 import SideBar from '../SideBar/SideBar';
 import BarChart from '../controls/BarChart/BarChart';
 import Authorization from '../Authorization/Authorization';
+import { Action } from '../../redux/Action';
+import dispatchCombinedAction from '../../redux/actions/dispatchCombinedAction';
+import setIsAboutPopupVisible from '../../redux/actions/setIsAboutPopupVisible';
+import setIsSearchFormVisible from '../../redux/actions/setIsSearchFormVisible';
+import setIsUserMenuVisible from '../../redux/actions/setIsUserMenuVisible';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 type TilSummary = {
     id: string;
@@ -33,7 +40,9 @@ type DateSummary = {
     tilsCount: number;
 };
 
-type Props = {};
+type Props = {
+    dispatchCombinedAction(actions: Array<Action>): Action;
+};
 
 type State = {
     tilsTotal: number;
@@ -43,7 +52,7 @@ type State = {
     authors: Array<AuthorSummary>;
 };
 
-export default class Statistics extends Component<Props, State> {
+class Statistics extends Component<Props, State> {
 
     async componentDidMount() {
         const resp: ApiResponse = await api.getStatistics();
@@ -72,6 +81,12 @@ export default class Statistics extends Component<Props, State> {
         }
     }
 
+    onClick = () => {
+        this.props.dispatchCombinedAction([
+            setIsAboutPopupVisible(false),
+            setIsSearchFormVisible(false),
+            setIsUserMenuVisible(false)]);
+    };
 
     render() {
 
@@ -81,7 +96,7 @@ export default class Statistics extends Component<Props, State> {
                 <Authorization />
                 <SideBar />
 
-                <div className={styles.wrapper}>
+                <div className={styles.wrapper} onClick={this.onClick}>
                     <h1>Statistics</h1>
 
                     {this.state
@@ -113,3 +128,9 @@ export default class Statistics extends Component<Props, State> {
     }
 }
 
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    dispatchCombinedAction: (actions: Array<Action>) => dispatch(dispatchCombinedAction(actions))
+});
+
+export default connect(null, mapDispatchToProps)(Statistics);
