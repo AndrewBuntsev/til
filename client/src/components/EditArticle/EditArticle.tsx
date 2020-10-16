@@ -148,7 +148,7 @@ export default class EditArticle extends Component<Props, State> {
 
         const toolbarConfig = {
             // Optionally specify the groups to display (displayed in the order listed).
-            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'LINK_BUTTONS', 'HISTORY_BUTTONS'],
+            display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'LINK_BUTTONS', 'IMAGE_BUTTON', 'HISTORY_BUTTONS'],
             INLINE_STYLE_BUTTONS: [
                 { label: 'Bold', style: 'BOLD', className: 'custom-css-class' },
                 { label: 'Italic', style: 'ITALIC' },
@@ -161,8 +161,7 @@ export default class EditArticle extends Component<Props, State> {
                 { label: 'Code Block', style: 'code-block' }
             ],
             BLOCK_TYPE_BUTTONS: [
-                { label: 'Blockquote', style: 'blockquote' },
-                { label: 'Image', style: 'image' }
+                { label: 'Blockquote', style: 'blockquote' }
             ]
         };
 
