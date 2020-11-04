@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import RichTextEditor from 'react-rte';
+import RichTextEditor from 'react-rte-image';
+
 
 import * as api from '../../api';
 // import JoditEditor from "jodit-react";
@@ -126,13 +127,15 @@ export default class EditArticle extends Component<Props, State> {
     tagComponent: HTMLElement;
 
     insertTagComponent = (initialValue?: string) => {
-        const toolBarContainers: HTMLCollection = document.getElementsByClassName('EditorToolbar__root___3_Aqz');
+        //const toolBarContainers: HTMLCollection = document.getElementsByClassName('EditorToolbar__root___3_Aqz');
+        const toolBarContainers: HTMLCollection = document.getElementsByClassName('EditorToolbar__root___1VC2v');
         if (!toolBarContainers || toolBarContainers.length == 0) return;
 
         const toolBarContainer: Element = toolBarContainers[0];
         this.tagComponent = document.createElement('div');
         this.tagComponent.style.padding = '2px';
-        this.tagComponent.classList.add('ButtonGroup__root___3lEAn');
+        //this.tagComponent.classList.add('ButtonGroup__root___3lEAn');
+        this.tagComponent.classList.add('ButtonGroup__root___2nXYD');
         toolBarContainer.appendChild(this.tagComponent);
 
         ReactDOM.render(<TextBox
