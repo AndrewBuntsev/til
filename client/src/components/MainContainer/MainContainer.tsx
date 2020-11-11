@@ -33,6 +33,8 @@ type State = {
 };
 
 class MainContainer extends Component<Props, State> {
+    private isLoading = true;
+
     state = {
         tils: [],
         author: null,
@@ -48,6 +50,7 @@ class MainContainer extends Component<Props, State> {
     async componentDidUpdate() {
         const queryString = this.props.location['search'];
         if (queryString != this.state.queryString) {
+            this.isLoading = true;
             const params = new URLSearchParams(queryString);
             const response: ApiResponse = await api.getTils({
                 id: params.get('id') ?? '',
@@ -61,6 +64,7 @@ class MainContainer extends Component<Props, State> {
             });
 
             console.log(response);
+            this.isLoading = false;
 
             if (response.status == ResponseStatus.SUCCESS && response.payload) {
                 let author: User = null;
@@ -112,7 +116,7 @@ class MainContainer extends Component<Props, State> {
                         author={this.state.author}
                         tilCount={this.state.tils.length} />
                     <TilsList tils={this.state.tils} />
-                    <Paginator page={pageNumber} />
+                    {!this.isLoading && <Paginator page={pageNumber} />}
                 </div>
             </div>
         );
