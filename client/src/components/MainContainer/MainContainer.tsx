@@ -18,6 +18,7 @@ import { Action } from '../../redux/Action';
 import dispatchCombinedAction from '../../redux/actions/dispatchCombinedAction';
 import { User } from '../../types/User';
 import SearchResultsHeader from './SearchResultsHeader';
+import Paginator from '../Paginator/Paginator';
 
 
 
@@ -54,6 +55,7 @@ class MainContainer extends Component<Props, State> {
                 likedBy: params.get('likedBy') ?? '',
                 date: params.get('date') ?? '',
                 tag: params.get('tag') ?? '',
+                page: params.get('page') ?? '',
                 searchTerm: params.get('searchTerm') ?? '',
                 random: params.get('random') ?? ''
             });
@@ -91,6 +93,15 @@ class MainContainer extends Component<Props, State> {
     render() {
         const params = new URLSearchParams(this.state.queryString);
 
+        let pageNumber = 1;
+        const page = params.get('page');
+        if (page) {
+            const parsedPageNumber = parseInt(page);
+            if (parsedPageNumber != NaN) {
+                pageNumber = parsedPageNumber;
+            }
+        }
+
         return (
             <div>
                 <SideBar />
@@ -101,6 +112,7 @@ class MainContainer extends Component<Props, State> {
                         author={this.state.author}
                         tilCount={this.state.tils.length} />
                     <TilsList tils={this.state.tils} />
+                    <Paginator page={pageNumber} />
                 </div>
             </div>
         );

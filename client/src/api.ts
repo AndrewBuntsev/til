@@ -6,16 +6,17 @@ export const testApi = () => {
     return fetch(`${ENDPOINT}/api/test`).then(res => res.json());
 };
 
-export const getTils = (options?: { id?: string, author?: string, likedBy?: string, date?: string, tag?: string, searchTerm?: string, random?: string }) => {
+export const getTils = (options?: { id?: string, author?: string, likedBy?: string, date?: string, tag?: string, page?: string, searchTerm?: string, random?: string }) => {
     const id = options && options.id ? options.id : '';
     const author = options && options.author ? options.author : '';
     const likedBy = options && options.likedBy ? options.likedBy : '';
     const date = options && options.date ? options.date : '';
     const tag = options && options.tag ? options.tag : '';
+    const page = options && options.page ? options.page : '';
     const searchTerm = options && options.searchTerm ? options.searchTerm : '';
     const random = options && options.random ? options.random : '';
 
-    const query = `${ENDPOINT}/api/getTils?id=${id}&author=${author}&likedBy=${likedBy}&date=${date}&tag=${tag}&searchTerm=${searchTerm}&random=${random}`;
+    const query = `${ENDPOINT}/api/getTils?id=${id}&author=${author}&likedBy=${likedBy}&date=${date}&tag=${tag}&page=${page}&searchTerm=${searchTerm}&random=${random}`;
 
     return fetch(query).then(res => res.json());
 };

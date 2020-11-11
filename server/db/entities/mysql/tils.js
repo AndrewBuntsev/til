@@ -2,8 +2,10 @@ const notificationHelper = require('./../../../helpers/notificationHelper');
 const tags = require('./tags');
 const { escapeCommas, deleteCommas } = require('../../../helpers/textHelper');
 
+const PAGE_SIZE = 30;
+
 exports.getTils = async (query, options) => {
-    const { id, author, likedBy, date, tag, searchTerm, random } = options;
+    const { id, author, likedBy, date, tag, page, searchTerm, random } = options;
 
     let whereClause = '';
     if (id) {
@@ -20,18 +22,28 @@ exports.getTils = async (query, options) => {
         whereClause += `where text like '%${searchTerm}%'`;
     }
 
-    const results = random ?
-        await query(`SELECT t.*, date_format(t.timestamp, '%M %d, %Y') as date, u.name as userName 
+    let pageNumber = parseInt(page);
+    if (isNaN(pageNumber) || pageNumber < 1) {
+        pageNumber = 1;
+    }
+
+    const pageClause = `LIMIT ${PAGE_SIZE} OFFSET ${(pageNumber - 1) * PAGE_SIZE}`;
+
+    const finalQuery = random ?
+        `SELECT t.*, date_format(t.timestamp, '%M %d, %Y') as date, u.name as userName 
             FROM tils t
             inner join users u on u.id = t.userId and t.isDeleted = 0
-            ORDER BY RAND() LIMIT 1`)
-        : await query(`SELECT t.*, date_format(t.timestamp, '%M %d, %Y') as date, u.name as userName 
+            ORDER BY RAND() LIMIT 1`
+        : `SELECT t.*, date_format(t.timestamp, '%M %d, %Y') as date, u.name as userName 
             FROM tils t
             inner join users u on u.id = t.userId and t.isDeleted = 0
             ${whereClause} 
-            order by timestamp desc`);
+            order by timestamp desc
+            ${whereClause == '' ? pageClause : ''}`;
 
-    return results;
+    //console.log(finalQuery);
+
+    return await query(finalQuery);
 };
 
 exports.addTil = async (query, options) => {
