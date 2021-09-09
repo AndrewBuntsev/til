@@ -2,7 +2,7 @@ const notificationHelper = require('./../../../helpers/notificationHelper');
 const tags = require('./tags');
 const { escapeCommas, deleteCommas } = require('../../../helpers/textHelper');
 
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 26;
 
 exports.getTils = async (query, options) => {
     const { id, author, likedBy, date, tag, page, searchTerm, random } = options;

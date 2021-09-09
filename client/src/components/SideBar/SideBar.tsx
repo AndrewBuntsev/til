@@ -41,7 +41,7 @@ class SideBar extends Component<Props, State> {
     render() {
         return (
             <div className={styles.container}>
-                {this.props.user && <AddArticle />}
+                {<AddArticle />}
                 <SearchArticle />
                 <About />
                 <SideBarItem img={require('./../../assets/images/chart.png')} imgHover={require('./../../assets/images/chart_over.png')} onClick={this.onChartClick} />
