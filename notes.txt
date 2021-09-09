@@ -1,0 +1,14 @@
+TODO:
+	Fix shouldComponentUpdate
+	Check error paths and display user error messages
+	
+
+
+EMOJI LIST:    	https://unicode.org/emoji/charts/full-emoji-list.html#1f643
+TIL SUBSCRIBE:	https://www.getrevue.co/profile/til
+GITHUB APP:  	https://github.com/settings/applications/1273201
+
+	
+
+TIL:  	
+	
