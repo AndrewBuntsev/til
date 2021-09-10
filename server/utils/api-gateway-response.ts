@@ -1,3 +1,5 @@
+import { ResponseStatus } from "../const/statusCodes";
+
 export class HttpResponse {
     public body: any;
     public headers: {[header: string]: string} = {
@@ -5,17 +7,15 @@ export class HttpResponse {
         'Access-Control-Allow-Origin': '*'
     };
 
-    constructor (public statusCode: number, body: any) {
-        
-        this.body = body
-            ? JSON.stringify(body)
-            : null;
+    constructor (public statusCode: number, message: string, body: any, status: ResponseStatus) {
+        this.body = JSON.stringify({ status, message, payload: body });
     }
 }
 
+export function createSuccessResponse(payload: any): HttpResponse {
+    return new HttpResponse(200, '', payload, ResponseStatus.SUCCESS);
+}
+
 export function createErrorResponse(code: number, message: string): HttpResponse {
-    return new HttpResponse(code, {
-        code,
-        message
-    });
+    return new HttpResponse(code, message, null, ResponseStatus.ERROR);
 }
