@@ -3,8 +3,6 @@ const AWS = require('aws-sdk');
 const fetch = require('node-fetch');
 const statusCodes = require('./const/statusCodes');
 const dbClient = require('./db/dbClient');
-const logger = require('./logger');
-const { COGNITO_CLIENT_ID } = require('./const/settings');
 
 
 exports.authoriseTilUser = async function (options) {
@@ -100,7 +98,7 @@ async function getCognitoUser(cogAccessToken, cogRefreshToken) {
             cogUser = await getUser({ AccessToken: access_token });
             cogUser.access_token = access_token;
         } catch (err) {
-            logger.error('Cannot get Cognito User after the Access Token has been refreshed');
+            console.error('Cannot get Cognito User after the Access Token has been refreshed');
             throw err;
         }
     }
@@ -125,7 +123,7 @@ async function refreshCognitoAccessToken(refresh_token) {
         cache: 'no-cache',
         method: 'POST',
         body: JSON.stringify({
-            ClientId: COGNITO_CLIENT_ID,
+            ClientId: process.env.COGNITO_CLIENT_ID,
             AuthFlow: 'REFRESH_TOKEN_AUTH',
             AuthParameters: {
                 REFRESH_TOKEN: refresh_token,

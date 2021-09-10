@@ -8,8 +8,6 @@ const getTils = app => {
     app.get('/api/getTils', async (req, res) => {
         try {
             const tils = await dbClient.getTils(req.query);
-            const ip = req.connection.remoteAddress || req.ip;
-            await dbClient.addViewer({ ip });
             res.status(200);
             res.json({ status: statusCodes.SUCCESS, message: '', payload: tils });
         }

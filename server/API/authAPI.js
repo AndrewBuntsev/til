@@ -5,7 +5,6 @@ const statusCodes = require('../const/statusCodes');
 const dbClient = require('../db/dbClient');
 const fetch = require('node-fetch');
 const logger = require('./../logger');
-const { WEB_URL, COGNITO_CLIENT_ID } = require('../const/settings');
 const { getCognitoUser } = require('../authoriseTilUser');
 
 
@@ -156,7 +155,7 @@ const liAuth = app => {
         try {
             if (code) {
                 //1. Get access_token from LinkedIn
-                const accessData = await fetch(`https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=${code}&redirect_uri=${WEB_URL}%2FliAuth&client_id=86v6z3n8v3ybvo&client_secret=${process.env.LINKEDIN_CLIENT_SECRET}`, {
+                const accessData = await fetch(`https://www.linkedin.com/oauth/v2/accessToken?grant_type=authorization_code&code=${code}&redirect_uri=${process.env.WEB_URL}%2FliAuth&client_id=${process.env.LINKEDIN_CLIENT_ID}&client_secret=${process.env.LINKEDIN_CLIENT_SECRET}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                 }).then(response => response.json());
@@ -228,11 +227,11 @@ const cogAuth = app => {
         try {
             if (code) {
                 //1. Get access_token from Cognito
-                const accessData = await fetch(`https://today-i-learned.auth.ap-southeast-2.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${COGNITO_CLIENT_ID}&code=${code}&redirect_uri=${WEB_URL}%2FcogAuth&scope=email+openid+profile+aws.cognito.signin.user.admin`, {
+                const accessData = await fetch(`https://today-i-learned.auth.ap-southeast-2.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${process.env.COGNITO_CLIENT_ID}&code=${code}&redirect_uri=${process.env.WEB_URL}%2FcogAuth&scope=email+openid+profile+aws.cognito.signin.user.admin`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'Authorization': `Basic ${Buffer.from(COGNITO_CLIENT_ID + ':' + process.env.COGNITO_CLIENT_SECRET).toString('base64')}`
+                        'Authorization': `Basic ${Buffer.from(process.env.COGNITO_CLIENT_ID + ':' + process.env.COGNITO_CLIENT_SECRET).toString('base64')}`
                     }
                 }).then(response => response.json());
 

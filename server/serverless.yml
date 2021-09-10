@@ -1,0 +1,55 @@
+service: til
+
+plugins:
+  - serverless-webpack
+  
+provider:
+  name: aws
+  stage: prod
+  runtime: nodejs14.x
+  region: ap-southeast-2
+  deploymentBucket:
+    name: til-serverless-deployments
+  logRetentionInDays: 30
+  environment:
+    ENV: ${file(stage-prod.yml):ENV}
+    LOG_PATH: ${file(stage-prod.yml):LOG_PATH}
+    CERT_PATH: ${file(stage-prod.yml):CERT_PATH}
+    PORT: ${file(stage-prod.yml):PORT}
+    MYSQL_HOST: ${file(stage-prod.yml):MYSQL_HOST}
+    MYSQL_USER: ${file(stage-prod.yml):MYSQL_USER}
+    MYSQL_PASSWORD: ${file(stage-prod.yml):MYSQL_PASSWORD}
+    MYSQL_DATABASE: ${file(stage-prod.yml):MYSQL_DATABASE}
+    WEB_URL: ${file(stage-prod.yml):WEB_URL}
+    COGNITO_CLIENT_ID: ${file(stage-prod.yml):COGNITO_CLIENT_ID}
+    FACEBOOK_CLIENT_SECRET: ${file(stage-prod.yml):FACEBOOK_CLIENT_SECRET}
+    GITHUB_CLIENT_ID: ${file(stage-prod.yml):GITHUB_CLIENT_ID}
+    GITHUB_CLIENT_SECRET: ${file(stage-prod.yml):GITHUB_CLIENT_SECRET}
+    LINKEDIN_CLIENT_ID: ${file(stage-prod.yml):LINKEDIN_CLIENT_ID}
+    LINKEDIN_CLIENT_SECRET: ${file(stage-prod.yml):LINKEDIN_CLIENT_SECRET}
+    COGNITO_CLIENT_SECRET: ${file(stage-prod.yml):COGNITO_CLIENT_SECRET}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: "*"
+    - Effect: "Allow"
+      Action: rds:*
+      Resource: "*"
+    
+functions:
+  getTags:
+    handler: lambda/tags/get-tags.getTags
+    events:
+      - http:
+          path: tags
+          method: get
+  getTils:
+    handler: lambda/tils/get-tils.getTils
+    events:
+      - http:
+          path: tils
+          method: get
+

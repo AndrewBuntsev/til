@@ -1,8 +1,7 @@
 /server/node_modules
 /server/package-lock.json
-/server/cert
-/server/.env
-/webpackDevServer.config.js
+/server/stage-prod.yml
+/server/.serverless
 
 /client/node_modules
 /client/package-lock.json

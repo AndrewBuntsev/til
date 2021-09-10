@@ -1,5 +1,4 @@
-const logger = require('./../../../logger');
-const notificationHelper = require('./../../../helpers/notificationHelper');
+const notificationHelper = require('./../../helpers/notificationHelper');
 
 exports.getUser = async (query, options) => {
     const { ghId, liId, cogId } = options;
@@ -32,11 +31,11 @@ exports.addUser = async (query, options) => {
     const insertDataPacket = await query(`INSERT INTO users (name, fbId, ghId, liId, cogId, fbUrl, liUrl, twUrl, wUrl, likedTils) 
         VALUES ('${name}', NULL, ${dbGhId}, ${dbLiId}, ${dbCogId}, NULL, NULL, NULL, NULL, '')`);
     const userId = insertDataPacket.insertId;
-    logger.important('Created new user with ID: ' + userId);
+    console.log('Created new user with ID: ' + userId);
 
     const user = await query(`SELECT * FROM users where id = ${userId}`);
     if (!user) {
-        logger.error(`Error while creating new user. User ID: ${userId}`);
+        console.error(`Error while creating new user. User ID: ${userId}`);
     } else {
         notificationHelper.sendNotification(
             'Today I Learned User Created',

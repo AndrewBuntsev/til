@@ -1,6 +1,4 @@
 // .env initialize
-require('dotenv').config();
-
 const mysql = require('mysql');
 const util = require('util');
 
@@ -16,9 +14,14 @@ const pool = mysql.createPool(
 const query = util.promisify(pool.query).bind(pool);
 const end = util.promisify(pool.end).bind(pool);
 
+exports.users = require('./entities/users');
+exports.tils = require('./entities/tils');
+exports.tags = require('./entities/tags');
+exports.statistics = require('./entities/statistics');
 
-// (async () => {
-//     await query(`ALTER TABLE tils
-//     ADD COLUMN isDeleted TINYINT(1) NOT NULL DEFAULT 0 AFTER likes`);
-//     await end();
-// })();
+
+exports.dbCall = async (func, options) => {
+    const callResult = await func(query, options);
+    //await end();
+    return callResult;
+};

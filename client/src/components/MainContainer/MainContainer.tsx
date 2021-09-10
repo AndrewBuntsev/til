@@ -63,9 +63,9 @@ class MainContainer extends Component<Props, State> {
                 random: params.get('random') ?? ''
             });
 
-            console.log(response);
             this.isLoading = false;
 
+            console.log('response = ', response)
             if (response.status == ResponseStatus.SUCCESS && response.payload) {
                 let author: User = null;
                 if (params.get('author')) {

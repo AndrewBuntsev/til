@@ -2,10 +2,6 @@ import { ENDPOINT } from "./const/settings";
 import { getGHUserId, getGHAccessToken, getLIUserId, getLIAccessToken, getCogUserId, getCogAccessToken, getCogRefreshToken } from "./helpers/cookiesHelper";
 
 
-export const testApi = () => {
-    return fetch(`${ENDPOINT}/api/test`).then(res => res.json());
-};
-
 export const getTils = (options?: { id?: string, author?: string, likedBy?: string, date?: string, tag?: string, page?: string, searchTerm?: string, random?: string }) => {
     const id = options && options.id ? options.id : '';
     const author = options && options.author ? options.author : '';
@@ -16,7 +12,7 @@ export const getTils = (options?: { id?: string, author?: string, likedBy?: stri
     const searchTerm = options && options.searchTerm ? options.searchTerm : '';
     const random = options && options.random ? options.random : '';
 
-    const query = `${ENDPOINT}/api/getTils?id=${id}&author=${author}&likedBy=${likedBy}&date=${date}&tag=${tag}&page=${page}&searchTerm=${searchTerm}&random=${random}`;
+    const query = `${ENDPOINT}/tils?id=${id}&author=${author}&likedBy=${likedBy}&date=${date}&tag=${tag}&page=${page}&searchTerm=${searchTerm}&random=${random}`;
 
     return fetch(query).then(res => res.json());
 };
@@ -131,7 +127,7 @@ export const cogAuth = (options: { code?: string, access_token?: string, refresh
 
 
 export const getTags = () => {
-    return fetch(`${ENDPOINT}/api/getTags`).then(res => res.json());
+    return fetch(`${ENDPOINT}/tags`).then(res => res.json());
 };
 
 export const addTag = (tag: string) => {
