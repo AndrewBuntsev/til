@@ -13,9 +13,6 @@ provider:
   logRetentionInDays: 30
   environment:
     ENV: ${file(stage-prod.yml):ENV}
-    LOG_PATH: ${file(stage-prod.yml):LOG_PATH}
-    CERT_PATH: ${file(stage-prod.yml):CERT_PATH}
-    PORT: ${file(stage-prod.yml):PORT}
     MYSQL_HOST: ${file(stage-prod.yml):MYSQL_HOST}
     MYSQL_USER: ${file(stage-prod.yml):MYSQL_USER}
     MYSQL_PASSWORD: ${file(stage-prod.yml):MYSQL_PASSWORD}
@@ -51,5 +48,11 @@ functions:
     events:
       - http:
           path: tils
+          method: get
+  getStatistics:
+    handler: lambda/statistics/get-statistics.getStatistics
+    events:
+      - http:
+          path: statistics
           method: get
 

@@ -148,5 +148,5 @@ export const addTag = (tag: string) => {
 
 
 export const getStatistics = () => {
-    return fetch(`${ENDPOINT}/api/getStatistics`).then(res => res.json());
+    return fetch(`${ENDPOINT}/statistics`).then(res => res.json());
 };
