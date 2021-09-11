@@ -17,5 +17,6 @@ export function createSuccessResponse(payload: any): HttpResponse {
 }
 
 export function createErrorResponse(code: number, message: string): HttpResponse {
+    console.error(message);
     return new HttpResponse(code, message, null, ResponseStatus.ERROR);
 }

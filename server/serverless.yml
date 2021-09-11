@@ -55,4 +55,22 @@ functions:
       - http:
           path: statistics
           method: get
+  authUserWithCognito:
+    handler: lambda/auth/cognito.getUser
+    events:
+      - http:
+          path: auth/cogAuth
+          method: get          
+  authUserWithLinkedin:
+    handler: lambda/auth/linkedin.getUser
+    events:
+      - http:
+          path: auth/liAuth
+          method: get  
+  authUserWithGithub:
+    handler: lambda/auth/github.getUser
+    events:
+      - http:
+          path: auth/ghAuth
+          method: get                                      
 

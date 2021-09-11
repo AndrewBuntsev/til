@@ -1,8 +1,8 @@
 const util = require('util');
 const AWS = require('aws-sdk');
 const fetch = require('node-fetch');
-const statusCodes = require('./const/statusCodes');
-const dbClient = require('./db/dbClient');
+const statusCodes = require('../const/statusCodes');
+const dbClient = require('../db/dbClient');
 
 
 exports.authoriseTilUser = async function (options) {
