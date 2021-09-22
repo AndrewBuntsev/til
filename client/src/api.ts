@@ -20,7 +20,7 @@ export const getTils = (options?: { id?: string, author?: string, likedBy?: stri
 
 export const saveTil = (text: string, tag: string, tilId?: string) => {
     const authObject = composeAuthObject();
-    return fetch(`${ENDPOINT}/api/saveTil`, {
+    return fetch(`${ENDPOINT}/saveTil`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, tag, tilId, ...authObject })
@@ -29,7 +29,7 @@ export const saveTil = (text: string, tag: string, tilId?: string) => {
 
 export const deleteTil = (tilId?: string) => {
     const authObject = composeAuthObject();
-    return fetch(`${ENDPOINT}/api/deleteTil`, {
+    return fetch(`${ENDPOINT}/deleteTil`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tilId, ...authObject })
@@ -58,12 +58,12 @@ export const unlikeTil = (tilId?: string) => {
 
 
 export const getUserData = (id: string) => {
-    return fetch(`${ENDPOINT}/api/getUserData?id=${id}`).then(res => res.json());
+    return fetch(`${ENDPOINT}/getUserData?id=${id}`).then(res => res.json());
 };
 
 export const updateUser = (twUrl?: string, liUrl?: string, fbUrl?: string, wUrl?: string) => {
     const authObject = composeAuthObject();
-    return fetch(`${ENDPOINT}/api/updateUser`, {
+    return fetch(`${ENDPOINT}/updateUser`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...authObject, twUrl, liUrl, fbUrl, wUrl })
@@ -97,14 +97,14 @@ export const getTags = () => {
     return fetch(`${ENDPOINT}/tags`).then(res => res.json());
 };
 
-export const addTag = (tag: string) => {
-    const authObject = composeAuthObject();
-    return fetch(`${ENDPOINT}/api/addTag`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tag, ...authObject })
-    }).then(res => res.json());
-};
+// export const addTag = (tag: string) => {
+//     const authObject = composeAuthObject();
+//     return fetch(`${ENDPOINT}/addTag`, {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ tag, ...authObject })
+//     }).then(res => res.json());
+// };
 
 
 export const getStatistics = () => {

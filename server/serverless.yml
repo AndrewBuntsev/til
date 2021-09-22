@@ -49,6 +49,14 @@ functions:
       - http:
           path: tils
           method: get
+  saveTil:
+    handler: lambda/tils/save-til.saveTil
+    events:
+      - http:
+          path: saveTil
+          method: post
+          cors:
+            origin: "*"
   likeTil:
     handler: lambda/tils/like-til.likeTil
     events:
