@@ -2,6 +2,7 @@
 /server/package-lock.json
 /server/stage-prod.yml
 /server/.serverless
+/server/.webpack
 
 /client/node_modules
 /client/package-lock.json

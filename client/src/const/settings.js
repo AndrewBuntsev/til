@@ -14,7 +14,7 @@
 
 
 //export const ENDPOINT = 'https://today-i-learned.org:80';
-export const ENDPOINT = 'https://71ebkcsgp4.execute-api.ap-southeast-2.amazonaws.com/prod';
+export const ENDPOINT = 'https://dzw56frcba.execute-api.ap-southeast-2.amazonaws.com/prod';
 //export const ENDPOINT = 'http://localhost:80';
 //export const THIS_URL = 'https%3A%2F%2Ftoday-i-learned.org';
 //export const THIS_URL = 'https%3A%2F%2Ftoday-i-learned.org';

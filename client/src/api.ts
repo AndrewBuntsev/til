@@ -17,67 +17,42 @@ export const getTils = (options?: { id?: string, author?: string, likedBy?: stri
     return fetch(query).then(res => res.json());
 };
 
-export const saveTil = (text: string, tag: string, tilId?: string) => {
-    const ghId = getGHUserId();
-    const ghAccessToken = getGHAccessToken();
-    const liId = getLIUserId();
-    const liAccessToken = getLIAccessToken();
-    const cogId = getCogUserId();
-    const cogAccessToken = getCogAccessToken();
-    const cogRefreshToken = getCogRefreshToken();
 
+export const saveTil = (text: string, tag: string, tilId?: string) => {
+    const authObject = composeAuthObject();
     return fetch(`${ENDPOINT}/api/saveTil`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, tag, tilId, ghId, ghAccessToken, liId, liAccessToken, cogId, cogAccessToken, cogRefreshToken })
+        body: JSON.stringify({ text, tag, tilId, ...authObject })
     }).then(res => res.json());
 };
 
 export const deleteTil = (tilId?: string) => {
-    const ghId = getGHUserId();
-    const ghAccessToken = getGHAccessToken();
-    const liId = getLIUserId();
-    const liAccessToken = getLIAccessToken();
-    const cogId = getCogUserId();
-    const cogAccessToken = getCogAccessToken();
-    const cogRefreshToken = getCogRefreshToken();
-
+    const authObject = composeAuthObject();
     return fetch(`${ENDPOINT}/api/deleteTil`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tilId, ghId, ghAccessToken, liId, liAccessToken, cogId, cogAccessToken, cogRefreshToken })
+        body: JSON.stringify({ tilId, ...authObject })
     }).then(res => res.json());
 };
 
 export const likeTil = (tilId?: string) => {
-    const ghId = getGHUserId();
-    const ghAccessToken = getGHAccessToken();
-    const liId = getLIUserId();
-    const liAccessToken = getLIAccessToken();
-    const cogId = getCogUserId();
-    const cogAccessToken = getCogAccessToken();
-    const cogRefreshToken = getCogRefreshToken();
+    const authObject = composeAuthObject();
+    const bodyObject = { tilId, ...authObject };
 
-    return fetch(`${ENDPOINT}/api/likeTil`, {
-        method: 'PATCH',
+    return fetch(`${ENDPOINT}/likeTil`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tilId, ghId, ghAccessToken, liId, liAccessToken, cogId, cogAccessToken, cogRefreshToken })
+        body: JSON.stringify(bodyObject),
     }).then(res => res.json());
 };
 
 export const unlikeTil = (tilId?: string) => {
-    const ghId = getGHUserId();
-    const ghAccessToken = getGHAccessToken();
-    const liId = getLIUserId();
-    const liAccessToken = getLIAccessToken();
-    const cogId = getCogUserId();
-    const cogAccessToken = getCogAccessToken();
-    const cogRefreshToken = getCogRefreshToken();
-
-    return fetch(`${ENDPOINT}/api/unlikeTil`, {
-        method: 'PATCH',
+    const authObject = composeAuthObject();
+    return fetch(`${ENDPOINT}/unlikeTil`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tilId, ghId, ghAccessToken, liId, liAccessToken, cogId, cogAccessToken, cogRefreshToken })
+        body: JSON.stringify({ tilId, ...authObject })
     }).then(res => res.json());
 };
 
@@ -86,20 +61,12 @@ export const getUserData = (id: string) => {
     return fetch(`${ENDPOINT}/api/getUserData?id=${id}`).then(res => res.json());
 };
 
-
 export const updateUser = (twUrl?: string, liUrl?: string, fbUrl?: string, wUrl?: string) => {
-    const ghId = getGHUserId();
-    const ghAccessToken = getGHAccessToken();
-    const liId = getLIUserId();
-    const liAccessToken = getLIAccessToken();
-    const cogId = getCogUserId();
-    const cogAccessToken = getCogAccessToken();
-    const cogRefreshToken = getCogRefreshToken();
-
+    const authObject = composeAuthObject();
     return fetch(`${ENDPOINT}/api/updateUser`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ghId, ghAccessToken, liId, liAccessToken, cogId, cogAccessToken, cogRefreshToken, twUrl, liUrl, fbUrl, wUrl })
+        body: JSON.stringify({ ...authObject, twUrl, liUrl, fbUrl, wUrl })
     }).then(res => res.json());
 };
 
@@ -131,6 +98,22 @@ export const getTags = () => {
 };
 
 export const addTag = (tag: string) => {
+    const authObject = composeAuthObject();
+    return fetch(`${ENDPOINT}/api/addTag`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tag, ...authObject })
+    }).then(res => res.json());
+};
+
+
+export const getStatistics = () => {
+    return fetch(`${ENDPOINT}/statistics`).then(res => res.json());
+};
+
+
+
+const composeAuthObject = () => {
     const ghId = getGHUserId();
     const ghAccessToken = getGHAccessToken();
     const liId = getLIUserId();
@@ -139,14 +122,5 @@ export const addTag = (tag: string) => {
     const cogAccessToken = getCogAccessToken();
     const cogRefreshToken = getCogRefreshToken();
 
-    return fetch(`${ENDPOINT}/api/addTag`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tag, ghId, ghAccessToken, liId, liAccessToken, cogId, cogAccessToken, cogRefreshToken })
-    }).then(res => res.json());
-};
-
-
-export const getStatistics = () => {
-    return fetch(`${ENDPOINT}/statistics`).then(res => res.json());
+    return { ghId, ghAccessToken, liId, liAccessToken, cogId, cogAccessToken, cogRefreshToken };
 };

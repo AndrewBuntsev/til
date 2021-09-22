@@ -10,7 +10,7 @@ provider:
   region: ap-southeast-2
   deploymentBucket:
     name: til-serverless-deployments
-  logRetentionInDays: 30
+  logRetentionInDays: 7
   environment:
     ENV: ${file(stage-prod.yml):ENV}
     MYSQL_HOST: ${file(stage-prod.yml):MYSQL_HOST}
@@ -49,6 +49,40 @@ functions:
       - http:
           path: tils
           method: get
+  likeTil:
+    handler: lambda/tils/like-til.likeTil
+    events:
+      - http:
+          path: likeTil
+          method: put
+          cors:
+            origin: "*"
+            headers:
+              - Access-Control-Allow-Origin
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Identity-Id
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+  unlikeTil:
+    handler: lambda/tils/unlike-til.unlikeTil
+    events:
+      - http:
+          path: unlikeTil
+          method: put
+          cors:
+            origin: "*"
+            headers:
+              - Access-Control-Allow-Origin
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Identity-Id
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent              
   getStatistics:
     handler: lambda/statistics/get-statistics.getStatistics
     events:

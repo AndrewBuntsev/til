@@ -2,7 +2,9 @@ import { ResponseStatus } from "../const/statusCodes";
 
 export class HttpResponse {
     public body: any;
-    public headers: {[header: string]: string} = {
+    public headers: any = {
+        'Access-Control-Allow-Headers' : 'Content-Type',
+        'Access-Control-Allow-Methods': 'OPTIONS,POST,PUT,PATCH,DELETE,GET',
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
     };
