@@ -15,7 +15,7 @@ export async function saveTil(event: APIGatewayEvent, context: Context) {
         let authResult = await authoriseTilUser({ ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken });
         let tilUser = authResult.payload;
         if (!tilUser) {
-            return createErrorResponse(500, `No TIL user found`);
+            return createErrorResponse(500, authResult);
         }
 
         if (tilId) {

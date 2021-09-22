@@ -57,6 +57,14 @@ functions:
           method: post
           cors:
             origin: "*"
+  deleteTil:
+    handler: lambda/tils/delete-til.deleteTil
+    events:
+      - http:
+          path: deleteTil
+          method: delete
+          cors:
+            origin: "*"            
   likeTil:
     handler: lambda/tils/like-til.likeTil
     events:
@@ -65,15 +73,6 @@ functions:
           method: put
           cors:
             origin: "*"
-            headers:
-              - Access-Control-Allow-Origin
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Identity-Id
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
   unlikeTil:
     handler: lambda/tils/unlike-til.unlikeTil
     events:
@@ -82,15 +81,15 @@ functions:
           method: put
           cors:
             origin: "*"
-            headers:
-              - Access-Control-Allow-Origin
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Identity-Id
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent              
+            # headers:
+            #   - Access-Control-Allow-Origin
+            #   - Content-Type
+            #   - X-Amz-Date
+            #   - Authorization
+            #   - X-Identity-Id
+            #   - X-Api-Key
+            #   - X-Amz-Security-Token
+            #   - X-Amz-User-Agent              
   getStatistics:
     handler: lambda/statistics/get-statistics.getStatistics
     events:
