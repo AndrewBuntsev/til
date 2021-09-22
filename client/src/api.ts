@@ -58,13 +58,13 @@ export const unlikeTil = (tilId?: string) => {
 
 
 export const getUserData = (id: string) => {
-    return fetch(`${ENDPOINT}/getUserData?id=${id}`).then(res => res.json());
+    return fetch(`${ENDPOINT}/user?id=${id}`).then(res => res.json());
 };
 
 export const updateUser = (twUrl?: string, liUrl?: string, fbUrl?: string, wUrl?: string) => {
     const authObject = composeAuthObject();
-    return fetch(`${ENDPOINT}/updateUser`, {
-        method: 'POST',
+    return fetch(`${ENDPOINT}/user`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...authObject, twUrl, liUrl, fbUrl, wUrl })
     }).then(res => res.json());

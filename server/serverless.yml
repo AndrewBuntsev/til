@@ -113,5 +113,19 @@ functions:
     events:
       - http:
           path: auth/ghAuth
-          method: get                                      
+          method: get           
+  getUser:
+    handler: lambda/users/get-user.getUser
+    events:
+      - http:
+          path: user
+          method: get                           
+  updateUser:
+    handler: lambda/users/update-user.updateUser
+    events:
+      - http:
+          path: user
+          method: put     
+          cors:
+            origin: "*"
 
