@@ -1,5 +1,5 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
-import { createErrorResponse, createSuccessResponse, HttpResponse } from '../../utils/api-gateway-response';
+import { createErrorResponse, createSuccessResponse } from '../../utils/api-gateway-response';
 import * as dbClient from '../../db/dbClient';
 
 export async function getStatistics(event: APIGatewayEvent, context: Context) {

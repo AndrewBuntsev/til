@@ -7,8 +7,12 @@ TODO:
 EMOJI LIST:    	https://unicode.org/emoji/charts/full-emoji-list.html#1f643
 TIL SUBSCRIBE:	https://www.getrevue.co/profile/til
 GITHUB APP:  	https://github.com/settings/applications/1273201
+DYNAMODB DOCS:	https://dynobase.dev/dynamodb-nodejs/
 
 	
 
 TIL:  	
 	
+	to deploy functions individually:
+	set AWS_PROFILE=til
+	serverless deploy --function getTils --stage prod

@@ -1,5 +1,6 @@
 //const dbConnector = require('./connectors/mongoConnector');
-const dbConnector = require('./dbConnector');
+//const dbConnector = require('./mysqlConnector');
+const dbConnector = require('./dynamodbConnector');
 const { dbCall, users, tils, tags, statistics } = dbConnector;
 
 

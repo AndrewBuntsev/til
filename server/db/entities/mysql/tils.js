@@ -1,6 +1,6 @@
-const notificationHelper = require('./../../helpers/notificationHelper');
+const notificationHelper = require('./../../../helpers/notificationHelper');
 const tags = require('./tags');
-const { escapeCommas, deleteCommas } = require('../../helpers/textHelper');
+const { escapeCommas, deleteCommas } = require('../../../helpers/textHelper');
 
 const PAGE_SIZE = 30;
 

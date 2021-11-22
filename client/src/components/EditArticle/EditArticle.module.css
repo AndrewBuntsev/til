@@ -29,6 +29,6 @@
 }
 
 :global(.public-DraftEditor-content) {
-  height: 35vh;
+  height: 35vh !important;
   overflow: auto;
 }

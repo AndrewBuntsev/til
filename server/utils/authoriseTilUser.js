@@ -1,11 +1,11 @@
-const util = require('util');
-const AWS = require('aws-sdk');
-const fetch = require('node-fetch');
-const statusCodes = require('../const/statusCodes');
-const dbClient = require('../db/dbClient');
+import fetch from 'node-fetch'; 
+import * as util from 'util';
+import * as AWS from 'aws-sdk';
+import { ResponseStatus } from "../const/statusCodes";
+import * as dbClient from '../db/dbClient';
 
 
-exports.authoriseTilUser = async function (options) {
+export const authoriseTilUser = async function (options) {
     const { ghId, liId, cogId, ghAccessToken, liAccessToken, cogAccessToken, cogRefreshToken } = options;
 
     let tilUser = null;
@@ -17,21 +17,21 @@ exports.authoriseTilUser = async function (options) {
         }).then(response => response.json());
 
         if (!ghUser) {
-            return { status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${ghAccessToken} access_token`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `Cannot get GitHub user for the ${ghAccessToken} access_token`, payload: null };
         }
 
         const { id } = ghUser;
         if (!id) {
-            return { status: statusCodes.SUCCESS, message: `Cannot get GitHub user for the ${ghAccessToken} access_token`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `Cannot get GitHub user for the ${ghAccessToken} access_token`, payload: null };
         }
 
         if (id != ghId) {
-            return { status: statusCodes.SUCCESS, message: `GitHub ${ghAccessToken} access_token is expired`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `GitHub ${ghAccessToken} access_token is expired`, payload: null };
         }
 
         tilUser = await dbClient.getUser({ ghId: ghId });
         if (!tilUser) {
-            return { status: statusCodes.SUCCESS, message: `Cannot find a user with ghId: ${ghId}`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `Cannot find a user with ghId: ${ghId}`, payload: null };
         }
     } else if (liId && liAccessToken) {
         // authorize against LinkedIn
@@ -40,24 +40,24 @@ exports.authoriseTilUser = async function (options) {
         }).then(response => response.json());
 
         if (!liUser) {
-            return { status: statusCodes.SUCCESS, message: `Cannot get LinkedIn user for the ${liAccessToken} access_token`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `Cannot get LinkedIn user for the ${liAccessToken} access_token`, payload: null };
         }
 
         if (liUser.id != liId) {
             res.status(200);
-            return { status: statusCodes.SUCCESS, message: `LinkedIn ${liAccessToken} access_token is expired`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `LinkedIn ${liAccessToken} access_token is expired`, payload: null };
         }
 
         tilUser = await dbClient.getUser({ liId: liId });
         if (!tilUser) {
-            return { status: statusCodes.SUCCESS, message: `Cannot find a user with liId: ${liId}`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `Cannot find a user with liId: ${liId}`, payload: null };
         }
     } else if (cogId && cogAccessToken && cogRefreshToken) {
         const cogUser = await getCognitoUser(cogAccessToken, cogRefreshToken);
 
         if (!cogUser || !cogUser.Username || !cogUser.UserAttributes) {
             res.status(200);
-            res.json({ status: statusCodes.SUCCESS, message: `Cannot get Cognito user for the ${cogAccessToken} access_token`, payload: null });
+            res.json({ status: ResponseStatus.SUCCESS, message: `Cannot get Cognito user for the ${cogAccessToken} access_token`, payload: null });
             return;
         }
 
@@ -66,24 +66,24 @@ exports.authoriseTilUser = async function (options) {
 
         if (id != cogId) {
             res.status(200);
-            return { status: statusCodes.SUCCESS, message: `Cognito ${cogAccessToken} access_token is expired`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `Cognito ${cogAccessToken} access_token is expired`, payload: null };
         }
 
         tilUser = await dbClient.getUser({ cogId: cogId });
         if (!tilUser) {
-            return { status: statusCodes.SUCCESS, message: `Cannot find a user with cogId: ${cogId}`, payload: null };
+            return { status: ResponseStatus.SUCCESS, message: `Cannot find a user with cogId: ${cogId}`, payload: null };
         }
     }
 
     if (!tilUser) {
-        return { status: statusCodes.SUCCESS, message: `Cannot find a user. Parameters are incorrect`, payload: null };
+        return { status: ResponseStatus.SUCCESS, message: `Cannot find a user. Parameters are incorrect`, payload: null };
     }
 
-    return { status: statusCodes.SUCCESS, message: '', payload: tilUser };
+    return { status: ResponseStatus.SUCCESS, message: '', payload: tilUser };
 };
 
 
-async function getCognitoUser(cogAccessToken, cogRefreshToken) {
+export const getCognitoUser = async function(cogAccessToken, cogRefreshToken) {
     // authorize against Cognito
     const cognitoService = new AWS.CognitoIdentityServiceProvider();
     const getUser = util.promisify(cognitoService.getUser).bind(cognitoService);
@@ -105,8 +105,6 @@ async function getCognitoUser(cogAccessToken, cogRefreshToken) {
 
     return cogUser;
 };
-
-exports.getCognitoUser = getCognitoUser;
 
 
 async function refreshCognitoAccessToken(refresh_token) {

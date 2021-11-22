@@ -1,4 +1,4 @@
-const notificationHelper = require('./../../helpers/notificationHelper');
+const notificationHelper = require('./../../../helpers/notificationHelper');
 
 exports.getUser = async (query, options) => {
     const { ghId, liId, cogId } = options;

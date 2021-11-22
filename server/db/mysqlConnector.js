@@ -14,10 +14,10 @@ const pool = mysql.createPool(
 const query = util.promisify(pool.query).bind(pool);
 const end = util.promisify(pool.end).bind(pool);
 
-exports.users = require('./entities/users');
-exports.tils = require('./entities/tils');
-exports.tags = require('./entities/tags');
-exports.statistics = require('./entities/statistics');
+exports.users = require('./entities/mysql/users');
+exports.tils = require('./entities/mysql/tils');
+exports.tags = require('./entities/mysql/tags');
+exports.statistics = require('./entities/mysql/statistics');
 
 
 exports.dbCall = async (func, options) => {

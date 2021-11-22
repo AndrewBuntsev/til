@@ -4,6 +4,8 @@ import { createErrorResponse, createSuccessResponse } from '../../utils/api-gate
 import * as dbClient from '../../db/dbClient';
 
 export async function getUser(event: APIGatewayEvent, context: Context) {
+    console.log('event = ', JSON.stringify(event, null, 2));
+
     // allow just 'GET' requests
     if (event.httpMethod !== 'GET') {
         return createErrorResponse(405, `Unsupported method "${event.httpMethod}"`);
@@ -14,11 +16,14 @@ export async function getUser(event: APIGatewayEvent, context: Context) {
     try {
         if (code) {
             //1. Get access_token from GitHub
-            const accessData = await fetch(`https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${code}`, {
+            const url = `https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${code}`;
+            console.log('url = ', url);
+            const accessData = await fetch(url, {
                 method: 'POST',
                 headers: { 'accept': 'application/json' },
                 body: JSON.stringify({})
             }).then(response => response.json());
+            console.log('accessData = ', accessData);
 
             access_token = accessData.access_token;
         }
@@ -35,6 +40,7 @@ export async function getUser(event: APIGatewayEvent, context: Context) {
         if (!ghUser) {
             return createErrorResponse(500, `Cannot get GitHub user for the ${access_token} access_token`);
         }
+        console.log('ghUser = ', ghUser);
 
         //3. Check if ghUser retrieved properly
         let { id, name, login, avatar_url } = ghUser;
@@ -45,8 +51,10 @@ export async function getUser(event: APIGatewayEvent, context: Context) {
 
         //4. Get associated user data from DB
         let tilUser = await dbClient.getUser({ ghId: id.toString() });
+        console.log('tilUser = ', tilUser);
         if (!tilUser) {
             //5. If the user does not exist in DB create it
+            console.log('About to create a new til user')
             tilUser = await dbClient.addUser({ ghId: id.toString(), name: name });
         }
 

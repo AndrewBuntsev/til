@@ -4,6 +4,7 @@ import { createErrorResponse, createSuccessResponse } from '../../utils/api-gate
 import * as dbClient from '../../db/dbClient';
 
 export async function getUser(event: APIGatewayEvent, context: Context) {
+    console.log('event = ', JSON.stringify(event, null, 2));
     // allow just 'GET' requests
     if (event.httpMethod !== 'GET') {
         return createErrorResponse(405, `Unsupported method "${event.httpMethod}"`);
@@ -18,6 +19,7 @@ export async function getUser(event: APIGatewayEvent, context: Context) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             }).then(response => response.json());
+            console.log('accessData = ', accessData);
 
             access_token = accessData.access_token;
         }

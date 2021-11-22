@@ -5,6 +5,7 @@ import * as dbClient from '../../db/dbClient';
 import { getCognitoUser } from '../../utils/authoriseTilUser';
 
 export async function getUser(event: APIGatewayEvent, context: Context) {
+    console.log('event = ', JSON.stringify(event, null, 2))
     // allow just 'GET' requests
     if (event.httpMethod !== 'GET') {
         return createErrorResponse(405, `Unsupported method "${event.httpMethod}"`);
@@ -15,11 +16,16 @@ export async function getUser(event: APIGatewayEvent, context: Context) {
     try {
         if (code) {
             //1. Get access_token from Cognito
-            const accessData = await fetch(`https://today-i-learned.auth.ap-southeast-2.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${process.env.COGNITO_CLIENT_ID}&code=${code}&redirect_uri=${process.env.WEB_URL}%2FcogAuth&scope=email+openid+profile+aws.cognito.signin.user.admin`, {
+            console.log('Getting access token from cognito');
+            const authorization = `Basic ${Buffer.from(process.env.COGNITO_CLIENT_ID + ':' + process.env.COGNITO_CLIENT_SECRET).toString('base64')}`;
+            const url = `https://today-i-learned.auth.ap-southeast-2.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${process.env.COGNITO_CLIENT_ID}&code=${code}&redirect_uri=${process.env.WEB_URL}%2FcogAuth&scope=email+openid+profile+aws.cognito.signin.user.admin`;
+            console.log('authorization = ', authorization);
+            console.log('url = ', url);
+            const accessData = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Basic ${Buffer.from(process.env.COGNITO_CLIENT_ID + ':' + process.env.COGNITO_CLIENT_SECRET).toString('base64')}`
+                    'Authorization': authorization
                 }
             }).then(response => response.json());
             console.log('accessData = ', accessData)
@@ -28,12 +34,16 @@ export async function getUser(event: APIGatewayEvent, context: Context) {
             refresh_token = accessData.refresh_token;
         }
 
+        console.log('access_token = ', access_token);
+        console.log('refresh_token = ', refresh_token);
+
         if (!access_token) {
             return createErrorResponse(500, 'Cannot get Cognito access_token');
         }
 
         //2. Get a user by access_token
         const cogUser = await getCognitoUser(access_token, refresh_token);
+        console.log('cogUser = ', cogUser);
 
         if (!cogUser || !cogUser.Username || !cogUser.UserAttributes) {
             return createErrorResponse(500, `Cannot get Cognito user for the ${access_token} access_token`);
@@ -54,6 +64,7 @@ export async function getUser(event: APIGatewayEvent, context: Context) {
 
         //4. Get associated user data from DB
         let tilUser = await dbClient.getUser({ cogId: id.toString() });
+        console.log('tilUser = ', tilUser);
         if (!tilUser) {
             //5. If the user does not exist in DB create it
             tilUser = await dbClient.addUser({ cogId: id.toString(), name: name });
